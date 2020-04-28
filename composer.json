@@ -1,0 +1,25 @@
+{
+    "name": "milestone/tinycom",
+    "description": "A tiny eCommerce portal for small business. Fully offline!",
+    "authors": [
+        {
+            "name": "Milestone Innovative Technologies",
+            "email": "info@milestoneit.net"
+        }
+    ],
+    "require": {
+		"symfony/translation": "4.3.8"
+	},
+    "autoload": {
+        "psr-4": {
+            "Milestone\\Tinycom\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Milestone\\Tinycom\\TinycomServiceProvider"
+            ]
+        }
+    }
+}
