@@ -1,0 +1,30 @@
+.item-display {
+
+}
+.item-image {
+    width: 75px;
+    height: 75px;
+}
+
+.title-row { height: 2.3rem; }
+.price-row { height: 3rem; }
+
+.item-description {
+    max-height: 2rem;
+}
+
+.item-prices del {
+    font-weight: normal;
+    font-size: 0.7rem;
+}
+.item-prices .item-price {
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.item-to-cart {
+    transform: scale(0.8);
+}
+
+.exclusive.spinner-grow { height: 1rem; width: 1rem; margin-bottom: 0.2rem; margin-right: 0.2rem; }
+.onsale.spinner-grow { height: 0.6rem; width: 0.6rem; margin-bottom: 0.1rem; margin-right: 0.1rem; }

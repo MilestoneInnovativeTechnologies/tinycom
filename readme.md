@@ -1,0 +1,19 @@
+ENV Changes
+
+APP_NAME=TinyCOM
+
+APP_DEBUG=false
+
+APP_URL=http://tinycom
+
+DB_HOST=127.0.0.1
+
+DB_PORT=3306
+
+DB_DATABASE=
+
+DB_USERNAME=
+
+DB_PASSWORD=
+
+QUEUE_CONNECTION=database

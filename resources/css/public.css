@@ -1,0 +1,38 @@
+#application {
+
+}
+
+#public_top_spacer {
+    height: 1rem;
+}
+.filter-control {
+    transform: translateY(-25%);
+}
+.cart-items-count::after {
+    content: 'items';
+    font-weight: normal;
+    font-size: 0.8rem;
+    display: block;
+    position: relative;
+    top:  -0.2rem;
+    text-transform: uppercase;
+}
+.cart-items-total::after {
+    content: 'amount';
+    font-weight: normal;
+    font-size: 0.8rem;
+    display: block;
+    position: relative;
+    top:  -0.2rem;
+    text-transform: uppercase;
+}
+hr.hr-or::after {
+    content: 'OR';
+    display: block;
+    transform: translateY(-50%);
+    text-align: center;
+    padding: 0;
+    background-color: white;
+    margin: auto;
+    width: 3rem;
+}
