@@ -1,8 +1,1 @@
-.main-fab-button {
-    border-radius: 50%;
-    width: 3.8rem; height: 3.8rem; font-size: 1.5rem;
-}
-
-.navbar-collapse {
-    transition: all 0.3s;
-}
+.main-fab-button{border-radius:50%;width:3.8rem;height:3.8rem;font-size:1.5rem}.navbar-collapse{transition:all .3s}
