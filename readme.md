@@ -1,7 +1,13 @@
-#ENV Changes
-
-Set APP_URL
-Add MEDIA_DISK=media
-
-#Publish
-php artisan vendor:publish
+ 
+1. Install laravel
+1. Enter project folder
+1. composer require milestone/tinycom
+1. php artisan vendor:publish
+1. Update .env file
+    1.  Set APP_NAME
+	1.  Set APP_URL
+	1.  Set APP_DEBUG
+	1.  Set DB Details
+	1.  Add MEDIA_DISK=media
+1. php artisan:migrate
+1. comment every routes in web.php
