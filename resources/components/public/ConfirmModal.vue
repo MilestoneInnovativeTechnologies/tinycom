@@ -79,7 +79,7 @@
         methods: {
             close(){ this.$store.commit('MISC/alterModal') },
             order(){ this.$store.dispatch('CART/order') },
-            move(name){ this.close(); return (name === 'start') ? (window.location.href = "/") : this.$router.push({ name }) }
+            move(name){ this.close(); return (name === 'start') ? (window.location.href = "/r") : this.$router.push({ name }) }
         },
         watch: {
             status(val){ if(val) (this.$store.state.CART.sync)() },

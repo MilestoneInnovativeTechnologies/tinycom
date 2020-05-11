@@ -22,4 +22,11 @@ class ItemController extends Controller
         CustomerController::live();
         return ($latest > $updated_at) ? Item::where('updated_at','>',date('Y-m-d H:i:s',$updated_at))->get() : [];
     }
+
+    public function create(Request $request){
+        $create = $request->only(['name','description','status','price','selling','stock']);
+        $item = Item::create($create); $item->Categories()->attach($request->input('category'));
+        if($request->hasFile('image')){ $item->addMediaFromRequest('image')->toMediaCollection('items'); }
+        $item->load(['Categories','media']); return $item;
+    }
 }

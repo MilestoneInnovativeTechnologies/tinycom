@@ -1,6 +1,6 @@
 <template>
     <section class="categories">
-        <div class="card m-lg-auto" style="max-width: 65vh">
+        <div class="card mx-sm-auto" style="max-width: 65vh">
             <div class="card-header">
                 Available categories
             </div>

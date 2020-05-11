@@ -5,9 +5,10 @@ const state = {
     toNumber: ['price','selling','stock'],
     last: null,
     url: {
-        sync: '/item/sync'
+        sync: '/item/sync',
+        create: '/admin/item/create'
     },
-    timeout: 60000,
+    timeout: 180000,
 }
 const getters = {
     item({ ITEMS,toNumber },{ isOnSale,sellPrice,image,isExclusive }){
@@ -26,7 +27,7 @@ const getters = {
         return (id) => {
             let { price,selling } = _.get(ITEMS,id);
             price = _.toNumber(price); selling = _.toNumber(selling);
-            return !!selling && price !== selling;
+            return selling !== 0 && selling !== price && selling > price
         }
     },
     isExclusive(s,g,rs,rootGetters){ return rootGetters["SOURCE/has"] },
@@ -34,7 +35,7 @@ const getters = {
     sellPrice({ ITEMS },{ isOnSale,isExclusive,exclusivePrice }){
         return (id) => {
             let item = ITEMS[id]
-            let price = isExclusive(id) ? exclusivePrice(id) : (isOnSale(id) ? _.get(item,'selling') : _.get(item,'selling'));
+            let price = isExclusive(id) ? exclusivePrice(id) : (isOnSale(id) ? _.get(item,'selling') : _.get(item,'price'));
             return _.toNumber(price);
         }
     },
@@ -53,6 +54,13 @@ const mutations = {
     setLast(state,item){
         Vue.set(state,'last',item)
     },
+    add(state,data){
+        if(!data || !data.id) return;
+        Vue.set(state.ITEMS,_.toInteger(data.id),data);
+        let categories = _.get(data,'categories'); if(_.isEmpty(categories)) return; let item_categories = _.map(categories,({ id }) => _.toInteger(id));
+        let item = _.toInteger(data.id)
+        return _.has(state.ITEM_CATEGORIES,item) ? state.ITEM_CATEGORIES[item].push(...item_categories) : Vue.set(state.ITEM_CATEGORIES,item,item_categories);
+    }
 }
 const actions = {
     sync({ getters,state,dispatch,commit }){
@@ -63,6 +71,9 @@ const actions = {
             }
             setTimeout((dispatch) => dispatch('sync'),state.timeout,dispatch);
         })
+    },
+    create({ state,commit },data){
+        return new Promise(resolve => $.ajax({ url:state.url.create, data, type: "POST",enctype: 'multipart/form-data', processData: false, contentType: false, success: function(R){ commit('add',R); resolve(R) }}))
     }
 }
 

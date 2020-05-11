@@ -7,7 +7,7 @@ function get($source,$prop){
 }
 function image($source){
     $Storage = \Illuminate\Support\Facades\Storage::disk('media');
-    if(!$source || $source->media->isEmpty()) return $Storage->url('SpecialOffer.png');
+    if(!$source || $source->media->isEmpty()) return '/images/SpecialOffer.png';
     $image = $source->media[0]; return $Storage->url($image->id . DIRECTORY_SEPARATOR . $image->file_name);
 }
 
@@ -56,7 +56,7 @@ function image($source){
 </head>
 <body style="height: 100vh; padding: 0px; margin: 0px;">
     <div style="position: relative; top:50%; transform: translateY(-100%); text-align: center; font-family: monospace">
-        <img src="{!! \Illuminate\Support\Facades\Storage::disk('media')->url('checking.gif') !!}">
+        <img src="/images/checking.gif">
         <p>@if($source->expired) <b>This source is expired and not active currently!</b> @else Identifying the source. @endif<br >You will be redirected to home page soon!!</p>
     </div>
 </body>

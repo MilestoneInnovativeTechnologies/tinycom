@@ -6,3 +6,7 @@
 .navbar-collapse {
     transition: all 0.3s;
 }
+
+.bill.delivered {
+    background: url("/images/delivered.png") no-repeat bottom right;
+}

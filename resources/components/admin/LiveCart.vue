@@ -12,14 +12,14 @@
             </div>
             <h4 class="card-title">Items</h4>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item" v-for="item in (cart.items || [])" :key="'live-cart-view-items-'+item.id">
+                <li class="list-group-item" v-for="item in (cart.items || [])" :key="'live-cart-view-items-'+item.item">
                     <div class="row">
-                        <div class="col-12"><strong>{{ itemName(item.id) }}</strong></div>
+                        <div class="col-12"><strong>{{ itemName(item.item) }}</strong></div>
                         <div class="col-6">{{ item.price }} X {{ item.quantity }}</div>
                         <div class="col-6 text-right font-weight-bolder">{{ item.amount }}</div>
                     </div>
                 </li>
-                <li class="list-group-item"><h5 class="text-right">{{ total }}</h5></li>
+                <li class="list-group-item"><h5 class="text-right">{{ cart.total }}</h5></li>
             </ul>
 
         </div>
@@ -31,15 +31,14 @@
         name: "LiveCart",
         props: ['id'],
         data(){ return {
-            layout: { UUID:'uuid',Customer:'name',Phone:'phone',Amount:'amount',Updated:'updated' }
+            layout: { UUID:'uuid',Customer:'name',Phone:'phone',Amount:'total',Updated:'updated' }
         } },
         computed: {
             carts(){ return this.$store.getters['CARTS/live'] },
             cart(){ return _.head(_.filter(this.carts,['id',this.id])) },
-            total(){ return _.sumBy(this.cart.items,({ amount }) => _.toNumber(amount)) }
         },
         methods: {
-            itemName(id){ return _.get(_.head(_.filter(this.$store.state.ITEMS.ITEMS,['id',id])),'name') }
+            itemName(id){ return _.get(_.head(_.filter(this.$store.state.ITEMS.ITEMS,['id',_.toInteger(id)])),'name') }
         }
     }
 </script>

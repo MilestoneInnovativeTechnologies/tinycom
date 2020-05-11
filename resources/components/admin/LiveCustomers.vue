@@ -1,6 +1,6 @@
 <template>
     <section class="live-customers">
-        <RecordList title="Live Customers" :records="records" :layout="layout" />
+        <RecordList title="Live Customers" :records="customers" :layout="layout" />
     </section>
 </template>
 
@@ -8,15 +8,10 @@
     export default {
         name: "LiveCustomers",
         data(){ return {
-            layout: { Customer:'name','Last Update':'last_updated' }
+            layout: { Customer:'name','Time':'updated' }
         } },
         computed: {
-            customers(){ return this.$store.getters["DASHBOARD/live_customers"] },
-            records(){ return _(this.customers).sortBy('time').reverse().value() }
+            customers(){ return this.$store.getters["CUSTOMERS/live"] },
         }
     }
 </script>
-
-<style scoped>
-
-</style>

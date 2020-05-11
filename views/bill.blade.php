@@ -1,6 +1,7 @@
 @php
-    $title = $bill->Customer->name . 'Your Order Confirmed!!';
-    $description = 'Your order of amount '.floatval($bill->amount).' with ' . ($COMPANY ?? 'Tiny COM') .' is confirmed. Here is the bill. Follow the link to see the bill bil details';
+    $amount = number_format($bill->Items->sum('amount'),2);
+    $title = $bill->Customer->name . ', Your Order Confirmed!!';
+    $description = 'Your order of amount '.$amount.' with ' . ($COMPANY ?? 'Tiny COM') .' is confirmed. Here is the bill. Follow the link to see the bill bil details';
     $url = request()->fullUrl();
 @endphp<!doctype html>
 <html lang="en">
@@ -49,7 +50,7 @@
     <main class="">
         <div class="container-fluid">
             <section class="bill-view py-3">
-                <div class="card col-lg-3 m-lg-auto" v-if="bill">
+                <div class="card col-lg-3 m-lg-auto" @if($bill->status === 'Delivered') style="background: url('/images/delivered.png') no-repeat bottom right" @endif>
                     <div class="card-body px-0">
                         <h4 class="card-title text-center">{{ $COMPANY ?? 'Tiny COM' }}</h4>
                         <hr>
@@ -72,12 +73,13 @@
                             @endif
                             </tbody>
                             <tfoot>
-                            <tr><th colspan="4" class="text-right font-weight-bolder" style="font-size: 1.2rem"><i class="fas fa-rupee-sign"></i> {{ floatval($bill->amount) }}</th></tr>
+                            <tr><th colspan="4" class="text-right font-weight-bolder" style="font-size: 1.2rem"><i class="fas fa-rupee-sign"></i> {{ $amount }}</th></tr>
                             </tfoot>
                         </table>
                         <hr>
-                        <p class="text-center" style="font-size: 1.5rem"><i class="fas fa-rupee-sign"></i> {{ $bill->amount }}</p>
+                        <p class="text-center" style="font-size: 1.5rem"><i class="fas fa-rupee-sign"></i> {{ $amount }}</p>
                         <hr>
+                        @if($bill->status === 'Delivered' && floatval($bill->amount) !== floatval($amount))<p class="text-center" style="font-size: 0.8rem;">Paid {{ number_format($bill->amount,2) }}</p>@endif
                     </div>
                 </div>
             </section>

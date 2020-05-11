@@ -8,7 +8,7 @@
     export default {
         name: "LiveCarts",
         data(){ return {
-            layout: { Customer:'name',Amount:'amount',Updated:'updated',Source:'source' }
+            layout: { Customer:'name',Amount:'total',Updated:'updated',Source:'source' }
         } },
         computed: {
             live(){ return this.$store.getters["CARTS/live"] },

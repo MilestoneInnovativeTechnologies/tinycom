@@ -3,14 +3,14 @@
 namespace Milestone\Tinycom\Model;
 
 use Illuminate\Support\Str;
-use Spatie\MediaLibrary\HasMedia\HasMedia;
-use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
-use Spatie\MediaLibrary\Models\Media;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Source extends Model implements HasMedia
 {
 
-    use HasMediaTrait;
+    use InteractsWithMedia;
 
     public static $SessionName = 'TinyCOM_Source';
     public static $SessionSourceItems = 'TinyCOM_SourceItems';
@@ -39,7 +39,7 @@ class Source extends Model implements HasMedia
     private static function getAttr($value){ return is_string($value) ? json_decode($value,true) : $value; }
 
 
-    public function registerMediaCollections()
+    public function registerMediaCollections(): void
     {
         $this->addMediaCollection('sources')
             ->singleFile()

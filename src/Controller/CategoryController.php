@@ -13,4 +13,11 @@ class CategoryController extends Controller
         if($request->hasFile('image')){ Category::find($id)->addMediaFromRequest('image')->toMediaCollection('categories'); }
         return Category::find($id);
     }
+
+    public function create(Request $request){
+        $create = $request->only(['name','description','status']);
+        $category = Category::create($create);
+        if($request->hasFile('image')){ $category->addMediaFromRequest('image')->toMediaCollection('categories'); }
+        $category->load('media'); return $category;
+    }
 }

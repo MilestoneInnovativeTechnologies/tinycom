@@ -18,7 +18,7 @@
                         <div class="col-6 text-right font-weight-bolder">{{ item.amount }}</div>
                     </div>
                 </li>
-                <li class="list-group-item"><h5 class="text-right">{{ total }}</h5></li>
+                <li class="list-group-item"><h5 class="text-right">{{ bill.total }}</h5></li>
             </ul>
 
         </div>
@@ -30,11 +30,10 @@
         name: "CartView",
         props: ['id'],
         data(){ return {
-            layout: { UUID:'uuid',Source:'source_title',Customer:'customer_name',Status:'status','Last Updated':'updated' }
+            layout: { UUID:'uuid',Source:'source_title',Customer:'customer_name',Phone:'customer_phone',Status:'status','Last Updated':'updated' }
         } },
         computed: {
             cart(){ return this.$store.getters['CARTS/cart'](this.id) },
-            total(){ return _.sumBy(this.cart.items,({ amount }) => _.toNumber(amount)) }
         },
         methods: {
             itemName(id){ return _.get(_.head(_.filter(this.$store.state.ITEMS.ITEMS,['id',id])),'name') }

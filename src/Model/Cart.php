@@ -3,14 +3,19 @@
 namespace Milestone\Tinycom\Model;
 
 use Illuminate\Support\Str;
+use Milestone\Tinycom\Controller\CartController;
 
 class Cart extends Model
 {
     protected static function booted(){
         static::saved(function ($cart) {
-            if($cart->wasChanged('status') && $cart->status === 'Cancelled'){
-                $items = $cart->Items->mapWithKeys(function($item){ return [ $item->item => $item->quantity ]; })->toArray();
-                Item::find(array_keys($items))->each(function($item)use($items){ $item->increment('stock',$items[$item->id] ?? 0); });
+            if($cart->wasChanged('status')){
+                CartController::removeOrder($cart->id);
+                if($cart->status === 'Cancelled'){
+                    $items = $cart->Items->mapWithKeys(function($item){ return [ $item->item => $item->quantity ]; })->toArray();
+                    Item::find(array_keys($items))->each(function($item)use($items){ $item->increment('stock',$items[$item->id] ?? 0); });
+                }
+                if($cart->status === 'Ordered'){ CartController::addOrder($cart->id); }
             }
         });
     }
@@ -18,14 +23,16 @@ class Cart extends Model
 
     public static $SessionName = 'TinyCOM_Cart';
     public static $CacheName = 'carts';
-    public static $CacheExpire = 3*60*60;
+    public static $CacheOrders = 'orders';
+    public static $CacheOrderLatest = 'latest_order';
+    public static $CacheExpire = 3*60;
     public static $DBExpire = 2*24*60*60;
 
     protected $guarded = [];
     protected $with = ['Items'];
 
     public function Items(){
-        return $this->hasMany(CartItem::class,'item','id');
+        return $this->hasMany(CartItem::class,'cart','id');
     }
 
     public function Source(){

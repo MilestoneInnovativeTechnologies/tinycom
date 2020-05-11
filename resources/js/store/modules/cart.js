@@ -37,7 +37,7 @@ const mutations = {
     incrementByIndex(state,idx){ let { price } = state.items[idx]; let quantity = ++ state.items[idx].quantity; state.items[idx].amount = price * quantity },
     decrementByIndex(state,idx){ let { price } = state.items[idx]; let quantity = -- state.items[idx].quantity; state.items[idx].amount = price * quantity },
     ordered(state){ state.ordered.status = true; state.ordered.error = null; },
-    orderResponse(state,{ error,message }){ state.ordered.error = error; state.ordered.message = message; },
+    orderResponse(state,{ error,message }){ state.ordered.error = error; state.ordered.message = message; state.items.splice(0); state.uuid = '' },
 }
 const actions = {
     init({ commit,dispatch,state:{ timeout } },data){
@@ -68,7 +68,7 @@ const actions = {
                 _.forEach(items,({ item }) => commit('removeItem',_.toInteger(item)));
                 _.forEach(R.items,({ item,quantity }) => { let qty = _.toNumber(quantity); while(qty-- >= 1) dispatch('increment',item); });
             }
-            setTimeout(sync,timeout)
+            //setTimeout(sync,timeout)
         })
     },
     order({ state:{ url:{ order },items,uuid },commit }){

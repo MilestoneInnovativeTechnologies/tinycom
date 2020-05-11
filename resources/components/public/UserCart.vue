@@ -1,13 +1,15 @@
 <template>
-    <div class="card mt-3 user-cart">
-        <div class="card-header">Cart Items</div>
-        <img v-if="src" :src="src" class="card-img-top">
-        <div class="card-body"><UserCartItems/></div>
-        <div class="card-footer">
-            <button class="btn btn-primary text-right" @click.prevent="$router.go(-1)"><i class="fas fa-chevron-left"></i> Continue Shopping</button>
-            <button class="btn btn-primary float-right" @click.prevent="confirm">Place Order <i class="fas fa-chevron-right"></i></button>
+    <section class="user-cart mt-3">
+        <div class="card user-cart mx-sm-auto" style="max-width: 65vh">
+            <div class="card-header"> <div class="card-title mb-0">Cart Items</div></div>
+            <img v-if="src" :src="src" class="card-img-top">
+            <div class="card-body"><UserCartItems /></div>
+            <div class="card-footer">
+                <button class="btn btn-primary text-right" @click.prevent="$router.go(-1)"><i class="fas fa-chevron-left"></i> Shop</button>
+                <button class="btn btn-primary float-right" @click.prevent="confirm">Place Order <i class="fas fa-chevron-right"></i></button>
+            </div>
         </div>
-    </div>
+    </section>
 </template>
 
 <script>

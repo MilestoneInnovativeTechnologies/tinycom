@@ -22,29 +22,30 @@
                 </div>
             </div>
         </div>
-        <div class="card col-lg-3 m-lg-auto" v-if="order">
+        <div class="card mx-sm-auto" style="max-width: 65vh" v-if="order">
             <div class="card-body">
-                <div class="row py-1" v-for="(key,head,idx) in layout" :key="'order-view-detail-index-'+idx">
+                <div class="row py-1 px-2" v-for="(key,head,idx) in layout" :key="'order-view-detail-index-'+idx">
                     <div class="col-3 px-0">{{ head }}</div><div class="col-9 text-right px-0">{{ order[key] }}</div>
                 </div>
-                <div class="row py-1">
+                <div class="row py-1 px-2">
                     <div class="col-3 px-0">Source</div><div class="col-9 text-right px-0">{{ order.source_title }} <button v-if="order.source" class="btn btn-link" @click="$router.push({ name:'source',params:{ id:order.source } })">&raquo;</button></div>
                 </div>
             </div>
-            <h4 class="card-title">Items</h4>
+            <h4 class="card-title px-4">Items</h4>
             <ul class="list-group list-group-flush" v-if="order.items && order.items.length">
                 <li class="list-group-item" v-for="item in (order.items || [])" :key="'order-view-items-'+item.id">
                     <div class="row">
-                        <div class="col-12"><strong>{{ itemName(item.id) }}</strong></div>
+                        <div class="col-12"><strong>{{ itemName(item.item) }}</strong></div>
                         <div class="col-6">{{ item.price }} X {{ item.quantity }}</div>
                         <div class="col-6 text-right font-weight-bolder">{{ item.amount }}</div>
                     </div>
                 </li>
-                <li class="list-group-item"><h5 class="text-right">{{ total }}</h5></li>
+                <li class="list-group-item"><h5 class="text-right">{{ order.total }}</h5></li>
             </ul>
             <div class="card-body text-center">
                 <button class="btn btn-block btn-warning" :disabled="disabled" :class="{ disabled }" @click.prevent="confirm">Confirm Order</button>
                 <button class="btn btn-link text-danger mt-3" :disabled="disabled" :class="{ disabled }" @click.prevent="cancel(false)">Cancel Order</button>
+                <button class="btn btn-link text-dark mt-3" :disabled="disabled" :class="{ disabled }" @click.prevent="$store.dispatch('CARTS/fetch',order.id)">Update from server</button>
             </div>
         </div>
     </section>
@@ -55,13 +56,11 @@
         name: "Order",
         props: ['id'],
         data(){ return {
-            layout: { 'Order ID':'id',UUID:'uuid',Customer:'customer_name',Status:'status','Last Updated':'updated' },
+            layout: { 'Order ID':'id',UUID:'uuid',Customer:'customer_name',Phone:'customer_phone',Status:'status','Last Updated':'updated' },
             disabled: false, message: '', title: '', reason: '', type: false,
         } },
         computed: {
             order(){ return this.$store.getters['CARTS/cart'](this.id) },
-            total(){ return _.sumBy(this.order.items,({ amount }) => _.toNumber(amount)) },
-            order_total(){ return _.get(this.order,'amount') },
         },
         methods: {
             itemName(id){ return _.get(_.head(_.filter(this.$store.state.ITEMS.ITEMS,['id',id])),'name') },

@@ -1,4 +1,5 @@
-.user-cart { max-width: 55vh; }
+
+
 .cart-total::after {
     content: 'totol amount';
     font-weight: normal;
