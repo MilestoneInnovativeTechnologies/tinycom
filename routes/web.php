@@ -39,29 +39,6 @@ Route::group([
     Route::view('r','TinyCOM::redirect')->name('redirect');
     Route::get('/','HomeController@index')->name('home');
 
-    //DEBUGS
-    Route::get('debug',function(){
-
-        \Milestone\Tinycom\Controller\CartController::removeOrder(10);
-        \Milestone\Tinycom\Controller\CartController::removeOrder(13);
-        \Milestone\Tinycom\Controller\CartController::removeOrder(14);
-
-//        session()->forget('TinyCOM_Cart');
-//        cache()->forget('carts');
-        $caches = [
-            \Milestone\Tinycom\Model\Cart::$CacheName,
-            \Milestone\Tinycom\Model\Cart::$CacheOrders,
-            \Milestone\Tinycom\Model\Cart::$CacheOrderLatest,
-            \Milestone\Tinycom\Model\Customer::$CacheForLive,
-            \Milestone\Tinycom\Model\Item::$UpdatedCacheName,
-            \Milestone\Tinycom\Model\Source::$CreatedCacheName
-        ];
-        dump('Cache');
-        foreach($caches as $cache) dump($cache, cache()->get($cache));
-        dd('Session',session()->all(),'Cookie',request()->cookies->all());
-
-    });
-
 });
 
 
