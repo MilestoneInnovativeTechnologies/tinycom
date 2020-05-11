@@ -25,6 +25,7 @@ class ItemController extends Controller
 
     public function create(Request $request){
         $create = $request->only(['name','description','status','price','selling','stock']);
+        foreach(['price','selling','stock'] as $key) $create[$key] = (isset($create[$key]) && !empty($create[$key])) ?  $create[$key] : 0;
         $item = Item::create($create); $item->Categories()->attach($request->input('category'));
         if($request->hasFile('image')){ $item->addMediaFromRequest('image')->toMediaCollection('items'); }
         $item->load(['Categories','media']); return $item;
