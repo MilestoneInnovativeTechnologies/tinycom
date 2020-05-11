@@ -7,7 +7,7 @@ use Illuminate\Support\ServiceProvider;
 class TinycomServiceProvider extends ServiceProvider
 {
 
-    private static $root = __DIR__ . '\\..\\';
+    private static $root = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR;
     private static $configKeys = ['filesystems.disks'];
 
     /**
@@ -38,7 +38,7 @@ class TinycomServiceProvider extends ServiceProvider
 
 
     private static function getRoot($folder = null,$file = null){
-        $path = ($folder ? "$folder\\" : "") . ($file ? "$file" : '');
+        $path = ($folder ? ("$folder" . DIRECTORY_SEPARATOR) : "") . ($file ? "$file" : '');
         return self::$root . $path;
     }
     private function mergeConfigs(){ foreach (self::$configKeys as $key) $this->mergeConfigFrom(self::getRoot('config',"$key.php"),$key); }

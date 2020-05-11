@@ -28,11 +28,10 @@
                 set(status){ this.dispatch({status}) },
             },
             image(){
-                return _.isEmpty(this.category.media) ? null : this.imageUrl(this.category.media[0].id,this.category.media[0].file_name)
+                return _.isEmpty(this.category.media) ? null : imageUrl(this.category.media[0])
             },
         },
         methods: {
-            imageUrl(id,name){ return `http://tinycom/uploads/media/${id}/${name}`  },
             changeImage(id){ this.$store.dispatch('SERVER/updateCategory',this.formData({ image:this.$refs[`category-${id}-image`].files[0] })) },
             formData(data){ let fd = new FormData; _.forEach(data,(value,key) => fd.append(key,value)); return { id:this.cid,data:fd,item:'category',action:'update' } },
             dispatch(data){ this.$store.dispatch('SERVER/serverItemAction',this.formData(data)) }

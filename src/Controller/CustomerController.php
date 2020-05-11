@@ -93,7 +93,7 @@ class CustomerController extends Controller
 
     public static function live($customer = null){
         $customer = $customer ?? \request()->cookie(Customer::$CookieName);
-        $live_customers = Cache::get(Customer::$CacheForLive);
+        $live_customers = Cache::get(Customer::$CacheForLive,[]);
         $time = time(); $expired = $time - Customer::$LiveTime;
         if($customer) $live_customers[$customer] = $time;
         $live_customers = array_filter($live_customers,function($time)use($expired){ return $time > $expired; });

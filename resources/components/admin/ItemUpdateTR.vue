@@ -42,11 +42,10 @@
                 set(stock){ this.dispatch({stock}) },
             },
             image(){
-                return _.isEmpty(this.item.media) ? null : this.imageUrl(this.item.media[0].id,this.item.media[0].file_name)
+                return _.isEmpty(this.item.media) ? null : imageUrl(this.item.media[0])
             },
         },
         methods: {
-            imageUrl(id,name){ return `http://tinycom/uploads/media/${id}/${name}`  },
             changeImage(id){ this.$store.dispatch('SERVER/serverItemAction',this.formData({ image:this.$refs[`item-${id}-image`].files[0] })) },
             formData(data){ let fd = new FormData; _.forEach(data,(value,key) => fd.append(key,value)); return { id:this.id,data:fd,item:'item',action:'update' } },
             dispatch(data){ this.$store.dispatch('SERVER/serverItemAction',this.formData(data)) }

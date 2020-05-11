@@ -1,7 +1,7 @@
 @php
     $amount = number_format($bill->Items->sum('amount'),2);
-    $title = $bill->Customer->name . ', Your Order Confirmed!!';
-    $description = 'Your order of amount '.$amount.' with ' . ($COMPANY ?? 'Tiny COM') .' is confirmed. Here is the bill. Follow the link to see the bill bil details';
+    $title = $bill->Customer->name . ', Your Order ' .($bill->status). '!!';
+    $description = 'Your order of amount '.$amount.' with ' . ($COMPANY ?? 'Tiny COM') .' is ' .($bill->status). '. Follow the link to see the bill bil details';
     $url = request()->fullUrl();
 @endphp<!doctype html>
 <html lang="en">
