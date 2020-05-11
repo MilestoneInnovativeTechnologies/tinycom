@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="stylesheet" href="css/app.css">
-    <link rel="stylesheet" href="css/public.css">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/public.css') }}">
 
-    <script src="/pack"></script>
+    <script src="{{ asset('pack') }}"></script>
 
     <title>TinyCOM :: A Tiny eCommerce portal for local business and delivery.</title>
 </head>
@@ -34,6 +34,6 @@
         </nav>
     </div>
     <script> const COMPANY = 'Tiny COM', MEDIA_URL = '{!! \Illuminate\Support\Facades\Storage::disk('media')->url('[id]/[file_name]') !!}'; function imageUrl({ id,file_name }){ return MEDIA_URL.replace(/\[(\w+)\]/g,(i,M) => eval(M))} </script>
-    <script defer src="js/public.js"></script>
+    <script defer src="{{ asset('js/public.js') }}"></script>
 </body>
 </html>
