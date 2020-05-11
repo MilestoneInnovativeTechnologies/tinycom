@@ -14,6 +14,9 @@
                 <li class="list-group-item">Actual Price <span class="float-right">{{ item.price }}</span></li>
                 <li class="list-group-item">Selling Price <span class="float-right">{{ item.selling }}  <p class="badge-warning badge p-2" v-if="item.isExclusive">For YOU</p></span></li>
             </ul>
+            <div class="card-body">
+                <CartIncrementDecrement class="float-right" :id="id" />
+            </div>
         </div>
     </section>
 </template>
@@ -23,7 +26,8 @@
         name: "ItemView",
         props: ['id'],
         data(){ return {
-            keys: ['Price','Selling']
+            keys: ['Price','Selling'],
+            quantity: 0,
         } },
         computed: {
             item(){ return this.$store.getters["ITEMS/item"](this.id) },

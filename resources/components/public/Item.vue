@@ -14,13 +14,8 @@
                     <del v-if="sale" class="">{{ prop('price') | number }}</del>
                 </td>
                 <td class="pb-2">
-                    <div class="form-inline float-right">
-                        <button @click.prevent="decrement" class="btn btn-sm btn-info"><i class="fas text-white fa-level-up-alt fa-rotate-180"></i></button>
-                        <input type='text' name='quantity' v-model="quantity" class='form-control form-control-sm border-0 text-center font-weight-bold text-info' style="width: 2rem" />
-                        <button @click.prevent="increment" class="btn btn-sm btn-info" ><i class="fas text-white fa-level-up-alt"></i></button>
-                    </div>
+                    <CartIncrementDecrement class="float-right" :id="id" />
                 </td>
-
             </tr>
         </tbody>
     </table>
@@ -38,15 +33,11 @@
             exclusive(){ return this.prop('isExclusive') },
             price(){ return this.prop('sellPrice') },
             quantity(){ return this.$store.getters['CART/itemQuantity'](this.id) },
-            amount(){ return this.$store.getters['CART/itemTotal'](this.id) },
             image(){ return this.prop('image') },
         },
         methods: {
             increment(){ this.$store.dispatch('CART/increment',this.id) },
             decrement(){ this.$store.dispatch('CART/decrement',this.id) },
         },
-        watch: {
-            amount(value){ this.totalShow = true; setTimeout(($vm) => $vm.totalShow = false,2500,this) }
-        }
     }
 </script>
