@@ -29,6 +29,7 @@ class TinycomServiceProvider extends ServiceProvider
     {
         if(app()->runningInConsole()){
             $this->loadMigrations();
+            $this->publishAssets();
         } else {
             $this->loadViews();
             $this->loadRoutes();
@@ -44,4 +45,5 @@ class TinycomServiceProvider extends ServiceProvider
     private function loadMigrations(){ $this->loadMigrationsFrom(self::getRoot('migrations')); }
     private function loadViews(){ $this->loadViewsFrom(self::getRoot('views'), 'TinyCOM'); }
     private function loadRoutes(){ $this->loadRoutesFrom(self::getRoot('routes','web.php')); }
+    private function publishAssets(){ $this->publishes([self::getRoot('assets') => public_path('/')]); }
 }
