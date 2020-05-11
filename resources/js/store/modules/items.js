@@ -1,7 +1,6 @@
 
 const state = {
     ITEMS,ITEM_CATEGORIES,
-    image_url: '/uploads/media/[id]/[file_name]',
     toNumber: ['price','selling','stock'],
     last: null,
     url: {
@@ -11,23 +10,27 @@ const state = {
     timeout: 180000,
 }
 const getters = {
-    item({ ITEMS,toNumber },{ isOnSale,sellPrice,image,isExclusive }){
-        return (id) => Object.assign({},_.get(ITEMS,id)
-            ,{ isOnSale:isOnSale(id), sellPrice:sellPrice(id), image:image(id), isExclusive:isExclusive(id) }
-            , _.zipObject(toNumber,_.map(toNumber,key => _.toNumber(_.get(ITEMS,[id,key]))))
-            )
+    all({ ITEMS,toNumber },{ isOnSale,sellPrice,image,isExclusive }){
+        return _.mapValues(ITEMS,item => {
+            return Object.assign({},item,{
+                isOnSale:isOnSale(item.id), sellPrice:sellPrice(item.id), image:image(item.id), isExclusive:isExclusive(item.id)
+            },_.zipObject(toNumber,_.map(toNumber,key => _.toNumber(_.get(item,key)))))
+        })
     },
-    image({ ITEMS,image_url }){
+    item(s,{ all }){
+        return (id) => _.get(all,_.toInteger(id),_.get(all,id,null))
+    },
+    image({ ITEMS }){
         return (iId) => {
-            let { media } = _.get(ITEMS,iId); if(!media || _.isEmpty(media)) return  null; let { id,file_name } = media[0];
-            return (id) ? image_url.replace(/\[(\w+)?\]/g,function(f,i){ return eval(i) }) : null
+            let { media } = _.get(ITEMS,iId), item_media = (!media || _.isEmpty(media)) ? null : media[0];
+            return (item_media) ? imageUrl(item_media) : null;
         }
     },
     isOnSale({ ITEMS }){
         return (id) => {
             let { price,selling } = _.get(ITEMS,id);
             price = _.toNumber(price); selling = _.toNumber(selling);
-            return selling !== 0 && selling !== price && selling > price
+            return selling !== 0 && selling !== price && selling < price
         }
     },
     isExclusive(s,g,rs,rootGetters){ return rootGetters["SOURCE/has"] },
