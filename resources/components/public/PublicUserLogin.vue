@@ -9,8 +9,8 @@
             <hr class="hr-or">
             <div class="card-body">
                 <h6 class="card-title">Register</h6>
-                <input type="text" v-model="name" class="form-control mb-1" placeholder="Name"></input>
-                <input type="text" v-model="phone" class="form-control" placeholder="Phone"></input>
+                <input type="text" v-model="name" class="form-control mb-1" placeholder="Name">
+                <input type="text" v-model="phone" class="form-control" placeholder="Phone">
                 <button class="float-right btn btn-primary btn-sm btn-block mt-1" @click="proceed">Register</button>
             </div>
         </div>

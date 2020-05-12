@@ -1,6 +1,6 @@
 <template>
     <section class="category-items px-3">
-        <h5 class="text-info border-info pb-1">{{ category.name }} <input type="text" class="form-control float-right col-4 filter-control" v-model="filter" placeholder="filter.."></h5>
+        <h5 class="text-info border-info pb-1 d-flex"><span class="mr-3">{{ category.name }}</span> <input type="text" class="form-control flex-grow-1 ml-auto filter-control" v-model="filter" placeholder="filter.."></h5>
         <div class="row">
             <div class="col-12 col-lg-6 my-1 shadow-sm px-0" v-for="item_id in display" :key="['exclusive','item',item_id].join('-')" ><item :id="item_id"></item></div>
         </div>

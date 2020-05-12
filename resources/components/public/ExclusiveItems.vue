@@ -13,7 +13,7 @@
         props: { start: { default:0 }, length: { default: 5 } },
         computed: {
             displayLength(){ return this.$route.params.length || this.length },
-            items(){ return Object.keys(this.$store.SOURCE.SOURCE.items) },
+            items(){ return Object.keys(this.$store.state.SOURCE.SOURCE.items) },
             display(){ return this.items.slice(0,this.displayLength) },
             total(){ return this.items.length },
         }

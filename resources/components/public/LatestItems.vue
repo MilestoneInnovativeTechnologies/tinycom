@@ -10,7 +10,7 @@
 <script>
     export default {
         name: "LatestItems",
-        props: { start: { default:0 }, length: { default: 4 } },
+        props: { start: { default:0 }, length: { default: 6 } },
         computed: {
             items(){ return this.$store.getters["ITEMS/getLatest"](this.length) },
         }

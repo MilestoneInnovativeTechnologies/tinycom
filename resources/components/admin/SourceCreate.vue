@@ -11,7 +11,7 @@
                         <p>Share the link</p>
                         <textarea class="form-control">{{ link }}</textarea>
                     </div>
-                    <div class="modal-footer"><button type="button" class="btn btn-secondary" @click.prevent="$router.push({ name:'sources' })" data-dismiss="modal">Back to Home</button></div>
+                    <div class="modal-footer"><button type="button" class="btn btn-info" @click.prevent="$router.push({ name:'sources' })" data-dismiss="modal">Back to Home</button></div>
                 </div>
             </div>
         </div>

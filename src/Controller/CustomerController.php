@@ -14,7 +14,7 @@ class CustomerController extends Controller
 
     public function login(Request $request){
         $customer = Customer::where('phone',$request->get('phone'))->first();
-        if(!$customer) $customer  = $this->registerUser($request);
+        if(!$customer) $customer  = $this->registerUser($request,true);
         else $customer->update(['live' => time()]);
 
         if($customer->phone == $customer->name && $request->filled('name') && $request->get('name') != $customer->name) $this->updateCustomerName($customer,$request->get('name'));
@@ -23,15 +23,24 @@ class CustomerController extends Controller
         $this->manageCart($request,$customer);
         $this->manageSource($request,$customer);
 
-        $customer = Customer::find($customer->id); $this->queueCookie($customer->id);
+        $customer = Customer::find($customer->id); self::queueCookie($customer->id);
         return $customer;
     }
 
-    public function registerUser(Request $request){
+    public function registerUser(Request $request, $live = true){
         $customer = new Customer;
         if($request->get('phone')) $customer->phone = $request->get('phone');
         $customer->name = $request->filled('name') ? $request->get('name') : $request->get('phone');
-        $customer->live = time(); $customer->save(); return $customer;
+        if($live) $customer->live = time(); $customer->save(); return $customer;
+    }
+
+    public function create(Request $request){
+        return $this->registerUser($request,false);
+    }
+
+    public function adminUpdate(Request $request){
+        Customer::where('id',$request->id)->update($request->only(['phone','name']));
+        return Customer::find($request->id);
     }
 
     public function updateCustomerName($customer,$name){
@@ -73,7 +82,7 @@ class CustomerController extends Controller
         } else session()->forget(Source::$SessionName);
     }
 
-    public function queueCookie($customer){
+    public static function queueCookie($customer){
         Cookie::queue(Cookie::make(Customer::$CookieName, $customer, 5*24*60));
     }
 
@@ -102,6 +111,11 @@ class CustomerController extends Controller
 
     public static function online(){
         return Cache::get(Customer::$CacheForLive);
+    }
+
+    public function fetch(Request $request){
+        $customer = $request->input('id');
+        return Customer::find($customer);
     }
 
 }
