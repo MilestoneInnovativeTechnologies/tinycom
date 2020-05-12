@@ -4,6 +4,7 @@ namespace Milestone\Tinycom\Controller;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Milestone\Tinycom\Model\Cart;
 use Milestone\Tinycom\Model\Customer;
 use Milestone\Tinycom\Model\Item;
 use Milestone\Tinycom\Model\Source;
@@ -46,10 +47,14 @@ class SourceController extends Controller
                 session()->put(Source::$SessionSourceItems,$source->items);
                 session()->put(Source::$SessionSourceCustomers,[]);
             } else {
-                session()->put(Source::$SessionSourceLogin,true);
-                $r_customer = $request->cookie(Customer::$CookieName);
-                if($r_customer){
-                    session()->put(Source::$SessionSourceItems,in_array($r_customer,$s_customers) ? $source->items : []);
+                if(count($s_customers) === 1) {
+                    CustomerController::queueCookie($s_customers[0]);
+                    session()->put(Source::$SessionSourceItems,$source->items);
+                    session()->forget(Cart::$SessionName);
+                } else {
+                    session()->put(Source::$SessionSourceLogin,true);
+                    $r_customer = $request->cookie(Customer::$CookieName);
+                    session()->put(Source::$SessionSourceItems,($r_customer && in_array($r_customer,$s_customers)) ? $source->items : []);
                 }
             }
         }
