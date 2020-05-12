@@ -1,6 +1,6 @@
 
 export const links = [
-    'Home','Orders','Confirms','Delivered','Sources','Carts','Categories','Items'
+    'Home','Customers','Categories','Items','Orders','Confirms','Delivered','Sources','Carts'
 ];
 
 export const routes = [
@@ -18,4 +18,6 @@ export const routes = [
     { path: '/bill/:id', name: 'bill' ,component: require('./../../components/admin/Bill').default, props:true },
     { path: '/live/cart/:id', name: 'live_cart' ,component: require('./../../components/admin/LiveCart').default, props:true },
     { path: '/delivered', name: 'delivered' ,component: require('./../../components/admin/Delivered').default },
+    { path: '/customers', name: 'customers' ,component: require('./../../components/admin/Customers').default },
+    { path: '/customer/:id', name: 'customer' ,component: require('./../../components/admin/Customer').default, props:true },
 ]

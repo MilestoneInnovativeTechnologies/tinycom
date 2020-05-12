@@ -7,7 +7,7 @@ const state = {
 }
 
 const getters = {
-    has({ SOURCE: { items } }){ return (id) => id ? _.has(items,id) : items.length },
+    has({ SOURCE: { items } }){ return (id) => (id === undefined) ? _.keys(items).length : _.has(items,_.toInteger(id)) },
     get({ SOURCE: { items } }){ return (id) => _.get(items,id,null) },
 }
 

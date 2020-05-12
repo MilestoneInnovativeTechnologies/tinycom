@@ -86,6 +86,14 @@ Route::group([
     });
 
     Route::group([
+        'prefix'    =>  'customer'
+    ],function(){
+        Route::post('fetch','CustomerController@fetch');
+        Route::post('create','CustomerController@create');
+        Route::post('update','CustomerController@adminUpdate');
+    });
+
+    Route::group([
         'prefix'    =>  'api'
     ],function(){
         Route::post('category/{id}/update','CategoryController@update');

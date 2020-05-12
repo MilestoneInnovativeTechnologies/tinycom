@@ -55,7 +55,7 @@ const app = new Vue({
     },
     mounted(){
         this.$store.dispatch('CARTS/init').then(null)
-        this.$store.dispatch('CUSTOMERS/live').then(null)
+        this.$store.dispatch('CUSTOMERS/init').then(null)
         setTimeout(($vm) => $vm.$store.dispatch('CARTS/orders').then(null),10000,this);
     }
 });
