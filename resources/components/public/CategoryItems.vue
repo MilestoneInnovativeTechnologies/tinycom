@@ -14,7 +14,7 @@
         props: ['id'],
         computed: {
             category(){ return this.$store.state.CATEGORIES.CATEGORIES[this.id] },
-            items(){ return this.$store.state.CATEGORIES.CATEGORY_ITEMS[this.id] },
+            items(){ return this.$store.getters["CATEGORIES/items"](this.id) },
             slugs(){ return _.pick(this.$store.getters["ITEMS/slugs"],this.items) },
             result(){ return _(this.slugs).map((v,k) => _.includes(v,_.toLower(this.filter)) ? _.toInteger(k) : null).filter().value() },
             display(){ return _.intersection(this.items,this.result) }

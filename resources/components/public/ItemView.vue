@@ -8,7 +8,7 @@
             </div>
             <div class="card-body row" v-if="item.isExclusive || item.isOnSale">
                 <div class="col text-success" v-if="item.isOnSale"><i class="fas fa-check-double mr-2"></i> On Sale</div>
-                <div class="col text-success" v-if="item.isExclusive"><i class="fas fa-check-double mr-2"></i> Specially Price</div>
+                <div class="col text-success" v-if="item.isExclusive"><i class="fas fa-check-double mr-2"></i> Special Price</div>
             </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">Actual Price <span class="float-right">{{ item.price }}</span></li>

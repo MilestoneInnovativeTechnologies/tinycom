@@ -37,7 +37,7 @@ const getters = {
             id,uuid,customer,items || [],time,source,
             _.sumBy(items || [],({ amount }) => _.toNumber(amount)),
             _.toNumber(amount || 0),
-            _.get(rootGetters["SOURCES/source"](source),'title'),
+            _.get(rootGetters["SOURCES/source2"](source),'title'),
             _.get(rootGetters["CUSTOMERS/customer"](customer),'name'),
             _.get(rootGetters["CUSTOMERS/customer"](customer),'phone'),
             fromNow(time)

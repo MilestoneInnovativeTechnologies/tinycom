@@ -18,7 +18,7 @@
                         <div class="col-6 text-right font-weight-bolder">{{ item.amount }}</div>
                     </div>
                 </li>
-                <li class="list-group-item"><h5 class="text-right">{{ bill.total }}</h5></li>
+                <li class="list-group-item"><h5 class="text-right">{{ cart.total }}</h5></li>
             </ul>
 
         </div>

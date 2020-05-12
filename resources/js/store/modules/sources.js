@@ -8,7 +8,7 @@ const state = {
 }
 
 const getters = {
-    all({ SOURCES },g,rootState){ return _.map(SOURCES,source => {
+    all({ SOURCES },{ source_orders },rootState){ return _.map(SOURCES,source => {
         return {
             id: source.id,
             uuid: source.uuid,
@@ -19,16 +19,26 @@ const getters = {
             hits: source.hits + `+${source.expire_hits}`,
             expire_hits: source.expire_hits,
             hit: source.hits,
-            orders: source.orders,
+            orders: source_orders[_.toInteger(source.id)] ? source_orders[_.toInteger(source.id)].length : 0,
             customers: _.map(source.customers,_.toInteger),
             items: _.map(source.items,(price,item) => _.zipObject(['item','price','name'],[item,price,rootState.ITEMS.ITEMS[item].name])),
         }
     }) },
-    source(state,{ all }){ return (id) => _.head(_.filter(all,['id',_.toInteger(id)])) }
+    source_orders(s,g,rootState){
+        let order_source = _(rootState.CARTS.CARTS).filter(({ status }) => status !== 'New').mapKeys(({ id }) => _.toInteger(id)).mapValues(({ source }) => _.toInteger(source)).value(),
+            source_orders = {};
+        _.forEach(order_source,(source,order) => {
+            if(!_.has(source_orders,source)) source_orders[source] = [];
+            if(!_.includes(source_orders[source],order)) source_orders[source].push(_.toInteger(order))
+        })
+        return source_orders;
+    },
+    source(state,{ all }){ return (id) => _.head(_.filter(all,['id',_.toInteger(id)])) },
+    source2(state,{ all }){ return (uuid) => _.head(_.filter(all,['uuid',uuid])) },
 }
 
 const mutations = {
-    add(state,source){ state.SOURCES.push(source) }
+    add(state,source){ state.SOURCES.push(source) },
 }
 
 const actions = {

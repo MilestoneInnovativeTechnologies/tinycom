@@ -33,9 +33,9 @@
         computed: {
             layout(){ return { Status:'status',Expire:'expire',Orders:'orders',Hits:'hit','Hits after expire':'expire_hits' } },
             source(){ return this.$store.getters["SOURCES/source"](this.id) },
-            phone(){ return this.source.customers.length === 1 ? _.get(this.$store.getters["CUSTOMERS/customer"](this.source.customers[0]),'phone') : ''},
+            phone(){ return this.source.customers.length === 1 ? ('91' + _.get(this.$store.getters["CUSTOMERS/customer"](this.source.customers[0]),'phone')) : ''},
             url(){ return urlParse('SOURCE_LINK',{ uuid:this.source.uuid }) },
-            whatsapp(){ return urlParse('WHATSAPP',{ text:this.url,phone:'91'+this.phone }) },
+            whatsapp(){ return urlParse('WHATSAPP',{ text:this.url,phone:this.phone }) },
         },
     }
 </script>

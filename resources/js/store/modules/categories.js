@@ -6,6 +6,7 @@ const state = {
     },
 }
 const getters = {
+    items({ CATEGORY_ITEMS }){ return (category) => _.map(_.get(CATEGORY_ITEMS,_.toInteger(category),[]),_.toInteger) }
 }
 const mutations = {
 
@@ -14,7 +15,7 @@ const mutations = {
     addItem(state,{ item,category }){
         item = _.toInteger(item); category = _.toInteger(category);
         return _.has(state.CATEGORY_ITEMS,category) ? state.CATEGORY_ITEMS[category].push(item) : Vue.set(state.CATEGORY_ITEMS,category,[item])
-    }
+    },
 
 }
 const actions = {

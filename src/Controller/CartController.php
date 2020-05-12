@@ -60,6 +60,7 @@ class CartController extends Controller
         if(!array_key_exists($cart['uuid'],$cache_carts)) $cache_carts[$cart['uuid']] = $cart;
         else {
             $cache_carts[$cart['uuid']]['items'] = $cart['items'] ?? [];
+            $cache_carts[$cart['uuid']]['source'] = $cart['source'] ?? null;
             //$cache_carts[$cart['uuid']]['amount'] = count($cache_carts[$cart['uuid']]['items']) ? array_sum(array_column($cart['items'],'amount')) : 0;
         }
         $time = time(); $cache_carts[$cart['uuid']]['time'] = $time;

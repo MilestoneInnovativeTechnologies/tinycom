@@ -48,16 +48,18 @@ function image($source){
     <script>
         window.onload = function(){
             setTimeout(() => location.href = "/",4000);
+            @if($source)
             if (window.XMLHttpRequest) { xmlhttp = new XMLHttpRequest(); } else { xmlhttp = new ActiveXObject("Microsoft.XMLHTTP"); }
             xmlhttp.open("GET", "/source/hit/{{ $source->uuid }}", true);
             xmlhttp.send();
+            @endif
         }
     </script>
 </head>
 <body style="height: 100vh; padding: 0px; margin: 0px;">
     <div style="position: relative; top:50%; transform: translateY(-100%); text-align: center; font-family: monospace">
         <img src="/images/checking.gif">
-        <p>@if($source->expired) <b>This source is expired and not active currently!</b> @else Identifying the source. @endif<br >You will be redirected to home page soon!!</p>
+        <p>@if(!$source || $source->expired) <b>This source is expired or not active currently!</b> @else Identifying the source. @endif<br >You will be redirected to home page soon!!</p>
     </div>
 </body>
 </html>

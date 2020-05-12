@@ -45,7 +45,7 @@ const getters = {
     getLast({ ITEMS,last }){ return last || _.maxBy(ITEMS,({ updated_at }) => new Date(updated_at).getTime()); },
     getLatest({ ITEMS }){
         let sorted = _(ITEMS).sortBy(({ updated_at }) => new Date(updated_at).getTime()).map('id').value(), length = sorted.length;
-        return (count) => sorted.slice(length - _.toInteger(count),length)
+        return (count) => count ? sorted.slice(length - _.toInteger(count),length) : sorted
     },
     slugs({ ITEMS }){ return _.mapValues(ITEMS,({ name,description }) => _.toLower(name) + ' ' + _.toLower(description)) }
 }

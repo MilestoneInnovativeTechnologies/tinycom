@@ -26,7 +26,7 @@ class SourceController extends Controller
                 ->mapWithKeys(function($item)use($categories){
                     $item_price = floatval($item->price); $category = Arr::get($item->Categories,"0.id"); $percentage = floatval($categories[$category]);
                     $price = floatval(((100 - $percentage)/100) * $item_price);
-                    return [$item->id => $price];
+                    return [$item->id => number_format($price,2)];
                 })->toArray();
             $items = $items + $c_items;
         }
