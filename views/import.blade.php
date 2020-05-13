@@ -15,6 +15,7 @@
                 <div class="card">
                     <div class="card-header">Import Categories <input type="submit" name="submit" value="Import Categories" class="float-right btn btn-success btn-sm"></div>
                     <div class="card-body">
+                        <p class="text-muted m-0">Name,Description,Image</p>
                         <textarea name="categories" class="form-control" rows="6"></textarea>
                     </div>
                 </div>
@@ -23,6 +24,7 @@
                 <div class="card">
                     <div class="card-header">Import Items <input type="submit" name="submit" value="Import Items" class="float-right btn btn-success btn-sm"></div>
                     <div class="card-body">
+                        <p class="text-muted m-0">name,categoryName,price,selling,stock,imageLink</p>
                         <textarea name="items" class="form-control" rows="6"></textarea>
                     </div>
                 </div>
