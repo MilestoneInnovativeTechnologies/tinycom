@@ -12,6 +12,8 @@
                 </ul>
             </div>
         </div>
+        <hr>
+        <a href="/admin/login" class="mt-3 text-center d-block">Logout</a>
     </div>
 </template>
 

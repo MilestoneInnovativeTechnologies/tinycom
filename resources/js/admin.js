@@ -48,7 +48,7 @@ const app = new Vue({
         header(){ return this.$route.params.header || this.COMPANY || 'Tiny COM' },
     },
     methods: {
-        alterFAB(){ this.actions = !this.actions; $('.nav_actions').css('height',this.actions ? '40vh' : '0vh') }
+        alterFAB(){ this.actions = !this.actions; $('.nav_actions').css('height',this.actions ? '60vh' : '0vh') }
     },
     created() {
         $('#admin_bottom_spacer').height($('.navbar.fixed-bottom').outerHeight()+'px');

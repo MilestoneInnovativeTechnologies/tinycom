@@ -42,11 +42,18 @@ Route::group([
 });
 
 
+Route::match(['get','post'],'/admin/login',function(\Illuminate\Http\Request $request){
+    \Illuminate\Support\Facades\Auth::logout();
+    if($request->getMethod() !== 'POST') return view('TinyCOM::login');
+    \Illuminate\Support\Facades\Auth::attempt(['name' => 'admin','password' => $request->input('password')]);
+    return  redirect()->route('admin');
+})->middleware('web')->name('admin.login');
+
 Route::group([
 
     'namespace'     => 'Milestone\\Tinycom\\Controller',
     'prefix'        =>  'admin',
-    'middleware'    =>  'web'
+    'middleware'    =>  ['web',\Milestone\Tinycom\Middleware\TinyCOMAuth::class]
 
 ],function(){
 
