@@ -51,7 +51,7 @@ class ImportController extends Controller
         $item_names = Item::pluck('name')->toArray();
         $items = array_filter(array_map(function($line) use($categories,$item_names,$created_at,$updated_at,&$relation,&$new_categories,&$new_category_items,&$item_image) {
             list($name,$categoryName,$price,$selling,$stock,$imageLink) = array_map('trim',array_pad(explode("\t",$line),6,null));
-            if(in_array($name,$item_names)) return ($item_image[$name] = $imageLink && false); $price = number_format(floatval($price),2,'.',''); $selling = number_format(floatval($selling),2,'.',''); $stock = number_format(floatval($stock),2,'.','');
+            if(in_array($name,$item_names)) return (($item_image[$name] = $imageLink) && false); $price = number_format(floatval($price),2,'.',''); $selling = number_format(floatval($selling),2,'.',''); $stock = number_format(floatval($stock),2,'.','');
             if(isset($categories[$categoryName])) {
                 $category = $categories[$categoryName];
                 if(!isset($relation[$category])) $relation[$category] = [];
@@ -72,18 +72,20 @@ class ImportController extends Controller
                 $relation[$id] = $new_category_items[$category];
             }
         }
-        Item::insert($items); $items = Item::pluck('id','name');
-        $records = [];
-        foreach ($relation as $category => $itemnames){
-            foreach ($itemnames as $itemname) {
-                $item = $items[$itemname];
-                $records[] = compact('category','item');
-            }
-        }
-        foreach ($item_image as $item_name => $image_link){
+        if(!empty($items)) Item::insert($items);
+        $items = Item::pluck('id','name'); $records = [];
+        if(!empty($item_image)) foreach ($item_image as $item_name => $image_link){
             if(isset($items[$item_name]) && $image_link)
                 Item::find($items[$item_name])->addMediaFromUrl($image_link)->toMediaCollection('items');
         }
-        DB::table('category_items')->insert($records);
+        if(!empty($relation)){
+            foreach ($relation as $category => $itemnames){
+                foreach ($itemnames as $itemname) {
+                    $item = $items[$itemname];
+                    $records[] = compact('category','item');
+                }
+            }
+            DB::table('category_items')->insert($records);
+        }
     }
 }
