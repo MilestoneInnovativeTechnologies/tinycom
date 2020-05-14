@@ -18,7 +18,7 @@ class ModifyUsersTable extends Migration
             $table->string('name',32)->index()->change();
             $table->string('email')->nullable()->change();
         });
-        \Illuminate\Support\Facades\DB::table('users')->updateOrInsert(['name' => 'admin'],['password' => \Illuminate\Support\Facades\Hash::make('admin')]);
+        \Illuminate\Support\Facades\DB::table('users')->updateOrInsert(['name' => 'admin'],['password' => \Illuminate\Support\Facades\Hash::make('admin'),'created_at' => now()->toDateTimeString(),'updated_at' => now()->toDateTimeString()]);
     }
 
     /**
