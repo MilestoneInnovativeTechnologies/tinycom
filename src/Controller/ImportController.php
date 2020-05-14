@@ -73,20 +73,26 @@ class ImportController extends Controller
             }
         }
         if(!empty($items)) Item::insert($items);
-        $items = Item::pluck('id','name'); $records = [];
-        if(!empty($item_image)) foreach ($item_image as $item_name => $image_link){
-            set_time_limit(5);
-            if(isset($items[$item_name]) && $image_link)
-                Item::find($items[$item_name])->addMediaFromUrl($image_link)->toMediaCollection('items');
-        }
+        $items = Item::pluck('id','name')->toArray(); $records = [];
         if(!empty($relation)){
+            $category_items = DB::table('category_items')->get()->map(function($ci){ return $ci->category . '-' . $ci->item; })->toArray();
             foreach ($relation as $category => $itemnames){
                 foreach ($itemnames as $itemname) {
                     $item = $items[$itemname];
-                    $records[] = compact('category','item');
+                    if(!in_array($category . '-' .$item,$category_items)){
+                        $records[] = compact('category','item');
+                        $category_items[] = $category . '-' .$item;
+                    }
                 }
             }
             DB::table('category_items')->insert($records);
+        }
+        if(!empty($item_image)) foreach ($item_image as $item_name => $image_link){
+            set_time_limit(15);
+            if(isset($items[$item_name]) && $image_link){
+                Item::find($items[$item_name])->addMediaFromUrl($image_link)->toMediaCollection('items');
+                usleep(10000);
+            }
         }
     }
 }
