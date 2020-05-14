@@ -6,7 +6,7 @@
             <ItemList class="mt-3" title="Exclusive Items" :items="exclusive" v-if="exclusive.length" :limit="exclusive_nos" />
             <ItemList class="mt-3" title="Latest Items" :items="latest_items" v-if="latest_items.length" :limit="latest" />
             <CategoriesList class="mt-3" v-if="categories.length > 1" />
-            <ItemList class="mt-3" :items="other_items" :limit="categories.length > 1 ? 8 : 16" />
+            <ItemList class="mt-3" :items="other_items" :limit="categories.length > 1 ? 8 : other_items.length" />
         </div>
     </section>
 </template>
