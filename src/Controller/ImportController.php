@@ -75,6 +75,7 @@ class ImportController extends Controller
         if(!empty($items)) Item::insert($items);
         $items = Item::pluck('id','name'); $records = [];
         if(!empty($item_image)) foreach ($item_image as $item_name => $image_link){
+            set_time_limit(5);
             if(isset($items[$item_name]) && $image_link)
                 Item::find($items[$item_name])->addMediaFromUrl($image_link)->toMediaCollection('items');
         }
