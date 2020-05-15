@@ -3,6 +3,7 @@
 namespace Milestone\Tinycom\Controller;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Milestone\Tinycom\Model\Item;
 
@@ -16,11 +17,14 @@ class ItemController extends Controller
         return Item::find($id);
     }
 
-    public function sync(Request $request){
-        $updated_at = strtotime($request->get('updated_at',now()->toDateTimeString()));
-        $latest = strtotime(Cache::get(Item::$UpdatedCacheName,now()->toDateTimeString()));
-        CustomerController::live();
-        return ($latest > $updated_at) ? Item::where('updated_at','>',date('Y-m-d H:i:s',$updated_at))->get() : [];
+    public function sync(){
+        $db_item_time = Carbon::parse(Cache::get(Item::$UpdatedCacheName,now()->toDateTimeString())); $given_time = Carbon::parse(session()->get(Item::$LastGivenSession));
+        CustomerController::live(); if($db_item_time->greaterThan($given_time)){
+            $items = Item::where('updated_at','>',$given_time)->get();
+            session()->put(Item::$LastGivenSession,now()->toDateTimeString());
+            return $items ?? [];
+        }
+        return [];
     }
 
     public function create(Request $request){

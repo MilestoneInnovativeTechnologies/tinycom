@@ -5,6 +5,7 @@ namespace Milestone\Tinycom\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Milestone\Tinycom\Model\Customer;
+use Milestone\Tinycom\Model\Item;
 
 class HomeController extends Controller
 {
@@ -33,6 +34,7 @@ class HomeController extends Controller
             $USER = json_encode($customer ?? null);
             $CART = json_encode($cart ?? null);
             $content = 'const '; foreach (self::$PackKeys as $key) $content .= "$key = ${$key},"; $content .= '_Null = null;';
+            session()->put(Item::$LastGivenSession,now()->toDateTimeString());
             return response($content,200,['Content-Type' => 'application/javascript']);
         } else {
             return response([],200,['Content-Type' => 'application/javascript']);

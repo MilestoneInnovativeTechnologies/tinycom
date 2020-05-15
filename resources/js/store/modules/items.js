@@ -8,7 +8,7 @@ const state = {
         sync: '/item/sync',
         create: '/admin/item/create'
     },
-    timeout: 180000,
+    timeout: 3*60*1000,
 }
 const getters = {
     all({ ITEMS,toNumber },{ isOnSale,sellPrice,image,isExclusive,left }){
@@ -58,7 +58,7 @@ const getters = {
 }
 const mutations = {
     update(state,data){
-        let { id } = data;
+        let id = _.toInteger(data.id);
         Vue.set(state.ITEMS,id,data)
     },
     setLast(state,item){
@@ -73,14 +73,11 @@ const mutations = {
     }
 }
 const actions = {
-    sync({ getters,state,dispatch,commit }){
-        $.post(state.url.sync,{ updated_at:_.get(getters,['getLast','updated_at']) },function(R){
-            if(R && R.length){
-                _.forEach(R,item => Vue.set(state.ITEMS,_.toNumber(item.id),item));
-                commit('setLast',_.maxBy(R,item => ({ updated_at }) => new Date(updated_at).getTime()));
-            }
-            setTimeout((dispatch) => dispatch('sync'),state.timeout,dispatch);
-        })
+    init({ state,dispatch }){ setTimeout(() => setTimeout((dispatch) => dispatch('sync'),state.timeout,dispatch)) },
+    sync({ state,dispatch,commit }){
+        $.post(state.url.sync,function(R){
+            if(R && R.length){ _.forEach(R,item => commit('update',item)) }
+        }).always(() => setTimeout((dispatch) => dispatch('sync'),state.timeout,dispatch))
     },
     create({ state,commit },data){
         return new Promise(resolve => $.ajax({ url:state.url.create, data, type: "POST",enctype: 'multipart/form-data', processData: false, contentType: false, success: function(R){ commit('add',R); resolve(R) }}))
