@@ -36,3 +36,4 @@ hr.hr-or::after {
     margin: auto;
     width: 3rem;
 }
+.stock_warn { font-size: 0.6rem; }

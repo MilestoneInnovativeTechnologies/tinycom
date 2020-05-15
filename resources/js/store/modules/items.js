@@ -2,6 +2,7 @@
 const state = {
     ITEMS,ITEM_CATEGORIES,
     toNumber: ['price','selling','stock'],
+    stock_warn_limit: 5,
     last: null,
     url: {
         sync: '/item/sync',
@@ -10,15 +11,21 @@ const state = {
     timeout: 180000,
 }
 const getters = {
-    all({ ITEMS,toNumber },{ isOnSale,sellPrice,image,isExclusive }){
+    all({ ITEMS,toNumber },{ isOnSale,sellPrice,image,isExclusive,left }){
         return _.mapValues(ITEMS,item => {
             return Object.assign({},item,{
-                isOnSale:isOnSale(item.id), sellPrice:sellPrice(item.id), image:image(item.id), isExclusive:isExclusive(item.id)
+                isOnSale:isOnSale(item.id), sellPrice:sellPrice(item.id), image:image(item.id), isExclusive:isExclusive(item.id),
+                left:_.get(left,item.id)
             },_.zipObject(toNumber,_.map(toNumber,key => _.toNumber(_.get(item,key)))))
         })
     },
     item(s,{ all }){
         return (id) => _.get(all,_.toInteger(id),_.get(all,id,null))
+    },
+    left({ ITEMS },g, { CART }){
+        let stock = _(ITEMS).keyBy(({ id }) => _.toInteger(id)).mapValues(({ stock }) => _.toNumber(stock)).value();
+        let cart = CART ? _(CART.items).keyBy(({ item }) => _.toInteger(item)).mapValues(({ quantity }) => _.toInteger(quantity)).value() : {};
+        return _.mapValues(stock,(qty,itm) => qty - _.get(cart,itm,0));
     },
     image({ ITEMS }){
         return (iId) => {
