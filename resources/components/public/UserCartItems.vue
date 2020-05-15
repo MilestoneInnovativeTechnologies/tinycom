@@ -24,7 +24,7 @@
         name: "UserCartItems",
         computed: {
             items(){ return this.$store.state.CART.items },
-            details(){ return this.$store.state.CART.details },
+            details(){ return this.$store.getters["CART/details"] },
             name(){ return (id) => _.get(this.details,[id,'name']) },
             desc(){ return (id) => _.get(this.details,[id,'description']) },
             total(){ return this.$store.getters['CART/total'] }

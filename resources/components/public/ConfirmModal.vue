@@ -67,11 +67,11 @@
     export default {
         name: "ConfirmModal",
         computed: {
-            ...mapState('CART',['items','details','ordered']),
+            ...mapState('CART',['items','ordered']),
             status(){ return this.$store.state.MISC.modal },
             alter(){ return !!$('#confirmModal').modal(['hide','show'][_.toSafeInteger(this.status)]); },
             user(){ return this.$store.state.USER.USER },
-            name(){ return (id) => _.get(this.details,[id,'name']) },
+            name(){ return (id) => _.get(this.$store.getters["CART/details"],[id,'name']) },
             total(){ return this.$store.getters['CART/total'] },
             disabled(){ return this.ordered.status || this.ordered.error || !this.user || _.isEmpty(this.items) },
             response(){ let response = this.ordered.error === false; if(response) setTimeout(this.move,3000,'start'); return response; }

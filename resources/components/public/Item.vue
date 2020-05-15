@@ -10,7 +10,7 @@
                 </td>
             </tr><tr class="price-row">
                 <td class="item-prices">
-                    <span class="item-price text-capitalize text-primary"><i v-if="exclusive" class="spinner-grow text-success exclusive"></i>{{ price }}</span><br />
+                    <div class="item-price text-primary"><i v-if="exclusive" class="spinner-grow text-success exclusive"></i>{{ price }}</div>
                     <del v-if="sale" class="">{{ prop('price') | number }}</del>
                 </td>
                 <td class="pb-2">
