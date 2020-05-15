@@ -11,6 +11,7 @@ class Item extends Model implements HasMedia
     use InteractsWithMedia;
 
     static public $UpdatedCacheName = 'item_last_updated';
+    static public $LastGivenSession = 'TinyCOM_LastItemGivenTime';
 
     protected $with = ['media'];
     protected $hidden = ['created_at'];
