@@ -54,8 +54,7 @@ const app = new Vue({
         $('#admin_bottom_spacer').height($('.navbar.fixed-bottom').outerHeight()+'px');
     },
     mounted(){
-        this.$store.dispatch('CARTS/init').then(null)
-        this.$store.dispatch('CUSTOMERS/init').then(null)
+        _.forEach(['CARTS','CUSTOMERS','ITEMS','SOURCES'],module => this.$store.dispatch(`${module}/init`).then(null))
         setTimeout(($vm) => $vm.$store.dispatch('CARTS/orders').then(null),10000,this);
     }
 });
