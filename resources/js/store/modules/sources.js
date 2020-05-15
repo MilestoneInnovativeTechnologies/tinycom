@@ -4,7 +4,11 @@ const state = {
     url: {
         create: '/admin/source/create',
         link: '/s/',
+        list: '/admin/source/list',
     },
+    interval: {
+        list: 5*60*1000
+    }
 }
 
 const getters = {
@@ -39,10 +43,23 @@ const getters = {
 
 const mutations = {
     add(state,source){ state.SOURCES.push(source) },
+    update(state,source){ let idx = _.findIndex(state.SOURCES,['uuid',source.uuid]); return (idx > -1) ? Vue.set(state.SOURCES,idx,source) : state.SOURCES.push(source) },
 }
 
 const actions = {
-
+    init({ state,dispatch }){ setTimeout((dispatch) => dispatch('sync'),state.interval.list,dispatch) },
+    create({ state,commit },data){
+        return new Promise(resolve => {
+            $.ajax({ url:state.url.create,data,type:"POST",enctype:'multipart/form-data',processData:false,contentType:false,success: function(R){
+                commit('add',R); return resolve(R);
+            }})
+        });
+    },
+    sync({ state,dispatch,commit }){
+        $.post(state.url.list,function(R){
+            if(R && R.length){ _.forEach(R,source => commit('update',source)) }
+        }).always(() => setTimeout((dispatch) => dispatch('sync'),state.interval.list,dispatch))
+    }
 }
 
 export default {
