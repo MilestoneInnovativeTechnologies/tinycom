@@ -8,7 +8,7 @@
     export default {
         name: "LiveCustomers",
         data(){ return {
-            layout: { Customer:'name','Time':'updated' }
+            layout: { Customer:'name','Updated':'updated' }
         } },
         computed: {
             customers(){ return this.$store.getters["CUSTOMERS/live"] },

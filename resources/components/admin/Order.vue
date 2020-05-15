@@ -28,7 +28,7 @@
                     <div class="col-3 px-0">{{ head }}</div><div class="col-9 text-right px-0">{{ order[key] }}</div>
                 </div>
                 <div class="row py-1 px-2">
-                    <div class="col-3 px-0">Source</div><div class="col-9 text-right px-0">{{ order.source_title }} <button v-if="order.source" class="btn btn-link" @click="$router.push({ name:'source',params:{ id:order.source } })">&raquo;</button></div>
+                    <div class="col-3 px-0">Source</div><div class="col-9 text-right px-0"><button v-if="order.source" class="btn btn-link p-0" @click="$router.push({ name:'source',params:{ id:order.source } })">{{ order.source_title }}</button><span v-else>{{ order.source_title }}</span></div>
                 </div>
             </div>
             <h4 class="card-title px-4">Items</h4>
@@ -63,7 +63,7 @@
             order(){ return this.$store.getters['CARTS/cart'](this.id) },
         },
         methods: {
-            itemName(id){ return _.get(_.head(_.filter(this.$store.state.ITEMS.ITEMS,['id',id])),'name') },
+            itemName(id){ return _.get(_.head(_.filter(this.$store.state.ITEMS.ITEMS,['id',_.toInteger(id)])),'name') },
             confirm(){
                 this.disabled = true;
                 this.$store.dispatch('CARTS/confirm',this.order.id).then(({ error,message }) => {
