@@ -13,8 +13,8 @@ const state = {
     },
     live: {},
     interval: {
-        live: 5000,
-        orders: 10000
+        live: 11000,
+        orders: 7000
     },
     fetch: null
 }
@@ -33,10 +33,11 @@ const getters = {
     recent({ recent_seconds },{ all }){ return _.filter(all,({ time }) => _.toInteger(time) > (timeNow() - recent_seconds)) },
     cart(state, { all }){ return (id) => _.head(_.filter(all,['id',id])) || state.fetch(id) },
     live({ live },g,rs,rootGetters){
-        return _.map(live,({ id,uuid,customer,items,time,source,amount }) => _.zipObject(['id','uuid','customer','items','time','source','total','amount','title','name','phone','updated'],[
+        return _.map(live,({ id,uuid,customer,items,time,source,amount }) => _.zipObject(['id','uuid','customer','items','time','source','total','amount','source_id','title','name','phone','updated'],[
             id,uuid,customer,items || [],time,source,
             _.sumBy(items || [],({ amount }) => _.toNumber(amount)),
             _.toNumber(amount || 0),
+            _.get(rootGetters["SOURCES/source2"](source),'id'),
             _.get(rootGetters["SOURCES/source2"](source),'title'),
             _.get(rootGetters["CUSTOMERS/customer"](customer),'name'),
             _.get(rootGetters["CUSTOMERS/customer"](customer),'phone'),
@@ -74,8 +75,8 @@ const actions = {
     confirm({ state,commit },id) { return new Promise(resolve => { $.post(state.url.confirm,{ id },function(R){ if(!R.error) commit('replace',R.cart); resolve(R); }) }) },
     delivered({ state,commit },data) { return new Promise(resolve => { $.post(state.url.delivered,data,function(R){ if(!R.error) commit('replace',R.cart); resolve(R); }) }) },
     cancel({ state,commit },data) { return new Promise(resolve => { $.post(state.url.cancel,data,function(R){ if(!R.error) commit('replace',R.cart); resolve(R); }) }) },
-    orders({ state,commit,dispatch }){ $.post(state.url.orders,function(R){ commit('ordered',R); setTimeout((dispatch) => dispatch('orders'),state.interval.orders,dispatch) }) },
-    live({ state,commit,dispatch }){ $.post(state.url.live,function(R){ commit('live',R); setTimeout((dispatch) => dispatch('live'),state.interval.live,dispatch) }) },
+    orders({ state,commit,dispatch }){ $.post(state.url.orders,function(R){ commit('ordered',R) }).always(() => setTimeout((dispatch) => dispatch('orders'),state.interval.orders,dispatch)) },
+    live({ state,commit,dispatch }){ $.post(state.url.live,function(R){ commit('live',R) }).always(() => setTimeout((dispatch) => dispatch('live'),state.interval.live,dispatch)) },
 }
 
 export default {

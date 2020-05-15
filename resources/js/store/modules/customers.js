@@ -11,7 +11,7 @@ const state = {
         admin_update: '/admin/customer/update',
     },
     live: {},
-    interval: 10000,
+    interval: 13000,
     fetch: null,
 }
 
@@ -41,7 +41,7 @@ const mutations = {
 
 const actions = {
     init({ commit,dispatch }){ commit('fetch',_.debounce(_.bind(dispatch,null,'fetch'),3500,{ leading:true })); dispatch('live'); },
-    live({ state,commit,dispatch }){ $.post(state.url.live,function(R){ commit('live',R); setTimeout((dispatch) => dispatch('live'),state.interval,dispatch); }); },
+    live({ state,commit,dispatch }){ $.post(state.url.live,function(R){ commit('live',R) }).always(() => setTimeout((dispatch) => dispatch('live'),state.interval,dispatch)) },
     fetch({ state,commit },id){ $.post(state.url.fetch,{ id },function(R){ commit('replace',R); }); },
     create({ state,commit },data){ $.post(state.url.create,data,function(R){ commit('replace',R); }); },
     update({ state,commit },data){ $.post(state.url.admin_update,data,function(R){ commit('replace',R); }); },
