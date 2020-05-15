@@ -56,7 +56,7 @@ const app = new Vue({
     },
     mounted(){
         this.$store.dispatch('CART/init',CART).then(() => null)
-        this.$store.dispatch('ITEMS/sync').then(() => null)
+        this.$store.dispatch('ITEMS/init').then(() => null)
     },
     created(){
         $('#public_bottom_spacer').height(($('.navbar.fixed-bottom').outerHeight())+'px');
