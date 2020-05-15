@@ -13,7 +13,10 @@
             </div>
         </div>
         <hr>
-        <a href="/admin/login" class="mt-3 text-center d-block">Logout</a>
+        <div class="d-flex justify-content-around">
+            <a href="/admin/login" class="text-center d-block">Logout</a>
+            <a href="#" @click.prevent="$router.push({ name: 'password' })" class="text-center d-block">Change Password</a>
+        </div>
     </div>
 </template>
 

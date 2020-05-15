@@ -20,6 +20,9 @@ const state = {
         update: {
             category: '/admin/api/category/[id]/update',
             item: '/admin/api/item/[id]/update',
+        },
+        admin: {
+            password: '/admin/api/password/update',
         }
     }
 }
@@ -51,6 +54,9 @@ const actions = {
                 let vAction = _.get(state.action_map,[action,item]); if(vAction) return dispatch(`${module}/${vAction}`,R,{ root:true });
             } },function(R){
         })
+    },
+    password({ state },password){
+        return new Promise(resolve => $.post(state.url.admin.password,{ password },function(R){ return resolve() }));
     },
 }
 

@@ -105,6 +105,7 @@ Route::group([
     ],function(){
         Route::post('category/{id}/update','CategoryController@update');
         Route::post('item/{id}/update','ItemController@update');
+        Route::post('password/update','UserController@password');
     });
 
 });
