@@ -68,6 +68,7 @@ Route::group([
         'prefix'    =>  'source'
     ],function(){
         Route::post('create','SourceController@create');
+        Route::post('list','SourceController@list');
     });
 
     Route::group([

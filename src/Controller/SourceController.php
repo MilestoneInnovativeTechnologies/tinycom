@@ -100,4 +100,8 @@ class SourceController extends Controller
         $customer = $request->cookie(Customer::$CookieName);
         return self::GetSourceItems($customer);
     }
+
+    public function list(){
+        return Source::where('expire','>',time() - 24*60*60)->get();
+    }
 }

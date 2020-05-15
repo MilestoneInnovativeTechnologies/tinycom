@@ -130,10 +130,11 @@
             categoryFilter({ name,description }){ return !this.category_filter || _.includes([name,description].join(' ').toLowerCase(),this.category_filter.toLowerCase()) },
             submit(){
                 let data = new FormData(this.$refs['source_create_form']), $vm = this;
-                $.ajax({ url:this.url, data, type: "POST",enctype: 'multipart/form-data', processData: false, contentType: false, success: function(R){
-                        $vm.sourceCreated(R)
-                    }
-                })
+                this.$store.dispatch('SOURCES/create',data).then(({ id }) => this.$router.push({ name:'source',params:{ id } }))
+                // $.ajax({ url:this.url, data, type: "POST",enctype: 'multipart/form-data', processData: false, contentType: false, success: function(R){
+                //         $vm.sourceCreated(R)
+                //     }
+                // })
             },
             sourceCreated(R){
                 this.$store.commit('SOURCES/add',R);

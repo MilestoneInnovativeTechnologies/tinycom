@@ -1,7 +1,7 @@
 <template>
     <section class="sources">
         <RecordList title="Sources" :records="records" :layout="layout" route="source" />
-        <button v-if="add !== false" class="btn btn-primary btn-block fixed-bottom" style="z-index: 1050" @click.prevent="$router.push({ name:'source_create' })">Add</button>
+        <button v-if="add !== false" class="btn btn-primary btn-block" @click.prevent="$router.push({ name:'source_create' })">Add</button>
     </section>
 </template>
 
