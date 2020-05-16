@@ -17,6 +17,8 @@ class TinycomServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $hosts = explode('.',request()->getHost()); array_pop($hosts); $domain = implode('.',$hosts);
+        if(!defined('DOMAIN')) define('DOMAIN',$domain);
         $this->mergeConfigs();
     }
 
