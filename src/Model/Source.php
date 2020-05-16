@@ -16,7 +16,7 @@ class Source extends Model implements HasMedia
     public static $SessionSourceItems = 'TinyCOM_SourceItems';
     public static $SessionSourceCustomers = 'TinyCOM_SourceCustomers';
     public static $SessionSourceLogin = 'TinyCOM_SourceLoginRequired';
-    public static $CreatedCacheName = 'source_last_created';
+    public static $CreatedCacheName = DOMAIN . '_' . 'source_last_created';
 
     protected $guarded = [];
     protected $appends = ['expired'];

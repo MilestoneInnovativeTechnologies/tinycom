@@ -22,9 +22,9 @@ class Cart extends Model
 
 
     public static $SessionName = 'TinyCOM_Cart';
-    public static $CacheName = 'carts';
-    public static $CacheOrders = 'orders';
-    public static $CacheOrderLatest = 'latest_order';
+    public static $CacheName = DOMAIN . '_' . 'carts';
+    public static $CacheOrders = DOMAIN . '_' . 'orders';
+    public static $CacheOrderLatest = DOMAIN . '_' . 'latest_order';
     public static $CacheExpire = 3*60;
     public static $DBExpire = 2*24*60*60;
 

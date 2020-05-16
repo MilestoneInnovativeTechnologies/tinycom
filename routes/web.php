@@ -2,7 +2,7 @@
 
 Route::group([
     'namespace'     => 'Milestone\\Tinycom\\Controller',
-    'middleware'    =>  'web'
+    'middleware'    =>  ['web',\Milestone\Tinycom\Middleware\TinyCOMDomain::class]
 ],function(){
 
     Route::group([
@@ -53,7 +53,7 @@ Route::group([
 
     'namespace'     => 'Milestone\\Tinycom\\Controller',
     'prefix'        =>  'admin',
-    'middleware'    =>  ['web',\Milestone\Tinycom\Middleware\TinyCOMAuth::class]
+    'middleware'    =>  ['web',\Milestone\Tinycom\Middleware\TinyCOMAuth::class,\Milestone\Tinycom\Middleware\TinyCOMDomain::class]
 
 ],function(){
 
