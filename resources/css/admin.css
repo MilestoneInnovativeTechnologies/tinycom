@@ -10,3 +10,7 @@
 .bill.delivered {
     background: url("/images/delivered.png") no-repeat bottom right;
 }
+
+.metric-count { font-size: 1.4rem; }
+.metric-label { font-size: 0.8rem; }
+.metric-summary { font-size: 1rem; }
