@@ -10,7 +10,7 @@ use Milestone\Tinycom\Model\Item;
 class HomeController extends Controller
 {
 
-    public static $TinyCOMCookie = DOMAIN . '_tc_auth';
+    public static $TinyCOMCookie = '_tc_auth';
     public static $PackKeys = ['CATEGORIES','ITEMS','BUNDLES','CATEGORY_ITEMS','ITEM_CATEGORIES','SOURCE','USER','CART'];
 
     public function index(Request $request){
