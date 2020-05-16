@@ -1,6 +1,6 @@
 
 export const links = [
-    'Home','Customers','Categories','Items','Orders','Confirms','Delivered','Sources','Carts'
+    'Home','Customers','Categories','Items','Orders','Confirms','Delivered','Sources','Carts','Report'
 ];
 
 export const routes = [
@@ -21,4 +21,5 @@ export const routes = [
     { path: '/customers', name: 'customers' ,component: require('./../../components/admin/Customers').default },
     { path: '/customer/:id', name: 'customer' ,component: require('./../../components/admin/Customer').default, props:true },
     { path: '/password', name: 'password' ,component: require('./../../components/admin/AdminPassword').default },
+    { path: '/report', name: 'report' ,component: require('./../../components/admin/OrderReport').default },
 ]

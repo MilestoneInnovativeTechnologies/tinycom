@@ -11,8 +11,9 @@ require('./bootstrap');
 window.Vue = require('vue');
 window.Vuex = require('vuex');
 window.VueRouter = require('vue-router');
+window.VueGraph = require('vue-graph');
 
-Vue.use(VueRouter,Vuex)
+Vue.use(VueRouter,Vuex,VueGraph)
 
 /**
  * The following block of code may be used to automatically register your
@@ -33,6 +34,8 @@ files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(
 const store = require('./store/admin').store
 const routes = require('./routes/admin').routes
 const routerOptions = { routes,mode:'hash',linkActiveClass:'active',tag:'li' }
+
+require('./graph/index')
 
 _.forEach(require('./filters').adminFilters,(fn,fl) => Vue.filter(fl,fn))
 
