@@ -18,6 +18,7 @@ class CreateCustomersTable extends Migration
             $table->string('name',64)->index();
             $table->string('phone',16)->index()->nullable();
             $table->string('email',64)->nullable();
+            $table->string('address',512)->nullable();
             $table->string('name_change',64)->nullable();
             $table->unsignedInteger('live')->index()->default(0);
             $table->enum('status',['Y','N'])->default('Y');
