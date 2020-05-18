@@ -39,7 +39,7 @@ class CustomerController extends Controller
     }
 
     public function adminUpdate(Request $request){
-        Customer::where('id',$request->id)->update($request->only(['phone','name']));
+        Customer::where('id',$request->id)->update($request->only(['phone','name','address']));
         return Customer::find($request->id);
     }
 
