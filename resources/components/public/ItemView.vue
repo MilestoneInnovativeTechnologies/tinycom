@@ -12,7 +12,8 @@
             </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">Price <span class="float-right">{{ price }}</span></li>
-                <li class="list-group-item" v-if="item.isOnSale">Selling Price <span class="float-right">{{ price_selling }}  <p class="badge-warning badge p-2" v-if="item.isExclusive">For YOU</p></span></li>
+                <li class="list-group-item" v-if="item.isOnSale">Selling Price <span class="float-right">{{ price_selling }} </span></li>
+                <li class="list-group-item" v-if="item.isExclusive">Special Price <span class="float-right"><p class="badge-warning badge p-2 mr-2" v-if="item.isExclusive">Specially for you only</p> {{ price_special }} </span></li>
                 <li class="list-group-item">Availability <span class="float-right">{{ stock_text }}</span></li>
             </ul>
             <div class="card-body">
@@ -31,6 +32,7 @@
             image(){ return this.item.image ? imageUrl(this.item.media[0]) : null },
             price(){ return this.item.price },
             price_selling(){ return this.item.selling },
+            price_special(){ return this.item.sellPrice },
             max(){ return this.$store.state.ITEMS.stock_warn_limit },
             stock_text(){ let left = this.item.left; return (left > this.max) ? 'In Stock' : (left <= 0 ? 'No Stock' : 'Few remaining') }
         }

@@ -11,7 +11,7 @@
         </tr><tr class="price-row">
             <td class="item-prices">
                 <div class="item-price text-primary"><i v-if="exclusive" class="spinner-grow text-success exclusive"></i>{{ price }}<ItemStockWarn :id="id" /></div>
-                <del v-if="sale" class="">{{ prop('price') | number }}</del>
+                <del v-if="sale || exclusive" class="">{{ prop('price') | number }}</del>
             </td>
             <td class="pb-2">
                 <CartIncrementDecrement class="float-right" :id="id" />
