@@ -3,9 +3,9 @@
         <div class="card-body p-1">
             <div class="card-title mt-2 font-weight-bolder">TODAY</div>
             <div class="d-flex flex-row">
-                <div @click="$router.push({ name:'orders' })" class="jumbotron bg-white mb-0 px-1 py-3 flex-grow-1 text-uppercase"><strong class="font-weight-bolder metric-count">{{ count.Ordered || 0 }}</strong><br><span>ORDER</span></div>
-                <div @click="$router.push({ name:'confirms' })" class="jumbotron bg-white mb-0 px-1 py-3 flex-grow-1 text-uppercase mx-1"><strong class="font-weight-bolder metric-count">{{ count.Confirmed || 0 }}</strong><br><span>CONFIRM</span></div>
-                <div @click="$router.push({ name:'delivered' })" class="jumbotron bg-white mb-0 px-1 py-3 flex-grow-1 text-uppercase"><strong class="font-weight-bolder metric-count">{{ count.Delivered || 0 }}</strong><br><span>DELIVER</span></div>
+                <div class="jumbotron bg-white mb-0 px-1 py-3 flex-grow-1 text-uppercase"><strong class="font-weight-bolder metric-count">{{ carts.length || 0 }}</strong><br><span>ORDER</span></div>
+                <div class="jumbotron bg-white mb-0 px-1 py-3 flex-grow-1 text-uppercase mx-1"><strong class="font-weight-bolder metric-count">{{ confirmed || 0 }}</strong><br><span>CONFIRM</span></div>
+                <div class="jumbotron bg-white mb-0 px-1 py-3 flex-grow-1 text-uppercase"><strong class="font-weight-bolder metric-count">{{ delivered || 0 }}</strong><br><span>DELIVER</span></div>
             </div>
         </div>
         <div class="card-body text-uppercase font-weight-bolder metric-summary py-2">
@@ -20,14 +20,15 @@
     export default {
         name: "OrdersMetric",
         data(){ return {
-            statuses: ['Ordered','Confirmed','Delivered']
+            consider: ['Ordered','Confirmed','Delivered'],
+            today: new Date().getDate()
         } },
         computed: {
-            carts(){ return this.$store.getters["CARTS/all"] },
-            today(){ return new Date().getDate() },
-            group(){ return _.groupBy(this.carts, ({ status,updated_at }) => (_.includes(this.statuses,status) && new Date(updated_at).getDate() === this.today) ? status : '-') },
-            count(){ return _.mapValues(this.group,group => group.length) },
-            total(){ return _.sumBy(this.group['Delivered'],({ amount }) => _.toNumber(amount)) }
+            carts(){ return _.filter(this.$store.getters["CARTS/all"],({ status,updated_at }) => new Date(updated_at).getDate() === this.today && _.includes(this.consider,status)) },
+            group(){ return _.groupBy(this.carts,'status') },
+            delivered(){ return _.get(this.group,'Delivered',[]).length; },
+            confirmed(){ return _.get(this.group,'Confirmed',[]).length + this.delivered; },
+            total(){ return _.sumBy(_.get(this.group,'Delivered',[{ amount:0 }]),({ amount }) => _.toNumber(amount)) }
         }
     }
 </script>
