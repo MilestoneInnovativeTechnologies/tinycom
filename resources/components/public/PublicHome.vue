@@ -20,7 +20,7 @@
         computed: {
             filter_items(){ return this.filter ? _(this.slugs).map((v,k) => _.includes(v,_.toLower(this.filter)) ? _.toInteger(k) : null).filter().value() : [] },
             items(){ return _(this.$store.getters["ITEMS/all"]).keys().map(_.toInteger).value() },
-            exclusive(){ return _(this.$store.state.SOURCE.SOURCE.items).keys().map(_.toInteger).value() },
+            exclusive(){ return _(this.$store.state.SOURCE.SOURCE.items).keys().map(_.toInteger).intersection(this.items).value() },
             latest_items(){ return _.difference(_.map(this.$store.getters["ITEMS/getLatest"](),_.toInteger) || [],this.exclusive.slice(0,this.exclusive_nos)) },
             other_items(){ return _.difference(this.items,this.exclusive.slice(0,this.exclusive_nos),this.latest_items.slice(0,this.latest)) },
             slugs(){ return this.$store.getters["ITEMS/slugs"] },
