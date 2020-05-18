@@ -1,9 +1,8 @@
 <template>
     <ul class="navbar-nav">
-        <li v-if="profile" class="nav-item"><a class="btn btn-light" href="/user/logout"><i class="fas fa-sign-out-alt mr-1"></i> Logout</a></li>
-        <li v-else-if="login" class="nav-item"><a class="nav-link">&nbsp</a></li>
-        <router-link v-else-if="user" :to="{ name:'profile',params:{ name,phone } }" tag="li" class="nav-item"><a>{{ name }}</a></router-link>
-        <router-link v-else :to="{ name:'login' }" tag="li" class="nav-item"><a class="nav-link btn btn-light m-0 p-2">Login</a></router-link>
+        <router-link v-if="!user" :to="{ name:'profile' }" tag="li" class="nav-item"><a class="nav-link btn btn-light m-0 p-2">Login</a></router-link>
+        <li v-else-if="profile" class="nav-item"><a class="btn btn-light" href="/user/logout"><i class="fas fa-sign-out-alt mr-1"></i> Logout</a></li>
+        <router-link v-else :to="{ name:'profile' }" tag="li" class="nav-item"><a>{{ name }}</a></router-link>
     </ul>
 </template>
 

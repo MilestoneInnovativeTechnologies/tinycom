@@ -16,10 +16,7 @@
                         <p><strong>Server Response: </strong>{{ ordered.message }}</p>
                         <button class="btn btn-block btn-primary" @click="move('start')">Visit Home Page</button>
                     </blockquote>
-                    <blockquote v-else-if="!user" class="no-user blockquote">
-                        <p>Please login to place your order.</p>
-                        <button class="btn btn-block btn-primary" @click="move('login')">Click here to login</button>
-                    </blockquote>
+                    <UserLoginCardBody v-else-if="!user" class="pt-0" />
                     <blockquote v-else-if="!items.length" class="no-user blockquote text-center">
                         <p>You have nothing in cart. Start adding products</p>
                         <button class="btn btn-block btn-primary" @click="move('home')">Start from here</button>

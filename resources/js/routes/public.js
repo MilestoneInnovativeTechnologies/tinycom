@@ -1,7 +1,6 @@
 
 export const routes = [
     { path: '/', name:'home', component: require("../../components/public/PublicHome").default },
-    { path: '/login', name:'login', component: require("../../components/public/PublicUserLogin").default },
     { path: '/profile', name:'profile', component: require("../../components/public/Profile").default },
     { path: '/cart', name:'cart', component: require("../../components/public/UserCart").default },
     { path: '/exclusive', name:'exclusive', component: require("../../components/public/ExclusiveItems").default },
