@@ -44,7 +44,7 @@ const app = new Vue({
     },
     computed: {
         header(){ return this.$route.params.header || this.COMPANY || 'Tiny COM' },
-        back(){ return window.history.length>0 },
+        back(){ return window.history.length>0 && this.$route.name !== 'home' },
         cartTotal(){ return this.$store.getters['CART/total'] },
         cartItems(){ return this.$store.getters['CART/itemsCount'] },
     },
