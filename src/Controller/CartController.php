@@ -5,7 +5,6 @@ namespace Milestone\Tinycom\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 use Milestone\Tinycom\Model\Cart;
 use Milestone\Tinycom\Model\CartItem;
 use Milestone\Tinycom\Model\Customer;
@@ -104,16 +103,16 @@ class CartController extends Controller
 
     public function confirm(Request $request){
         $id = $request->input('id');
-        $Cart = Cart::find($id); if(!$Cart) return ['error' => true, 'message' => 'Order not found'];
-        if($Cart->status !== 'Ordered') return ['error' => true, 'message' => 'This is not an order'];
+        $Cart = Cart::find($id); if(!$Cart) return ['error' => true, 'message' => "Requested order, $id, doesn't exists."];
+        if($Cart->status !== 'Ordered') return ['error' => true, 'message' => "This order cannot be confirmed as it is not in confirmable state. Current state of cart $id is: " . $Cart->status];
         $Cart->status = 'Confirmed'; $Cart->time = time(); $Cart->confirmed_at = date('Y-m-d H:i:s');
         $Cart->save(); return ['error' => false, 'message' => 'Successfully marked as confirmed', 'cart' => $Cart];
     }
 
     public function cancel(Request $request){
         $id = $request->input('id');
-        $Cart = Cart::find($id); if(!$Cart) return ['error' => true, 'message' => 'Order not found'];
-        if($Cart->status != 'Ordered') return ['error' => true, 'message' => 'This is not an order'];
+        $Cart = Cart::find($id); if(!$Cart) return ['error' => true, 'message' => "Requested order, $id, doesn't exists."];
+        if($Cart->status != 'Ordered') return ['error' => true, 'message' => "This order cannot be cancelled as it is not in cancellable state. Current state of cart $id is: " . $Cart->status];
         $Cart->status = 'Cancelled'; $Cart->reason = $request->input('reason'); $Cart->time = time();
         $Cart->save(); return ['error' => false, 'message' => 'Successfully marked as cancelled', 'cart' => $Cart];
     }
@@ -124,8 +123,8 @@ class CartController extends Controller
 
     public function delivered(Request $request){
         $id = $request->input('id'); $amount = $request->input('amount');
-        $Cart = Cart::find($id); if(!$Cart) return ['error' => true, 'message' => 'Order not found'];
-        if($Cart->status !== 'Confirmed') return ['error' => true, 'message' => 'This is not a confirmed order'];
+        $Cart = Cart::find($id); if(!$Cart) return ['error' => true, 'message' => "Requested order, $id, doesn't exists."];
+        if($Cart->status !== 'Confirmed') return ['error' => true, 'message' => "This order cannot be delivered as it is not in deliverable state. Current state of cart $id is: " . $Cart->status];
         $Cart->status = 'Delivered'; $Cart->amount = $amount; $Cart->time = time(); $Cart->confirmed_at = date('Y-m-d H:i:s');
         $Cart->save(); return ['error' => false, 'message' => 'Successfully marked as delivered', 'cart' => $Cart];
     }
