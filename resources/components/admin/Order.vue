@@ -73,7 +73,7 @@
                         this.title = 'Error while performing requested action';
                         $(this.$refs['order_confirm_modal']).modal('show');
                     }
-                    else this.$router.push({ name:'confirms' })
+                    else this.$router.push({ name:'bill',params:{ id:this.id } })
                 })
             },
             cancel(status){

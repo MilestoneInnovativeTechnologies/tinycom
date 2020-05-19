@@ -81,7 +81,7 @@
             itemName(id){ return _.get(_.head(_.filter(this.$store.state.ITEMS.ITEMS,['id',id])),'name') },
             deliver(post){
                 if(!post) return $(this.$refs['order_deliver_modal']).modal('show');
-                this.$store.dispatch('CARTS/delivered',{ id:this.bill.id,amount:this.collect }).then(() => this.$router.push({ name:'delivered' }))
+                this.$store.dispatch('CARTS/delivered',{ id:this.bill.id,amount:this.collect });//.then(() => this.$router.push({ name:'delivered' }))
             }
         }
     }
