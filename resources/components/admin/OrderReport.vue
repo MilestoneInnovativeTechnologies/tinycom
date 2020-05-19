@@ -61,7 +61,7 @@
             axis_min(){ return _.min(this.bar_totals[0]) },
             axis_max(){ return _.max(this.bar_totals[0]) },
             line_values(){ return [_.map(this.statics,'total')] },
-            area_names(){ return ['Delivered','Confirmed','Orders'] },
+            area_names(){ return ['Orders','Confirmed','Delivered'] },
             area_values(){ return _.map(this.area_names,name => _.map(this.statics,_.toLower(name))) },
         },
         methods: {
