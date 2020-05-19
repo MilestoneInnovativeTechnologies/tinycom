@@ -1,5 +1,5 @@
 <template>
-    <div class="card text-center bg-light" style="max-width: 65vh">
+    <div class="card text-center bg-light mx-auto" style="max-width: 65vh">
         <div class="card-body p-1">
             <div class="card-title mt-2 font-weight-bolder">LIVE</div>
             <div class="d-flex flex-row">
