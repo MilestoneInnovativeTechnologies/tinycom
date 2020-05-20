@@ -12,9 +12,13 @@ class ItemController extends Controller
 
     public function update(Request $request, $id){
         $update = ['name','description','status','price','selling','stock'];
-        Item::where('id',$id)->update($request->only($update));
-        if($request->hasFile('image')){ Item::find($id)->addMediaFromRequest('image')->toMediaCollection('items'); }
-        return Item::find($id);
+        $item = Item::find($id); $item->update($request->only($update));
+        if($request->hasFile('image')){ $item->addMediaFromRequest('image')->toMediaCollection('items'); }
+        if($request->has('categories')) {
+            $categories = $request->input('categories',[]);
+            $item->Categories()->sync($categories);
+        }
+        return Item::with(['media','Categories'])->find($id);
     }
 
     public function sync(){

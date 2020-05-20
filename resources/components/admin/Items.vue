@@ -14,27 +14,39 @@
                 </div>
             </div>
         </form>
-        <h5 class="d-flex"><span class="mt-1">Items</span> <input type="text" class="form-control-sm mx-auto" placeholder="search" v-model="search"> <button class="btn btn-primary btn-sm" @click.prevent="create(false)">Add</button></h5>
-        <div class="table-responsive">
-            <table class="table table-sm">
-                <thead><tr><th>Image</th><th>Name</th><th>Price</th><th>Selling</th><th>Stock</th><th>Status</th><th>Description</th></tr></thead>
-                <tbody>
-                    <ItemUpdateTR v-for="id in items" :key="['form','update','item',id].join('-')" :id="id" />
-                </tbody>
-            </table>
+        <div class="d-flex mt-2">
+            <input type="text" class="form-control-sm flex-grow-1" placeholder="search" v-model="search">
+            <button class="btn btn-outline-primary btn-sm ml-2 flex-grow-0" @click.prevent="create(false)">Add New</button>
         </div>
+        <h5 class="mt-3 d-flex"><span class="mt-1">Active Items</span><button class="ml-auto btn btn-outline-info btn-sm" @click.prevent="$router.push({ name:'price_stock_update' })"><i class="fas fa-chart-pie fa-fw"></i> Price Stock Update</button></h5>
+        <div class="table-responsive"><table class="table table-sm">
+            <thead><tr><th>#</th><th>Name</th><th> </th></tr></thead>
+            <tbody>
+                <tr v-for="item in active" :key="'item-list-item-'+item.id"><td>{{ item.id }}</td><td>{{ item.name }}</td><td><button @click="$router.push({ name:'item_update',params:{ id:item.id } })" class="btn btn-sm btn-link pt-0"><i class="fas fa-angle-double-right"></i></button></td></tr>
+            </tbody>
+        </table></div>
+        <h5 class="mt-1">Inactive Items</h5>
+        <div class="table-responsive"><table class="table table-sm">
+            <thead><tr><th>#</th><th>Name</th><th> </th></tr></thead>
+            <tbody>
+            <tr v-for="item in inactive" :key="'item-list-item-'+item.id"><td>{{ item.id }}</td><td>{{ item.name }}</td><td><button @click="$router.push({ name:'item_update',params:{ id:item.id } })" class="btn btn-sm btn-link pt-0"><i class="fas fa-angle-double-right"></i></button></td></tr>
+            </tbody>
+        </table></div>
     </section>
 </template>
 
 <script>
+    import RecordList from "./RecordList";
     export default {
-        name: "Items",
+        name: "ItemList",
+        components: {RecordList},
         data(){ return {
             search: '', ic: 0
         } },
         computed: {
-            slugs(){ return _.mapValues(this.$store.state.ITEMS.ITEMS, obj => _(obj).values().join(' ').toLowerCase() ) },
-            items(){ if(_.isEmpty(this.search)) return _.keys(this.slugs); let keys = [],search = _.toLower(this.search); _.forEach(this.slugs,(text,id) => (_.includes(text,search)) ? keys.push(id) : null); return keys },
+            grouped(){ return _(this.$store.getters["ITEMS/all"]).filter(({ name,description }) => _.isEmpty(this.search) || _.includes(_.toLower(name+description),_.toLower(this.search))).groupBy('status').value() },
+            active(){ return _.get(this.grouped,'Y',[]) },
+            inactive(){ return _.get(this.grouped,'N',[]) },
         },
         methods: {
             create(post){
