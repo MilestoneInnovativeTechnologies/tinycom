@@ -55,7 +55,7 @@
                         <h4 class="card-title text-center">{{ $COMPANY ?? 'Tiny COM' }}</h4>
                         <hr>
                         <dl class="row m-0">
-                            <dt class="col-3 p-0">Bill# </dt><dd class="col-9 p-0">{{ $bill->uuid }}</dd>
+                            <dt class="col-3 p-0">Order # </dt><dd class="col-9 p-0">{{ $bill->uuid }}</dd>
                             <dt class="col-3 p-0">Date: </dt><dd class="col-9 p-0">{{ date('d/M/Y',strtotime($bill->confirmed_at)) }} <span class="float-right">{{ date('h:i A',strtotime($bill->confirmed_at)) }}</span></dd>
                             <dt class="col-3 p-0">Customer: </dt><dd class="col-9 p-0">{{ $bill->Customer->name }}<em class="text-right float-right" style="font-size: 0.8rem">{{ $bill->Customer->phone }}</em></dd>
                         </dl>
