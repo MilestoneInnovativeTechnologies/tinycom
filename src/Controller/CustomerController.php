@@ -23,7 +23,7 @@ class CustomerController extends Controller
         $this->manageCart($request,$customer);
         $this->manageSource($request,$customer);
 
-        $customer = Customer::find($customer->id); self::queueCookie($customer->id);
+        $customer = Customer::find($customer->id); self::queueCookie($customer->id); self::live($customer->id);
         return $customer;
     }
 
@@ -88,6 +88,7 @@ class CustomerController extends Controller
 
     public function logout(){
         Cookie::queue(Cookie::make(Customer::$CookieName, 0, -1));
+        self::live_off(\request()->cookie(Customer::$CookieName));
         return redirect()->route('home');
     }
 
@@ -105,6 +106,14 @@ class CustomerController extends Controller
         $live_customers = Cache::get(Customer::$CacheForLive,[]);
         $time = time(); $expired = $time - Customer::$LiveTime;
         if($customer) $live_customers[$customer] = $time;
+        $live_customers = array_filter($live_customers,function($time)use($expired){ return $time > $expired; });
+        Cache::put(Customer::$CacheForLive,$live_customers);
+    }
+
+    public static function live_off($customer){
+        $live_customers = Cache::get(Customer::$CacheForLive,[]);
+        if(isset($live_customers[$customer])) unset($live_customers[$customer]);
+        $time = time(); $expired = $time - Customer::$LiveTime;
         $live_customers = array_filter($live_customers,function($time)use($expired){ return $time > $expired; });
         Cache::put(Customer::$CacheForLive,$live_customers);
     }
