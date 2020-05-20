@@ -10,27 +10,33 @@ const state = {
         create: '/admin/customer/create',
         admin_update: '/admin/customer/update',
     },
-    live: {},
+    live: [],
     interval: 13000,
+    live_seconds: 5*60,
     fetch: null,
 }
 
 const getters = {
     customer({ CUSTOMERS }){ return (id) => _.head(_.filter(CUSTOMERS,['id',_.toInteger(id)])) },
-    live({ live }){ return _.reverse(_.sortBy(live,'time')) }
+    index(state){ return _(state.CUSTOMERS).map(({ id }) => _.toInteger(id)).invert().value() },
+    live({ live,CUSTOMERS }){ return _(CUSTOMERS).pickBy(({ id }) => _.includes(live,_.toInteger(id))).sortBy(({ live }) => _.toInteger(live)).reverse().value() }
 }
 
 const mutations = {
     fetch(state,fn){ Vue.set(state,'fetch',fn) },
     live(state,data){
+        state.live.splice(0,state.live.length); state.live.push(..._.keys(data));
         _.forEach(data,(time,customer) => {
-            time = _.toInteger(time); customer = _.toInteger(customer); let updated = fromNow(time) + ' ago';
-            if(_.has(state.live,customer)) return Object.assign(state.live[customer],{ time:time },{ updated:fromNow(time) });
-            let idx = _.findIndex(state.CUSTOMERS,['id',customer]); if(idx === -1) return state.fetch(customer);
-            let { name,phone } = state.CUSTOMERS[idx];
-            Vue.set(state.live,customer,{ customer,time,updated,name,phone });
+            time = _.toInteger(time); customer = _.toInteger(customer);
+            if(time+state.live_seconds < (new Date().getTime()/1000)){
+                let idx = _.indexOf(state.live,customer);
+                if(idx > -1) state.live.splice(idx,1);
+            } else {
+                let idx = _.findIndex(state.CUSTOMERS,['id',customer]); if(idx === -1) return state.fetch(customer);
+                Vue.set(state.CUSTOMERS[idx],'live',time);
+                if(!_.includes(state.live,customer)) state.live.push(customer);
+            }
         });
-        _.forEach(_.difference(_.keys(state.live),_.keys(data)),customer => Vue.delete(state.live,customer));
     },
     replace(state,data){
         let id = _.get(data,'id',null); if(!id) return; id = _.toInteger(id);

@@ -8,10 +8,10 @@
     export default {
         name: "LiveCustomers",
         data(){ return {
-            layout: { Customer:'name','Updated':'updated' }
+            layout: { Customer:'name','Last Update':'updated' }
         } },
         computed: {
-            customers(){ return this.$store.getters["CUSTOMERS/live"] },
+            customers(){ return _.map(this.$store.getters["CUSTOMERS/live"],customer => Object.assign({},customer,{ updated:fromNow(customer.live)})) },
         }
     }
 </script>

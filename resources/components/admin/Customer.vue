@@ -36,6 +36,10 @@
         },
         methods: {
             update(){ this.$store.dispatch('CUSTOMERS/update',{ id:this.id,name:this.v_name,phone:this.v_phone,address:this.v_address }).then(() => this.$router.push({ name:'customers' }) ) }
+        },
+        beforeRouteUpdate(to,from,next){
+            this.$store.dispatch('CUSTOMERS/fetch',this.id);
+            next();
         }
     }
 </script>
