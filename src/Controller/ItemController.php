@@ -34,4 +34,8 @@ class ItemController extends Controller
         if($request->hasFile('image')){ $item->addMediaFromRequest('image')->toMediaCollection('items'); }
         $item->load(['Categories','media']); return $item;
     }
+
+    public function fetch(Request $request){
+        return Item::with(['media','Categories'])->find($request->input('id'));
+    }
 }

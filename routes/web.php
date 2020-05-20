@@ -85,6 +85,7 @@ Route::group([
         'prefix'    =>  'item'
     ],function(){
         Route::post('create','ItemController@create');
+        Route::post('fetch','ItemController@fetch');
     });
 
     Route::group([

@@ -6,9 +6,11 @@ const state = {
     last: null,
     url: {
         sync: '/item/sync',
-        create: '/admin/item/create'
+        create: '/admin/item/create',
+        fetch: '/admin/item/fetch',
     },
     timeout: 3*60*1000,
+    fetch: null,
 }
 const getters = {
     all({ ITEMS,toNumber },{ isOnSale,sellPrice,image,isExclusive,left }){
@@ -40,8 +42,8 @@ const getters = {
             return selling !== 0 && selling !== price && selling < price
         }
     },
-    isExclusive(s,g,rs,rootGetters){ return rootGetters["SOURCE/has"] },
-    exclusivePrice(s,g,rs,rootGetters){ return rootGetters["SOURCE/get"] },
+    isExclusive(s,g,rs,rootGetters){ return rootGetters["SOURCE/has"] || (() => false) },
+    exclusivePrice(s,g,rs,rootGetters){ return rootGetters["SOURCE/get"] || (() => null)  },
     sellPrice({ ITEMS },{ isOnSale,isExclusive,exclusivePrice }){
         return (id) => {
             let item = ITEMS[id]
@@ -57,9 +59,15 @@ const getters = {
     slugs({ ITEMS }){ return _.mapValues(ITEMS,({ name,description }) => _.toLower(name) + ' ' + _.toLower(description)) }
 }
 const mutations = {
+    fetch(state,fn){ Vue.set(state,'fetch',fn) },
     update(state,data){
+        if(!data || !data.id) return;
         let id = _.toInteger(data.id);
-        Vue.set(state.ITEMS,id,data)
+        Vue.set(state.ITEMS,id,data);
+        if(data.categories && !_.isEmpty(data.categories)){
+            let c_ids = _.map(data.categories,({ id }) => _.toInteger(id));
+            Vue.set(state.ITEM_CATEGORIES,id,c_ids);
+        }
     },
     setLast(state,item){
         Vue.set(state,'last',item)
@@ -73,7 +81,11 @@ const mutations = {
     }
 }
 const actions = {
-    init({ state,dispatch }){ setTimeout(() => setTimeout((dispatch) => dispatch('sync'),state.timeout,dispatch)) },
+    init({ state,dispatch,commit }){
+        commit('fetch',_.debounce(_.bind(dispatch,null,'fetch'),3500,{ leading:true }));
+        setTimeout(() => setTimeout((dispatch) => dispatch('sync'),state.timeout,dispatch))
+    },
+    fetch({ state,commit },id){ $.post(state.url.fetch,{ id },function(item){ if(item && item.id) commit('replace',item); }) },
     sync({ state,dispatch,commit }){
         $.post(state.url.sync,function(R){
             if(R && R.length){ _.forEach(R,item => commit('update',item)) }
@@ -81,6 +93,15 @@ const actions = {
     },
     create({ state,commit },data){
         return new Promise(resolve => $.ajax({ url:state.url.create, data, type: "POST",enctype: 'multipart/form-data', processData: false, contentType: false, success: function(R){ commit('add',R); resolve(R) }}))
+    },
+    update({ commit,state },item){
+        if(!item || !item.id) return; let item_id = _.toInteger(item.id), categories = state.ITEM_CATEGORIES[item_id];
+        _.forEach(categories,category => commit('CATEGORIES/removeItem',{ item:item_id,category },{ root:true }));
+        commit('update',item);
+        if(item.categories && !_.isEmpty(item.categories)){
+            let categories = _.map(item.categories,({ id }) => _.toInteger(id));
+            _.forEach(categories,category => commit('CATEGORIES/addItem',{ item:item_id,category },{ root:true }))
+        }
     }
 }
 
