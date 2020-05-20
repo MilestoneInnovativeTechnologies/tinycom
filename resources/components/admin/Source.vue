@@ -19,7 +19,7 @@
         <div class="card col-lg-3 m-lg-auto mt-3" v-if="source">
             <ul class="list-group list-group-flush">
                 <li class="list-group-item px-0"><dl class="mb-0 row"><dt class="col-3">Link</dt><dd class="mb-0 col-9"><textarea class="form-control">{{ url }}</textarea></dd></dl></li>
-                <li class="list-group-item px-0"><dl class="mb-0 row"><dt class="col-3">Share</dt><dd class="mb-0 col-9"><a :href="whatsapp" target="_blank"><i class="fab fa-whatsapp mr-1"></i> Whats App</a></dd></dl></li>
+                <li class="list-group-item px-0"><dl class="mb-0 row"><dt class="col-3">Share</dt><dd class="mb-0 col-9"><a :href="whatsapp" target="_blank"><i class="fab fa-whatsapp mr-1 text-success"></i> Whats App</a></dd></dl></li>
             </ul>
         </div>
     </section>
