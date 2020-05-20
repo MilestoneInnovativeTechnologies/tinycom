@@ -15,6 +15,8 @@
 .metric-label { font-size: 0.8rem; }
 .metric-summary { font-size: 1rem; }
 
+td[rowspan] { vertical-align: middle }
+
 .trans-enter-active, .trans-leave-active { transition: all .750s; position: fixed; top: 2rem; }
 .trans-leave { opacity: 1; }
 .trans-leave-to { opacity: 0; transform: scaleX(-0.9); }

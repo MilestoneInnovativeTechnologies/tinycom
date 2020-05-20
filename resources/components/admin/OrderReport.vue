@@ -1,7 +1,7 @@
 <template>
     <div class="card" style="max-width: 65vh">
         <div class="card-body">
-            <graph-bar :padding-left="30" :padding-top="30" :padding-bottom="0" :padding-right="0" :height="graph_height" :width="graph_width" :axis-reverse="true" :labels="graph_days" :values="bar_totals" :axis-min="axis_min" :axis-max="axis_max" display="all">
+            <graph-bar :padding-left="30" :padding-top="30" :padding-bottom="0" :padding-right="0" :height="graph_height" :width="graph_width" :axis-reverse="true" :labels="graph_days" :values="bar_totals" :axis-min="axis_min" :axis-max="axis_max" :axis-step="10" display="all">
                 <note text="Collection Report"></note>
             </graph-bar>
         </div>
@@ -50,8 +50,8 @@
             statics(){ return _.mapValues(this.date_day,(day,dDate) => _.zipObject(['day','orders','confirmed','delivered','total'],[day,_.get(this.group,dDate,[]).length,_.get(this.count,[dDate,'Confirmed'],0)+_.get(this.count,[dDate,'Delivered'],0),_.get(this.count,[dDate,'Delivered'],0),this.total(_.get(this.group,dDate,[]))])) },
             graph_days(){ return _.map(this.statics,'day') },
             bar_totals(){ return [_.map(this.statics,'total')] },
-            axis_min(){ return _.min(this.bar_totals[0]) },
-            axis_max(){ return _.max(this.bar_totals[0]) },
+            axis_min(){ return _.floor(_.min(this.bar_totals[0]),-3); },
+            axis_max(){ return _.ceil(_.max(this.bar_totals[0])*1.15,-2) },
             line_values(){ return [_.map(this.statics,'total')] },
             area_names(){ return ['Orders','Confirmed','Delivered'] },
             area_values(){ return _.map(this.area_names,name => _.map(this.statics,_.toLower(name))) },

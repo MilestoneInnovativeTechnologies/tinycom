@@ -30,7 +30,3 @@
         },
     }
 </script>
-
-<style>
-    td[rowspan] { vertical-align: middle }
-</style>
