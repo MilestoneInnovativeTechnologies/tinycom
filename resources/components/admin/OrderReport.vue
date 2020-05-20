@@ -19,20 +19,12 @@
             </table>
         </div>
         <div class="card-body pt-0">
-            <graph-line :padding-left="30" :padding-top="30" :padding-bottom="30" :padding-right="0" :width="graph_width" :height="graph_height" shape="curve" :axis-full-mode="true" :labels="graph_days" :values="line_values" disply="all">
+            <graph-line :padding-left="30" :padding-top="30" :padding-bottom="30" :padding-right="0" :width="graph_width" :height="graph2_height" shape="curve" :axis-full-mode="true" :labels="graph_days" :values="line_values" disply="all">
                 <note text="Collection"></note>
             </graph-line>
         </div>
         <div class="card-body pt-0">
-            <graph-line :padding-left="0" :padding-top="30" :padding-bottom="50" :padding-right="0"
-                        :width="graph_width"
-                    :height="graph_height"
-                    :axis-full-mode="true"
-                    shape="curve"
-                    :opacity="0.6"
-                    :borderline="true"
-                    :labels="graph_days"
-                    :values="area_values">
+            <graph-line :padding-left="0" :padding-top="30" :padding-bottom="50" :padding-right="0" :width="graph_width" :height="graph2_height" :axis-full-mode="true" shape="curve" :opacity="0.6" :borderline="true" :labels="graph_days" :values="area_values">
                 <note text="Orders"></note>
                 <legends :names="area_names"></legends>
                 <guideline :tooltip-y="true"></guideline>
@@ -46,7 +38,7 @@
         name: "OrderReport",
         data(){ return {
             graph_width: window.outerWidth-100,
-            graph_height: 160,
+            graph_height: 160, graph2_height: 200,
             days: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
             avoid_status: ['New','Cancelled']
         } },

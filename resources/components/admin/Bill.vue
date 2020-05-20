@@ -16,6 +16,7 @@
                 </div>
             </div>
         </div>
+        <button class="mb-2 btn btn-info text-light py-2" @click="$router.push({ name:'confirms' })"><i class="fas fa-backward fa-fw mr-2"></i> Back to Confirmed Orders</button>
         <div class="card mx-lg-auto bill" style="max-width: 65vh" v-if="bill" :class="{ delivered }">
             <div class="card-body">
                 <h4 class="card-title text-center">{{ $root.COMPANY }}</h4>

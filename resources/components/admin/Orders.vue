@@ -1,6 +1,6 @@
 <template>
     <section class="carts-all">
-        <RecordList :records="carts" :layout="layout" truncate="20" title="Orders" route="order" :limit="15" />
+        <RecordList :records="carts" :layout="layout" truncate="20" title="Pending Orders" route="order" :limit="15" />
     </section>
 </template>
 

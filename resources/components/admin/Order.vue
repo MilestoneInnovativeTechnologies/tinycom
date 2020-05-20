@@ -22,6 +22,7 @@
                 </div>
             </div>
         </div>
+        <button class="mb-2 btn btn-info text-light py-2" @click="$router.push({ name:'orders' })"><i class="fas fa-backward fa-fw mr-2"></i> Back to Pending Orders</button>
         <div class="card mx-sm-auto" style="max-width: 65vh" v-if="order">
             <div class="card-body">
                 <div class="row py-1 px-2" v-for="(key,head,idx) in layout" :key="'order-view-detail-index-'+idx">
