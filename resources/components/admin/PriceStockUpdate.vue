@@ -9,7 +9,7 @@
                         <tr><td rowspan="2">{{ id }}</td>
                             <th colspan="3">{{ details[id].name }}</th>
                         </tr>
-                        <ItemUpdateTR :id="id" class="mb-2" />
+                        <PriceStockUpdateRow :id="id" class="mb-2" />
                     </template>
                 </tbody>
             </table>
