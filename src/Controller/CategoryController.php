@@ -11,13 +11,13 @@ class CategoryController extends Controller
         $update = ['name','description','status'];
         Category::where('id',$id)->update($request->only($update));
         if($request->hasFile('image')){ Category::find($id)->addMediaFromRequest('image')->toMediaCollection('categories'); }
-        return Category::find($id);
+        return Category::find($id)->load(['media' => function($Q){ $Q->select(['model_id','id','file_name']); }]);
     }
 
     public function create(Request $request){
         $create = $request->only(['name','description','status']);
         $category = Category::create($create);
         if($request->hasFile('image')){ $category->addMediaFromRequest('image')->toMediaCollection('categories'); }
-        $category->load('media'); return $category;
+        $category->load(['media' => function($Q){ $Q->select(['model_id','id','file_name']); }]); return $category;
     }
 }

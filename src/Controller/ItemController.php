@@ -18,7 +18,7 @@ class ItemController extends Controller
             $categories = $request->input('categories',[]);
             $item->Categories()->sync($categories);
         }
-        return Item::with(['media','Categories'])->find($id);
+        return Item::with(['media' => function($Q){ $Q->select(['model_id','id','file_name']); },'Categories'])->find($id);
     }
 
     public function sync(){
@@ -36,10 +36,10 @@ class ItemController extends Controller
         foreach(['price','selling','stock'] as $key) $create[$key] = (isset($create[$key]) && !empty($create[$key])) ?  $create[$key] : 0;
         $item = Item::create($create); $item->Categories()->attach($request->input('category'));
         if($request->hasFile('image')){ $item->addMediaFromRequest('image')->toMediaCollection('items'); }
-        $item->load(['Categories','media']); return $item;
+        $item->load(['Categories','media' => function($Q){ $Q->select(['model_id','id','file_name']); }]); return $item;
     }
 
     public function fetch(Request $request){
-        return Item::with(['media','Categories'])->find($request->input('id'));
+        return Item::with(['media' => function($Q){ $Q->select(['model_id','id','file_name']); },'Categories'])->find($request->input('id'));
     }
 }

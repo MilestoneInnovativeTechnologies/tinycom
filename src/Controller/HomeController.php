@@ -25,8 +25,8 @@ class HomeController extends Controller
             $cart = CartController::GetCreateCart($customer,$source['uuid']);
             if($customer) $customer = Customer::find($customer);
             $category_items = \Milestone\Tinycom\Model\CategoryItem::all();
-            $CATEGORIES = json_encode(\Milestone\Tinycom\Model\Category::where('status','Y')->get()->keyBy->id);
-            $ITEMS = json_encode(\Milestone\Tinycom\Model\Item::where('status','Y')->get()->keyBy->id);
+            $CATEGORIES = json_encode(\Milestone\Tinycom\Model\Category::where('status','Y')->with(['media' => function($Q){ $Q->select(['model_id','id','file_name']); }])->get()->keyBy->id);
+            $ITEMS = json_encode(\Milestone\Tinycom\Model\Item::where('status','Y')->with(['media' => function($Q){ $Q->select(['model_id','id','file_name']); }])->get()->keyBy->id);
             $BUNDLES = json_encode(\Milestone\Tinycom\Model\Bundle::with('Items')->get());
             $CATEGORY_ITEMS = json_encode($category_items->groupBy->category->mapWithKeys(function($Obj,$Cat){ return [$Cat => $Obj->pluck('item')]; }));
             $ITEM_CATEGORIES = json_encode($category_items->groupBy->item->mapWithKeys(function($Obj,$Itm){ return [$Itm => $Obj->pluck('category')]; }));
