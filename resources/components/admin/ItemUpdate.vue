@@ -52,7 +52,7 @@
         data(){ return { mi:0, msg:['','Updating..','Updated!!'], icon:['','check','check-double'] } },
         computed: {
             categories(){ return _.mapValues(this.$store.state.CATEGORIES.CATEGORIES,'name') },
-            item_categories(){ return _.get(this.$store.state.ITEMS.ITEM_CATEGORIES,_.toInteger(this.id)) },
+            item_categories(){ return _.get(this.$store.getters["ITEMS/ITEM_CATEGORIES"],_.toInteger(this.id)) },
             item(){ return this.$store.getters["ITEMS/item"](this.id) }
         },
         methods: {

@@ -1,6 +1,6 @@
 
 const state = {
-    ITEMS,ITEM_CATEGORIES,
+    ITEMS,
     toNumber: ['price','selling','stock'],
     stock_warn_limit: 5,
     last: null,
@@ -13,6 +13,15 @@ const state = {
     fetch: null,
 }
 const getters = {
+    ITEM_CATEGORIES(s,g,rootState){
+        let item_categories = {};
+        _(rootState.CATEGORIES.CATEGORY_ITEMS).forEach((items,category) => _.forEach(items,item => {
+            item = _.toInteger(item); category = _.toInteger(category);
+            if(!_.has(item_categories,item)) Vue.set(item_categories,item,[]);
+            if(!_.includes(item_categories[item])) item_categories[item].push(category);
+        }));
+        return item_categories;
+    },
     all({ ITEMS,toNumber },{ isOnSale,sellPrice,image,isExclusive,left }){
         return _.mapValues(ITEMS,item => {
             return Object.assign({},item,{
@@ -64,10 +73,6 @@ const mutations = {
         if(!data || !data.id) return;
         let id = _.toInteger(data.id);
         Vue.set(state.ITEMS,id,data);
-        if(data.categories && !_.isEmpty(data.categories)){
-            let c_ids = _.map(data.categories,({ id }) => _.toInteger(id));
-            Vue.set(state.ITEM_CATEGORIES,id,c_ids);
-        }
     },
     setLast(state,item){
         Vue.set(state,'last',item)
@@ -77,7 +82,6 @@ const mutations = {
         Vue.set(state.ITEMS,_.toInteger(data.id),data);
         let categories = _.get(data,'categories'); if(_.isEmpty(categories)) return; let item_categories = _.map(categories,({ id }) => _.toInteger(id));
         let item = _.toInteger(data.id)
-        return _.has(state.ITEM_CATEGORIES,item) ? state.ITEM_CATEGORIES[item].push(...item_categories) : Vue.set(state.ITEM_CATEGORIES,item,item_categories);
     }
 }
 const actions = {
@@ -94,8 +98,8 @@ const actions = {
     create({ state,commit },data){
         return new Promise(resolve => $.ajax({ url:state.url.create, data, type: "POST",enctype: 'multipart/form-data', processData: false, contentType: false, success: function(R){ commit('add',R); resolve(R) }}))
     },
-    update({ commit,state },item){
-        if(!item || !item.id) return; let item_id = _.toInteger(item.id), categories = state.ITEM_CATEGORIES[item_id];
+    update({ commit,state,getters },item){
+        if(!item || !item.id) return; let item_id = _.toInteger(item.id), categories = getters.ITEM_CATEGORIES[item_id];
         _.forEach(categories,category => commit('CATEGORIES/removeItem',{ item:item_id,category },{ root:true }));
         commit('update',item);
         if(item.categories && !_.isEmpty(item.categories)){
