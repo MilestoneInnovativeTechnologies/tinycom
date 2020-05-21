@@ -11,7 +11,7 @@ class HomeController extends Controller
 {
 
     public static $TinyCOMCookie = '_tc_auth';
-    public static $PackKeys = ['CATEGORIES','ITEMS','BUNDLES','CATEGORY_ITEMS','ITEM_CATEGORIES','SOURCE','USER','CART'];
+    public static $PackKeys = ['CATEGORIES','ITEMS','BUNDLES','CATEGORY_ITEMS','SOURCE','USER','CART'];
 
     public function index(Request $request){
         Cookie::queue(self::$TinyCOMCookie,1);
@@ -28,8 +28,7 @@ class HomeController extends Controller
             $CATEGORIES = json_encode(\Milestone\Tinycom\Model\Category::where('status','Y')->with(['media' => function($Q){ $Q->select(['model_id','id','file_name']); }])->get()->keyBy->id);
             $ITEMS = json_encode(\Milestone\Tinycom\Model\Item::where('status','Y')->with(['media' => function($Q){ $Q->select(['model_id','id','file_name']); }])->get()->keyBy->id);
             $BUNDLES = json_encode(\Milestone\Tinycom\Model\Bundle::with('Items')->get());
-            $CATEGORY_ITEMS = json_encode(\Milestone\Tinycom\Model\CategoryItem::all()->groupBy->category->mapWithKeys(function($Obj,$Cat){ return [$Cat => $Obj->pluck('item')]; }));
-            $ITEM_CATEGORIES = json_encode($category_items->groupBy->item->mapWithKeys(function($Obj,$Itm){ return [$Itm => $Obj->pluck('category')]; }));
+            $CATEGORY_ITEMS = json_encode(\Milestone\Tinycom\Model\CategoryItem::all()->groupBy->category->mapWithKeys(function($Obj,$Cat){ return [$Cat => $Obj->map(function($obj){ return intval($obj->item); })]; }));
             $SOURCE = json_encode($source ?? null);
             $USER = json_encode($customer ?? null);
             $CART = json_encode($cart ?? null);
