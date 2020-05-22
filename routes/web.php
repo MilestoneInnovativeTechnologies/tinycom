@@ -1,6 +1,25 @@
 <?php
 
 Route::group([
+    'domain'        => '{sub}.' . config('tinycom.domain'),
+    'namespace'     => 'Milestone\\Tinycom\\Controller',
+    'middleware'    =>  ['web',\Milestone\SDDS\Middleware\SDDS::class]
+],function () {
+    Route::get('/',function($sub){ return $sub; });
+});
+
+Route::group([
+
+    'domain'        => config('tinycom.domain'),
+    'namespace'     => 'Milestone\\Tinycom\\Controller',
+    'middleware'    =>  'web'
+
+],function () {
+    Route::get('/',function(){ return '$sub'; });
+});
+
+/*
+Route::group([
     'namespace'     => 'Milestone\\Tinycom\\Controller',
     'middleware'    =>  'web'
 ],function(){
@@ -112,3 +131,4 @@ Route::group([
 
 });
 
+*/

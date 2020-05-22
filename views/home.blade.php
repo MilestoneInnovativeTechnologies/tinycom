@@ -32,6 +32,6 @@
         </nav>
     </div>
     <script> const COMPANY = 'Tiny COM', MEDIA_URL = '{!! \Illuminate\Support\Facades\Storage::disk('media')->url('[id]/[file_name]') !!}'; function imageUrl(media){ return MEDIA_URL.replace(/\[(\w+)\]/g,(i,M) => media[M])} </script>
-    <script defer src="{{ asset('js/public.js') }}"></script>
+    <script defer src="{{ asset('js/public.js') }}?_={{ time() }}"></script>
 </body>
 </html>

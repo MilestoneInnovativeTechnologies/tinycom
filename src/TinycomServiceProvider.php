@@ -31,6 +31,7 @@ class TinycomServiceProvider extends ServiceProvider
     {
         if(app()->runningInConsole()){
             $this->loadMigrations();
+            $this->publishConfig();
             $this->publishAssets();
         } else {
             $this->loadViews();
@@ -43,6 +44,7 @@ class TinycomServiceProvider extends ServiceProvider
         $path = ($folder ? ("$folder" . DIRECTORY_SEPARATOR) : "") . ($file ? "$file" : '');
         return self::$root . $path;
     }
+    private function publishConfig(){ $this->publishes([self::getRoot('config','tinycom.php') => config_path('tinycom.php')]); }
     private function mergeConfigs(){ foreach (self::$configKeys as $key) $this->mergeConfigFrom(self::getRoot('config',"$key.php"),$key); }
     private function loadMigrations(){ $this->loadMigrationsFrom(self::getRoot('migrations')); }
     private function loadViews(){ $this->loadViewsFrom(self::getRoot('views'), 'TinyCOM'); }
