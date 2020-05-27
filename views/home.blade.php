@@ -21,7 +21,7 @@
         <div id="public_top_spacer">&nbsp;</div>
         <main class="">
             <div class="container-fluid">
-                <keep-alive><transition name="trans"><router-view></router-view></transition></keep-alive>
+                <keep-alive><transition name="trans" mode="out-in"><router-view></router-view></transition></keep-alive>
             </div>
         </main>
         <div id="public_bottom_spacer" class="mt-3">&nbsp;</div>
