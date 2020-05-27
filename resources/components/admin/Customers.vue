@@ -10,7 +10,8 @@
                     <div class="modal-body">
                         <p class="lead"> Please fill all details</p>
                         <input type="text" v-model="name" class="form-control mb-1" placeholder="Name">
-                        <input type="text" v-model="phone" class="form-control" placeholder="Phone">
+                        <input type="text" v-model="phone" class="form-control mb-1" placeholder="Phone">
+                        <textarea v-model="address" class="form-control" placeholder="Address"></textarea>
                     </div>
                     <div class="modal-footer"><button type="button" class="btn btn-info" @click.prevent="create(true)" data-dismiss="modal">Add Customer</button></div>
                 </div>
@@ -27,7 +28,7 @@
         props: ['add'],
         data(){ return {
             layout: { ID:'id',Name:'name',Phone:'phone' },
-            name:'', phone: ''
+            name:'', phone: '', address: '',
         } },
         computed: {
             records(){ return this.$store.state.CUSTOMERS.CUSTOMERS }
@@ -35,7 +36,7 @@
         methods: {
             create(post){
                 if(!post) return $(this.$refs['customer_create_modal']).modal('show');
-                if(this.name && this.phone) this.$store.dispatch('CUSTOMERS/create',{ name:this.name,phone:this.phone }).then(() => { this.name = ''; this.phone = '' }) }
+                if(this.name && this.phone) this.$store.dispatch('CUSTOMERS/create',{ name:this.name,phone:this.phone,address:this.address }).then(() => { this.name = ''; this.phone = '' }) }
         }
     }
 </script>

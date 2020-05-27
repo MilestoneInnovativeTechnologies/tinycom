@@ -31,6 +31,7 @@ class CustomerController extends Controller
         $customer = new Customer;
         if($request->get('phone')) $customer->phone = $request->get('phone');
         $customer->name = $request->filled('name') ? $request->get('name') : $request->get('phone');
+        $customer->address = $request->get('address',null);
         if($live) $customer->live = time(); $customer->save(); return $customer;
     }
 
