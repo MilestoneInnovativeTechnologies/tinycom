@@ -1,7 +1,7 @@
 <template>
     <div class="form-inline">
         <button @click.prevent="decrement" class="btn btn-sm btn-info"><i class="fas text-white fa-level-up-alt fa-rotate-180"></i></button>
-        <input type='text' name='quantity' v-model="quantity" class='form-control form-control-sm border-0 text-center font-weight-bold text-info' style="width: 2rem" />
+        <input type='text' name='quantity' v-model="quantity" class='form-control form-control-sm border-0 text-center font-weight-bold text-info bg-white' style="width: 2rem" readonly />
         <button @click.prevent="increment" class="btn btn-sm btn-info" :class="{ disabled }" :disabled="disabled"><i class="fas text-white fa-level-up-alt"></i></button>
     </div>
 </template>
