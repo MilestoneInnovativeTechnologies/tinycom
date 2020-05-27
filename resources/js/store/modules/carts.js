@@ -16,6 +16,9 @@ const state = {
         live: 11000,
         orders: 7000
     },
+    expire: {
+        live: 5*60
+    },
     fetch: null
 }
 
@@ -56,7 +59,7 @@ const mutations = {
             if(!_.has(state.live,uuid)) Vue.set(state.live,uuid,{});
             Vue.set(state.live,uuid,details);
         })
-        _.forEach(_.difference(_.keys(state.live),_.keys(carts)),cart => Vue.delete(state.live,cart));
+        _.forEach(_.difference(_.keys(state.live),_.map(carts,({ time,uuid }) => ((time + state.expire.live) < timeNow()) ? null : uuid)),cart => Vue.delete(state.live,cart));
     },
     ordered(state,carts){
         if(!carts || _.isEmpty(carts)) return;
