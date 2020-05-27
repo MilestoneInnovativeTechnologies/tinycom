@@ -90,7 +90,7 @@ class CustomerController extends Controller
     public function logout(){
         Cookie::queue(Cookie::make(Customer::$CookieName, 0, -1));
         self::live_off(\request()->cookie(Customer::$CookieName));
-        return redirect()->route('home');
+        return redirect()->route('home',['sub' => SUB]);
     }
 
     public function update(Request $request){

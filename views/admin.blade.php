@@ -7,11 +7,11 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
 
-    <title>TinyCOM :: A Tiny eCommerce portal for local business and delivery.</title>
+    <title>{{ COMPANY }}</title>
 </head>
 <body>
     <div id="application" class="">
-        <nav class="navbar navbar-expand-lg navbar-light bg-info mb-2"><span><i v-if="$route.name !== 'home'" @click.prevent="$router.go(-1)" class="d-lg-none fas fa-chevron-left"></i> Tiny COM</span></nav>
+        <nav class="navbar navbar-expand-lg navbar-light bg-info mb-2"><span><i v-if="$route.name !== 'home'" @click.prevent="$router.go(-1)" class="d-lg-none fas fa-chevron-left"></i> {{ COMPANY }}</span></nav>
         <main class="">
             <div class="container-fluid">
                 <keep-alive><transition name="trans" mode="out-in"><router-view></router-view></transition></keep-alive>
@@ -26,7 +26,7 @@
     <script>
         @php $category_items = \Milestone\Tinycom\Model\CategoryItem::all(); $days7before = date('Y-m-d',strtotime('-7 days')).' 23:59:59'; session()->put(\Milestone\Tinycom\Model\Item::$LastGivenSession,now()->toDateTimeString()) @endphp
         const CATEGORIES = @json(\Milestone\Tinycom\Model\Category::with(['media' => function($Q){ $Q->select(['model_id','id','file_name']); }])->get()->keyBy->id), ITEMS = @json(\Milestone\Tinycom\Model\Item::with(['media' => function($Q){ $Q->select(['model_id','id','file_name']); }])->get()->keyBy->id), BUNDLES = @json(\Milestone\Tinycom\Model\Bundle::with('Items')->get()), CATEGORY_ITEMS = @json(\Milestone\Tinycom\Model\CategoryItem::all()->groupBy->category->mapWithKeys(function($Obj,$Cat){ return [$Cat => $Obj->pluck('item')]; })), ITEM_CATEGORIES = @json($category_items->groupBy->item->mapWithKeys(function($Obj,$Itm){ return [$Itm => $Obj->pluck('category')]; })), CUSTOMERS = @json(\Milestone\Tinycom\Model\Customer::all()), SOURCES = @json(\Milestone\Tinycom\Model\Source::where('expire','>',time() - 24*60*60)->get()), CARTS = @json(\Milestone\Tinycom\Model\Cart::with('Items')->where('updated_at','>',$days7before)->get());
-        const COMPANY = 'Tiny COM'; URL = { WHATSAPP:'https://api.whatsapp.com/send?phone=|phone|&text=|text|',SOURCE_LINK: '{{ route('source_link','|uuid|') }}',BILL_LINK: '{{ route('bill_link','|uuid|') }}',MEDIA: '{!! \Illuminate\Support\Facades\Storage::disk('media')->url('[id]/[file_name]') !!}' };
+        const COMPANY = '{{ COMPANY }}'; URL = { WHATSAPP:'https://api.whatsapp.com/send?phone=|phone|&text=|text|',SOURCE_LINK: '{{ route('source_link',['uuid' => '|uuid|','sub' => SUB]) }}',BILL_LINK: '{{ route('bill_link',['uuid' => '|uuid|', 'sub' => SUB]) }}',MEDIA: '{!! \Illuminate\Support\Facades\Storage::disk('media')->url('[id]/[file_name]') !!}' };
         function urlParse(item,data){ return URL[item].replace(/\|(\w+)\|/g,(f,m) => data[m] || '') + '?_=' + timeNow() }
         function timeNow(){ return parseInt(new Date().getTime()/1000) }
         function imageUrl(media){
@@ -40,6 +40,6 @@
         }
     </script>
 
-    <script src="{{ asset('js/admin.js') }}?_={{ time() }}"></script>
+    <script src="{{ asset('js/admin.js') }}"></script>
 </body>
 </html>

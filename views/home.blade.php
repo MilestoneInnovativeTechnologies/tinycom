@@ -18,7 +18,7 @@
             <a class="navbar-brand"><i v-if="back" @click.prevent="$router.go(-1)" class="d-lg-none fas fa-chevron-left"></i> @{{ header }}</a>
             <span class="navbar-text ml-auto"><navbar-user /></span>
         </nav>
-        <div id="public_top_spacer">&nbsp;</div>
+        <div id="public_top_spacer" :class="topSpacer">&nbsp;</div>
         <main class="">
             <div class="container-fluid">
                 <keep-alive><transition name="trans" mode="out-in"><router-view></router-view></transition></keep-alive>

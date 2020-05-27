@@ -47,6 +47,7 @@ const app = new Vue({
         back(){ return window.history.length>0 && this.$route.name !== 'home' },
         cartTotal(){ return this.$store.getters['CART/total'] },
         cartItems(){ return this.$store.getters['CART/itemsCount'] },
+        topSpacer(){ return this.$store.state.USER.USER ? ['mb-3'] : ['mb-5'] },
     },
     methods: {
         forward(){
@@ -60,5 +61,6 @@ const app = new Vue({
     },
     created(){
         $('#public_bottom_spacer').height(($('.navbar.fixed-bottom').outerHeight())+'px');
+        $('#public_top_spacer').height(($('.navbar.fixed-top').outerHeight())+'px');
     }
 });

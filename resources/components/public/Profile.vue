@@ -1,6 +1,6 @@
 <template>
     <section class="profile">
-        <div class="card mt-3" v-if="user">
+        <div class="card mt-4" v-if="user">
             <div class="card-header"><div class="card-title mb-0">Update</div></div>
             <div class="card-body">
                 <span class="text-muted">Name</span>
