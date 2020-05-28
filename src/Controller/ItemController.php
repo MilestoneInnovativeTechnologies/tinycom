@@ -10,7 +10,7 @@ use Milestone\Tinycom\Model\Item;
 class ItemController extends Controller
 {
 
-    public function update(Request $request, $id){
+    public function update(Request $request, $sub, $id){
         $update = ['name','description','status','price','selling','stock'];
         $item = Item::find($id); $item->update($request->only($update));
         if($request->hasFile('image')){ $item->addMediaFromRequest('image')->toMediaCollection('items'); }
@@ -24,7 +24,7 @@ class ItemController extends Controller
     public function sync(){
         $db_item_time = Carbon::parse(Cache::get(Item::$UpdatedCacheName,now()->toDateTimeString())); $given_time = Carbon::parse(session()->get(Item::$LastGivenSession));
         CustomerController::live(); if($db_item_time->greaterThan($given_time)){
-            $items = Item::where('updated_at','>',$given_time)->get();
+            $items = Item::with(['media' => function($Q){ $Q->select(['model_id','id','file_name']); }])->where('updated_at','>',$given_time)->get();
             session()->put(Item::$LastGivenSession,now()->toDateTimeString());
             return $items ?? [];
         }
@@ -37,6 +37,11 @@ class ItemController extends Controller
         $item = Item::create($create); $item->Categories()->attach($request->input('category'));
         if($request->hasFile('image')){ $item->addMediaFromRequest('image')->toMediaCollection('items'); }
         $item->load(['Categories','media' => function($Q){ $Q->select(['model_id','id','file_name']); }]); return $item;
+    }
+
+    public function stock(Request $request){
+        if($request->filled('stock')) Item::query()->update(['stock' => $request->input('stock')]);
+        return $request->input('stock');
     }
 
     public function fetch(Request $request){

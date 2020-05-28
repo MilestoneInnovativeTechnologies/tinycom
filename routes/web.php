@@ -115,6 +115,7 @@ Route::group([
         ],function(){
             Route::post('create','ItemController@create');
             Route::post('fetch','ItemController@fetch');
+            Route::post('stock','ItemController@stock');
         });
 
         Route::group([

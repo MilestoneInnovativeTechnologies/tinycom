@@ -8,6 +8,7 @@ const state = {
         sync: '/item/sync',
         create: '/admin/item/create',
         fetch: '/admin/item/fetch',
+        stock: '/admin/item/stock',
     },
     timeout: 3*60*1000,
     fetch: null,
@@ -82,6 +83,10 @@ const mutations = {
         Vue.set(state.ITEMS,_.toInteger(data.id),data);
         let categories = _.get(data,'categories'); if(_.isEmpty(categories)) return; let item_categories = _.map(categories,({ id }) => _.toInteger(id));
         let item = _.toInteger(data.id)
+    },
+    stock(state,stock){
+        stock = _.toInteger(stock);
+        _.forEach(state.ITEMS,(item,id) => Vue.set(state.ITEMS[id],'stock',stock))
     }
 }
 const actions = {
@@ -97,6 +102,10 @@ const actions = {
     },
     create({ state,commit },data){
         return new Promise(resolve => $.ajax({ url:state.url.create, data, type: "POST",enctype: 'multipart/form-data', processData: false, contentType: false, success: function(R){ commit('add',R); resolve(R) }}))
+    },
+    stock({ state,commit },stock){
+        stock = _.toSafeInteger(stock);
+        $.post(state.url.stock,{ stock },function(stock){ commit('stock',_.toInteger(stock)) })
     },
     update({ commit,state,getters },item){
         if(!item || !item.id) return; let item_id = _.toInteger(item.id), categories = getters.ITEM_CATEGORIES[item_id];
