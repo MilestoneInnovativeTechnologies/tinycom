@@ -14,7 +14,7 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-info mb-2"><span><i v-if="$route.name !== 'home'" @click.prevent="$router.go(-1)" class="d-lg-none fas fa-chevron-left"></i> {{ COMPANY }}</span></nav>
         <main class="">
             <div class="container-fluid">
-                <keep-alive><transition name="trans" mode="out-in"><router-view></router-view></transition></keep-alive>
+                <transition name="trans" mode="out-in"><keep-alive><router-view></router-view></keep-alive></transition>
             </div>
         </main>
         <nav class="navbar fixed-bottom navbar-light bg-light">
