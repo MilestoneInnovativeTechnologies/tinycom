@@ -14,7 +14,7 @@
 <body class="pb-0">
     <div id="application">
         <section class="confirm-modal"><confirm-modal /></section>
-        <nav class="navbar navbar-top navbar-expand-lg navbar-light bg-info">
+        <nav class="navbar navbar-top navbar-expand-lg navbar-light bg-info fixed-top">
             <a class="navbar-brand"><i v-if="back" @click.prevent="$router.go(-1)" class="d-lg-none fas fa-chevron-left"></i> @{{ header }}</a>
             <span class="navbar-text ml-auto"><navbar-user /></span>
         </nav>
