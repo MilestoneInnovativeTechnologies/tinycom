@@ -5,6 +5,7 @@ const state = {
         create: '/admin/source/create',
         link: '/s/',
         list: '/admin/source/list',
+        extend: '/admin/source/extend',
     },
     interval: {
         list: 5*60*1000
@@ -53,6 +54,11 @@ const actions = {
             $.ajax({ url:state.url.create,data,type:"POST",enctype:'multipart/form-data',processData:false,contentType:false,success: function(R){
                 commit('add',R); return resolve(R);
             }})
+        });
+    },
+    extend({ state,commit },data){
+        return new Promise(resolve => {
+            $.post(state.url.extend,data,function(R){ commit('update',R); return resolve(R); })
         });
     },
     sync({ state,dispatch,commit }){

@@ -104,4 +104,10 @@ class SourceController extends Controller
     public function list(){
         return Source::where('expire','>',time() - 24*60*60)->get();
     }
+
+    public function extend(Request $request){
+        $data = $request->only(['id','expire']);
+        $source = Source::find($data['id']); $source->update(['expire' => time() + intval($data['expire'])]);
+        return $source;
+    }
 }

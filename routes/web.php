@@ -97,6 +97,7 @@ Route::group([
         ],function(){
             Route::post('create','SourceController@create');
             Route::post('list','SourceController@list');
+            Route::post('extend','SourceController@extend');
         });
 
         Route::group([

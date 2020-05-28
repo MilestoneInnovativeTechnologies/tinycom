@@ -17,6 +17,20 @@
             </ul>
         </div>
         <div class="card col-lg-3 m-lg-auto mt-3" v-if="source">
+            <div class="card-body">
+                <div class="card-title">Extend expire time from now<span class="text-success float-right" v-show="ext_notify%2"><i class="fas fa-check-double fa-fw"></i> Extended!!</span></div>
+                <div class="form-row">
+                    <div class="col"><input type="text" class="form-control" name="expire_after" v-model="exp_num" id="source_create_expire_period_number"></div>
+                    <div class="col"><select class="form-control" name="expire_period" v-model="exp_period">
+                        <option value="60">Minutes</option>
+                        <option value="3600">Hours</option>
+                        <option value="86400">Days</option>
+                    </select></div>
+                </div>
+                <button class="btn btn-block btn-primary mt-2" @click.prevent="extend">Set Expire Time</button>
+            </div>
+        </div>
+        <div class="card col-lg-3 m-lg-auto mt-3" v-if="source">
             <ul class="list-group list-group-flush">
                 <li class="list-group-item px-0"><dl class="mb-0 row"><dt class="col-3">Link</dt><dd class="mb-0 col-9"><textarea class="form-control">{{ url }}</textarea></dd></dl></li>
                 <li class="list-group-item px-0"><dl class="mb-0 row"><dt class="col-3">Share</dt><dd class="mb-0 col-9"><a :href="whatsapp" target="_blank"><i class="fab fa-whatsapp mr-1 text-success"></i> Whats App</a></dd></dl></li>
@@ -30,12 +44,17 @@
     export default {
         name: "Source",
         props: ['id'],
+        data(){ return { exp_num:1,exp_period:60,ext_notify:0 } },
         computed: {
             layout(){ return { Status:'status',Expire:'expire',Orders:'orders',Hits:'hit','Hits after expire':'expire_hits' } },
             source(){ return this.$store.getters["SOURCES/source"](this.id) },
+            expire(){ return _.toSafeInteger(this.exp_num) * _.toSafeInteger(this.exp_period) },
             phone(){ return this.source.customers.length === 1 ? ('91' + _.get(this.$store.getters["CUSTOMERS/customer"](this.source.customers[0]),'phone')) : ''},
             url(){ return urlParse('SOURCE_LINK',{ uuid:this.source.uuid }) },
             whatsapp(){ return urlParse('WHATSAPP',{ text:this.url,phone:this.phone }) },
         },
+        methods: {
+            extend(){ this.$store.dispatch('SOURCES/extend',{ id:this.id,expire:this.expire }).then(R => { this.ext_notify++; setTimeout($vm0 => $vm0.ext_notify++,2500,this) }) }
+        }
     }
 </script>
