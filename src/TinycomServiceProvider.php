@@ -4,6 +4,7 @@ namespace Milestone\Tinycom;
 
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use Milestone\Tinycom\Model\Subscription;
 
@@ -40,8 +41,8 @@ class TinycomServiceProvider extends ServiceProvider
         } else {
             $this->loadViews();
             $this->loadRoutes('web',strtolower(ACCESSING));
+            self::subscriptionsRearrange();
         }
-        self::subscriptionsRearrange();
     }
 
 
@@ -57,8 +58,8 @@ class TinycomServiceProvider extends ServiceProvider
     private function publishAssets(){ $this->publishes([self::getRoot('assets') => public_path('/')]); }
 
     private static function getDomainParts($host){
-        $domains = config('tinycom.domains'); $domain = $sub = '';
-        if(in_array($host,$domains)) return ['domain' => $host, 'sub' => ''];
+        $domains = config('tinycom.domains',[]); $domain = $sub = '';
+        if(empty($domains) || in_array($host,$domains)) return ['domain' => $host, 'sub' => ''];
         $parts = explode(".",$host); $loop = count($parts);
         while(--$loop >= 0){
             $sub = implode(".",array_slice($parts,0,$loop)); $domain = implode(".",array_slice($parts,$loop));
@@ -68,6 +69,7 @@ class TinycomServiceProvider extends ServiceProvider
     }
 
     private static function subscriptionsRearrange(){
+        if(!DB::connection()->getPdo()) return;
         $lastUpdated = Carbon::parse(Cache::get(Subscription::$CacheSubscriptionCheckDate, Carbon::yesterday()->toDateTimeString()));
         if ($lastUpdated->lessThan(now()->startOfDay())) {
             $subscriptions = Subscription::where('end', '<', now()->startOfDay()->toDateTimeString())->where('status', 'Current');

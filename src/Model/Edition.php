@@ -9,13 +9,14 @@ use Milestone\Tinycom\Cast\Json;
 class Edition extends Model
 {
     protected $casts = ['features' => Json::class];
+    protected $guarded = [];
     public static $EditionCacheName = 'AppEditions';
 
     protected static function booted(){
         parent::booted();
         static::saved(function(){
             Cache::forget(self::$EditionCacheName);
-            Cache::rememberForever(self::$EditionCacheName,function(){ return Edition::all()->mapWithKeys(function($edition){ return [$edition->id => Arr::only($edition,['name','amount_multiplier','active'])]; })->toArray(); });
+            Cache::rememberForever(self::$EditionCacheName,function(){ return Edition::all()->mapWithKeys(function($edition){ return [$edition->id => Arr::only($edition->toArray(),['name','amount_multiplier','active'])]; })->toArray(); });
         });
     }
 
