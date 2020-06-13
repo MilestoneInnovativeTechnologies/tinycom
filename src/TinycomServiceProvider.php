@@ -69,7 +69,7 @@ class TinycomServiceProvider extends ServiceProvider
     }
 
     private static function subscriptionsRearrange(){
-        if(!DB::connection()->getPdo()) return;
+        if(empty(config('tinycom.name'))) return;
         $lastUpdated = Carbon::parse(Cache::get(Subscription::$CacheSubscriptionCheckDate, Carbon::yesterday()->toDateTimeString()));
         if ($lastUpdated->lessThan(now()->startOfDay())) {
             $subscriptions = Subscription::where('end', '<', now()->startOfDay()->toDateTimeString())->where('status', 'Current');

@@ -21,11 +21,11 @@
                 <b-card>
                     <b-card-title class="text-info">Subscriptions <b-badge variant="info" class="float-right p-2">{{ subscriptions.length }}</b-badge></b-card-title>
                     <dl class="row align-items-center text-info">
-                        <dt class="col-3 my-2">Active</dt><dd class="col-9 mb-0"><b-progress :max="subscriptions.length" striped :value="active.length" height="2rem" show-value variant="success"></b-progress></dd>
-                        <dt class="col-3 my-2">Upcoming</dt><dd class="col-9 mb-0"><b-progress :max="subscriptions.length" striped :value="upcoming.length" height="2rem" show-value variant="info"></b-progress></dd>
-                        <dt class="col-3 my-2">Recently Expiring</dt><dd class="col-9 mb-0"><b-progress :max="subscriptions.length" striped :value="expiring.length" height="2rem" show-value variant="primary"></b-progress></dd>
-                        <dt class="col-3 my-2">Recently Expired</dt><dd class="col-9 mb-0"><b-progress :max="subscriptions.length" striped :value="expired.length" height="2rem" show-value variant="warning"></b-progress></dd>
-                        <dt class="col-3 my-2">Expired & Inactive</dt><dd class="col-9 mb-0"><b-progress :max="subscriptions.length" striped :value="inactive.length" height="2rem" show-value variant="danger"></b-progress></dd>
+                        <dt class="col-3 my-2">Active</dt><dd class="col-9 mb-0"><b-progress :max="companies.length" striped :value="active.length" height="2rem" show-value variant="success"></b-progress></dd>
+                        <dt class="col-3 my-2">Upcoming</dt><dd class="col-9 mb-0"><b-progress :max="companies.length" striped :value="upcoming.length" height="2rem" show-value variant="info"></b-progress></dd>
+                        <dt class="col-3 my-2">Recently Expiring</dt><dd class="col-9 mb-0"><b-progress :max="companies.length" striped :value="expiring.length" height="2rem" show-value variant="primary"></b-progress></dd>
+                        <dt class="col-3 my-2">Recently Expired</dt><dd class="col-9 mb-0"><b-progress :max="companies.length" striped :value="expired.length" height="2rem" show-value variant="warning"></b-progress></dd>
+                        <dt class="col-3 my-2">Expired & Inactive</dt><dd class="col-9 mb-0"><b-progress :max="companies.length" striped :value="inactive.length" height="2rem" show-value variant="danger"></b-progress></dd>
                     </dl>
                 </b-card>
             </b-col>

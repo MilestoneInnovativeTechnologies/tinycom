@@ -40,7 +40,7 @@
             header(){ return _.get(this.$route,['meta','title'],'') }
         },
         methods: {
-            response({ error,message,variant }){ this.$bvToast.toast(message,{ variant,title:'Company' }) },
+            response({ error,message,variant }){ this.$bvToast.toast(message,{ variant,title:'Company' }); this.$bvModal.hide('company-form-modal') },
         },
     }
 </script>
