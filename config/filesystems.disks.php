@@ -1,14 +1,19 @@
 <?php
-
-$hosts = explode('.',request()->getHost()); array_pop($hosts); $domain = implode('.',$hosts); $domain = $domain ? ('/' . $domain) : '';
-
+    $host = \Illuminate\Support\Facades\Request::getScheme() . '://' . HOST ;
     return [
 
         'media' => [
             'driver' => 'local',
-            'root' => public_path('uploads/media' . $domain),
-            'url' => env('APP_URL').'/uploads/media'.$domain,
+            'root' => public_path('uploads/media/' . HOST),
+            'url' => $host . '/uploads/media/' . HOST,
             'visibility' => 'public',
-        ]
+        ],
+        'payment' => [
+            'driver' => 'local',
+            'root' => public_path('uploads/payment/' . HOST),
+            'url' => $host . '/uploads/payment/' . HOST,
+            'visibility' => 'public',
+        ],
+
 
     ];

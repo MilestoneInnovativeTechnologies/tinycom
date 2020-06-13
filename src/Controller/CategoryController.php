@@ -7,7 +7,7 @@ use Milestone\Tinycom\Model\Category;
 
 class CategoryController extends Controller
 {
-    public function update(Request $request, $id){
+    public function update(Request $request, $sub, $id){
         $update = ['name','description','status'];
         Category::where('id',$id)->update($request->only($update));
         if($request->hasFile('image')){ Category::find($id)->addMediaFromRequest('image')->toMediaCollection('categories'); }

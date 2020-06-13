@@ -2,7 +2,10 @@
 
 namespace Milestone\Tinycom;
 
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\ServiceProvider;
+use Milestone\Tinycom\Model\Subscription;
 
 class TinycomServiceProvider extends ServiceProvider
 {
@@ -17,8 +20,9 @@ class TinycomServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $hosts = explode('.',request()->getHost()); array_pop($hosts); $domain = implode('.',$hosts);
-        if(!defined('DOMAIN')) define('DOMAIN',$domain);
+        $host = request()->getHost(); $parts = self::getDomainParts($host);
+        define('ACCESSING',($parts['domain'] === $host) ? 'VENDOR' : 'CLIENT');
+        define('HOST',$host); define('DOMAIN',$parts['domain']); define('SUB',$parts['sub']);
         $this->mergeConfigs();
     }
 
@@ -29,14 +33,15 @@ class TinycomServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->loadMigrations(strtolower(ACCESSING));
         if(app()->runningInConsole()){
-            $this->loadMigrations();
             $this->publishConfig();
             $this->publishAssets();
         } else {
             $this->loadViews();
-            $this->loadRoutes();
+            $this->loadRoutes('web',strtolower(ACCESSING));
         }
+        self::subscriptionsRearrange();
     }
 
 
@@ -46,8 +51,38 @@ class TinycomServiceProvider extends ServiceProvider
     }
     private function publishConfig(){ $this->publishes([self::getRoot('config','tinycom.php') => config_path('tinycom.php')]); }
     private function mergeConfigs(){ foreach (self::$configKeys as $key) $this->mergeConfigFrom(self::getRoot('config',"$key.php"),$key); }
-    private function loadMigrations(){ $this->loadMigrationsFrom(self::getRoot('migrations')); }
+    private function loadMigrations($access){ $this->loadMigrationsFrom(self::getRoot('migrations' . DIRECTORY_SEPARATOR . $access)); }
     private function loadViews(){ $this->loadViewsFrom(self::getRoot('views'), 'TinyCOM'); }
-    private function loadRoutes(){ $this->loadRoutesFrom(self::getRoot('routes','web.php')); }
+    private function loadRoutes(...$files){ foreach ($files as $filename) $this->loadRoutesFrom(self::getRoot('routes', ($filename . '.php'))); }
     private function publishAssets(){ $this->publishes([self::getRoot('assets') => public_path('/')]); }
+
+    private static function getDomainParts($host){
+        $domains = config('tinycom.domains'); $domain = $sub = '';
+        if(in_array($host,$domains)) return ['domain' => $host, 'sub' => ''];
+        $parts = explode(".",$host); $loop = count($parts);
+        while(--$loop >= 0){
+            $sub = implode(".",array_slice($parts,0,$loop)); $domain = implode(".",array_slice($parts,$loop));
+            if(in_array($domain,$domains)) break;
+        }
+        return compact('domain','sub');
+    }
+
+    private static function subscriptionsRearrange(){
+        $lastUpdated = Carbon::parse(Cache::get(Subscription::$CacheSubscriptionCheckDate, Carbon::yesterday()->toDateTimeString()));
+        if ($lastUpdated->lessThan(now()->startOfDay())) {
+            $subscriptions = Subscription::where('end', '<', now()->startOfDay()->toDateTimeString())->where('status', 'Current');
+            if ($subscriptions->exists())
+                $subscriptions->get()->each(function ($subscription) {
+                    $subscription->status = 'Expired';
+                    $subscription->save();
+                });
+            $subscriptions = Subscription::where('start', '<', now()->endOfDay()->toDateTimeString())->where('status', 'Upcoming');
+            if ($subscriptions->exists())
+                $subscriptions->get()->each(function ($subscription) {
+                    $subscription->status = 'Current';
+                    $subscription->save();
+                });
+            Cache::put(Subscription::$CacheSubscriptionCheckDate, now()->toDateTimeString());
+        }
+    }
 }

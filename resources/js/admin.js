@@ -4,13 +4,11 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-import VueRouter from "vue-router";
-
 require('./bootstrap');
 
 window.Vue = require('vue');
 window.Vuex = require('vuex');
-window.VueRouter = require('vue-router');
+import VueRouter from "vue-router"
 window.VueGraph = require('vue-graph');
 
 Vue.use(VueRouter,Vuex,VueGraph)

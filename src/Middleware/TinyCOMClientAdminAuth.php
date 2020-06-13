@@ -5,7 +5,7 @@ namespace Milestone\Tinycom\Middleware;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
-class TinyCOMAuth
+class TinyCOMClientAdminAuth
 {
     /**
      * Handle an incoming request.
@@ -16,7 +16,7 @@ class TinyCOMAuth
      */
     public function handle($request, Closure $next)
     {
-        if(!Auth::check()) return redirect()->route('admin.login');
+        if(!Auth::check()) return redirect()->route('admin.login',['sub' => SUB]);
         return $next($request);
     }
 }

@@ -12,11 +12,11 @@ class Source extends Model implements HasMedia
 
     use InteractsWithMedia;
 
-    public static $SessionName = 'TinyCOM_Source';
-    public static $SessionSourceItems = 'TinyCOM_SourceItems';
-    public static $SessionSourceCustomers = 'TinyCOM_SourceCustomers';
-    public static $SessionSourceLogin = 'TinyCOM_SourceLoginRequired';
-    public static $CreatedCacheName = DOMAIN . '_' . 'source_last_created';
+    public static $SessionName = CODE . '_Source';
+    public static $SessionSourceItems = CODE . '_SourceItems';
+    public static $SessionSourceCustomers = CODE . '_SourceCustomers';
+    public static $SessionSourceLogin = CODE . '_SourceLoginRequired';
+    public static $CreatedCacheName = CODE . '_' . 'source_last_created';
 
     protected $guarded = [];
     protected $appends = ['expired'];

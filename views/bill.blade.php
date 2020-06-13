@@ -52,7 +52,7 @@
             <section class="bill-view py-3">
                 <div class="card col-lg-3 m-lg-auto" @if($bill->status === 'Delivered') style="background: url('/images/delivered.png') no-repeat bottom right" @endif>
                     <div class="card-body px-0">
-                        <h4 class="card-title text-center">{{ $COMPANY ?? 'Tiny COM' }}</h4>
+                        <h4 class="card-title text-center">{{ COMPANY ?? 'Tiny COM' }}</h4>
                         <hr>
                         <dl class="row m-0">
                             <dt class="col-3 p-0">Order # </dt><dd class="col-9 p-0">{{ $bill->uuid }}</dd>

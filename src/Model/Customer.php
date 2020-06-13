@@ -5,8 +5,8 @@ namespace Milestone\Tinycom\Model;
 class Customer extends Model
 {
 
-    public static $CookieName = 'TinyCOM_Customer';
-    public static $CacheForLive = DOMAIN . '_' . 'TinyCOM_Customer_Live';
+    public static $CookieName = CODE . '_Customer';
+    public static $CacheForLive = CODE . '_' . '_Customer_Live';
     public static $LiveTime = 120;
 
     protected $guarded = [];

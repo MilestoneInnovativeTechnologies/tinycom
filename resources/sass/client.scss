@@ -1,0 +1,14 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
+
+$font-size-base:              0.8rem !default; // Assumes the browser default, typically `16px`
+
+// Bootstrap
+@import 'node_modules/bootstrap/scss/bootstrap';
+@import 'node_modules/bootstrap-vue/src/index.scss';
+
+.trans-enter-active, .trans-leave-active { transition: all .200s; }
+.trans-leave { opacity: 1; transform: scale(1,1); }
+.trans-leave-to { opacity: 0; transform: scale(0.8,0.8); }
+.trans-enter { opacity: 0; transform: scale(1.2,1.2); }
+.trans-enter-to { opacity: 1; transform: scale(1,1); }

@@ -9,7 +9,7 @@
 
     <script src="{{ asset('pack') }}"></script>
 
-    <title>TinyCOM :: A Tiny eCommerce portal for local business and delivery.</title>
+    <title>{{ COMPANY }}</title>
 </head>
 <body class="pb-0">
     <div id="application">
@@ -31,7 +31,7 @@
             <button class="btn btn-info" type="button" @click="forward"><i class="fas fa-angle-double-right"></i></button>
         </nav>
     </div>
-    <script> const COMPANY = 'Tiny COM', MEDIA_URL = '{!! \Illuminate\Support\Facades\Storage::disk('media')->url('[id]/[file_name]') !!}'; function imageUrl(media){ return MEDIA_URL.replace(/\[(\w+)\]/g,(i,M) => media[M])} </script>
-    <script defer src="{{ asset('js/public.js') }}?_={{ time() }}"></script>
+    <script> const COMPANY = '{{ COMPANY }}', MEDIA_URL = '{!! \Illuminate\Support\Facades\Storage::disk('media')->url('[id]/[file_name]') !!}'; function imageUrl(media){ return MEDIA_URL.replace(/\[(\w+)\]/g,(i,M) => media[M])} </script>
+    <script defer src="{{ asset('js/public.js') }}"></script>
 </body>
 </html>
