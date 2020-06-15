@@ -1,15 +1,20 @@
 <template>
     <b-card v-if="payments.length" header="Payments">
         <h4>Summary</h4>
-        <b-table small :items="grouped_items" small></b-table>
-        <h4>Detail</h4>
-        <b-table small :items="payments" small :fields="['Year','Month','Description','Amount']">
-            <template v-slot:cell(Year)="data">{{ new Date(data.item.date).getFullYear() }}</template>
-            <template v-slot:cell(Month)="data">{{ Months[new Date(data.item.date).getMonth()] }}</template>
-            <template v-slot:cell(Description)="data">{{ lg(orders,[data.item.order,'attributes','description']) }}</template>
-            <template v-slot:cell(Amount)="data">{{ lg(data.item,['amount']) }}</template>
+        <b-table small :items="grouped_items" small>
+            <template v-slot:cell(payments)="data">
+                <b-button variant="info" size="sm" @click.prevent="selected = data.item.month"><b-icon icon="arrow-down-square" class="mr-1"></b-icon> View Details</b-button>
+            </template>
         </b-table>
-
+        <div v-if="selected && grouped[selected]">
+            <h4>Detail</h4>
+            <b-table small :items="grouped[selected]" small :fields="['Year','Month','Description','Amount']">
+                <template v-slot:cell(Year)="data">{{ new Date(data.item.date).getFullYear() }}</template>
+                <template v-slot:cell(Month)="data">{{ Months[new Date(data.item.date).getMonth()] }}</template>
+                <template v-slot:cell(Description)="data">{{ lg(orders,[data.item.order,'attributes','description']) }}</template>
+                <template v-slot:cell(Amount)="data">{{ lg(data.item,['amount']) }}</template>
+            </b-table>
+        </div>
     </b-card>
 </template>
 
@@ -18,6 +23,7 @@
         name: "ReferrerPaymentCard",
         props: ['id'],
         data(){ return {
+            selected: null,
             Months: ['January','February','March','April','May','June','July','August','September','October','November','December'],
             max: new Date().getTime() - (9*30*24*60*60*1000)
         } },
@@ -29,7 +35,7 @@
             o_keys(){ return _.map(this.orders,(c,k) => _.toInteger(k)) },
             payments(){ return _(this.$store.state.PAYMENTS.DATA).filter(({ order,date }) => _.includes(this.o_keys,_.toInteger(order)) && new Date(date).getTime() > this.max).value() },
             grouped(){ return _.groupBy(this.payments,({ date }) => [new Date(date).getFullYear(),this.Months[new Date(date).getMonth()]].join('/')) },
-            grouped_items(){ return _.map(this.grouped,(pays,date) => _.zipObject(['month','total'],[date,this.sumAmount(pays)]) )}
+            grouped_items(){ return _.map(this.grouped,(pays,date) => _.zipObject(['month','total','payments'],[date,this.sumAmount(pays),pays]) )}
             // year_sum(){ return _.mapValues(this.year,(payments) => _.sumBy(payments,({ amount }) => _.toNumber(amount))) },
             // month(){ return _.mapValues(this.year,(payments) => _.groupBy(payments,({ date }) => new Date(date).getMonth())) },
             // month_sum(){ return _.mapValues(this.month,(mPayments) => _.mapValues(mPayments,(payments) => _.sumBy(payments,({ amount }) => _.toNumber(amount)))) }

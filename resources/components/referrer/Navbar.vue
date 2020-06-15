@@ -24,7 +24,7 @@
         name: "Navbar",
         components: { BNavbar,BNavbarBrand,BNavbarToggle,BCollapse,BNavbarNav,BNavItem,BNavItemDropdown,BDropdown,BDropdownItem },
         data(){ return {
-            links: require('./../../js/routes/client').links,
+            links: require('./../../js/routes/referrer').links,
         } },
         computed: {
             active(){ return (name) => this.$route.name === name },

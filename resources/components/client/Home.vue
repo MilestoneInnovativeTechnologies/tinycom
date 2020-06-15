@@ -32,7 +32,7 @@
             order: null,
         } },
         computed: {
-            companies(){ return _.filter(this.$store.state.COMPANIES.DATA,['setup','Y']) },
+            companies(){ return _.filter(this.$store.state.COMPANIES.DATA,['setup','N']) },
         },
         methods: {
         }

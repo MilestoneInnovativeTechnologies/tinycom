@@ -3,6 +3,9 @@
 namespace Milestone\Tinycom\Controller;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Milestone\Tinycom\Model\Company;
+use Milestone\Tinycom\Model\Order;
 use Milestone\Tinycom\Model\Payment;
 
 class PaymentController extends Controller
@@ -14,7 +17,9 @@ class PaymentController extends Controller
     public function ProcessPayment(Request $request){ return $request->getContent() ? (new RazorPayController())->ProcessPayment($request) : ''; }
 
     public function fetch(){
-        return self::Data(Payment::all());
+        if(Auth::user()->type === 'company') return self::Data(Payment::all());
+        $companies = Company::pluck('id')->toArray(); $orders = Order::whereIn('company',$companies)->pluck('id')->toArray();
+        return self::Data(Payment::whereIn('order',$orders)->get());
     }
 
     public function manual(Request $request){

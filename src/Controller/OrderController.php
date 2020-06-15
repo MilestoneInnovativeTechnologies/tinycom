@@ -3,6 +3,8 @@
 namespace Milestone\Tinycom\Controller;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Milestone\Tinycom\Model\Company;
 use Milestone\Tinycom\Model\Order;
 
 class OrderController extends Controller
@@ -42,7 +44,9 @@ class OrderController extends Controller
     }
 
     public function fetch(Request $request){
-        return self::Data(Order::whereIn('status',['New','Paid'])->get());
+        if(Auth::user()->type === 'company') return self::Data(Order::whereIn('status',['New','Paid'])->get());
+        $companies = Company::pluck('id')->toArray();
+        return self::Data(Order::whereIn('status',['New','Paid'])->whereIn('company',$companies)->get());
     }
 
     public static function OrderPaid($order_id){

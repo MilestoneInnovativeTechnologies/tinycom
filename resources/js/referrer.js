@@ -42,9 +42,10 @@ const app = new Vue({
             'edition': ['id','name','description','active','amount_multiplier'],
             'order': ['amount','attributes','date','id','link','status','status_log','type','company','payment'],
             'payment': ['amount','attachment','date','id','order'],
-            'company': ['active','company','domain','id','setup','created_at'],
+            'company': ['active','company','domain','id','setup','user','created_at'],
+            'user': ['name','email','phone','id','created_at'],
         };
-        let EDITIONS = [],COMPANIES = [],ORDERS = [],PAYMENTS = [],SUBSCRIPTIONS = [];
+        let EDITIONS = [], CLIENTS = [],COMPANIES = [],ORDERS = [],PAYMENTS = [],SUBSCRIPTIONS = [];
         _.forEach(DATA,company => {
             _.forEach(company.subscriptions,subscription => {
                 if(subscription.edition) {
@@ -53,6 +54,7 @@ const app = new Vue({
                 }
                 SUBSCRIPTIONS.push(subscription)
             })
+
             if(!_.isEmpty(company.orders)) _.forEach(company.orders,order => {
                 if(order.payment) {
                     PAYMENTS.push(_.pick(order.payment,required_fields.payment));
@@ -60,10 +62,17 @@ const app = new Vue({
                 }
                 ORDERS.push(_.pick(order, required_fields.order))
             })
+
+            if(company.user) {
+                CLIENTS.push(_.pick(company.user,required_fields.user));
+                Vue.set(company,'user',company.user.id);
+            }
             COMPANIES.push(_.pick(company,required_fields.company));
+
             dispatch('EDITIONS/serve_fetch',{ data:EDITIONS }); dispatch('COMPANIES/serve_fetch',{ data:COMPANIES });
             dispatch('ORDERS/serve_fetch',{ data:ORDERS }); dispatch('PAYMENTS/serve_fetch',{ data:PAYMENTS });
             dispatch('SUBSCRIPTIONS/serve_fetch',{ data:SUBSCRIPTIONS });
+            dispatch('CLIENTS/serve_fetch',{ data:CLIENTS });
         })
     }
 });

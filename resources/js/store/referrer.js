@@ -4,6 +4,7 @@ export const store = new Vuex.Store({
     modules: {
         SERVER: require('./modules/vendor').default,
         PROFILE: require('./modules/profile').default,
+        CLIENTS: require('./modules/clients').default,
         COMPANIES: require('./modules/companies').default,
         SUBSCRIPTIONS: require('./modules/subscriptions').default,
         ORDERS: require('./modules/orders').default,
