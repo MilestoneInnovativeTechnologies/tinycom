@@ -59,7 +59,7 @@ class CompanyController extends Controller
         $username = config('tinycom.database_username');
         $data['database_username'] = config('tinycom.database_username_prefix') . (empty($username) ? $sub : $username);
         $data['database_password'] = $data['database_username']; $company = Company::create($data);
-        return self::Data($company->fresh(),'Company added successfully!!');
+        return self::Data(Auth::user()->type === 'company' ? $company->fresh()->makeVisible(['password','database_password','database_username','database']) : $company->fresh(),'Company added successfully!!');
     }
 
     public function fetch(Request $request){

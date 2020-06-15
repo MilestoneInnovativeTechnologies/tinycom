@@ -6,7 +6,7 @@
             <template v-slot:cell(client)="data">{{ clientName(data.item.user) }}</template>
             <template v-slot:cell(since)="data">{{ data.item.created_at | date }}</template>
             <template v-slot:cell(expire_on)="data">{{ expireDate(data.item.id) | date }}</template>
-            <template v-slot:cell(upcoming)="data">{{ upcoming.length ? 'Yes' : 'No' }}</template>
+            <template v-slot:cell(upcoming)="data">{{ upcoming(data.item.id).length ? 'Yes' : 'No' }}</template>
             <template v-slot:cell(actions)="data" v-if="actions">
                 <b-button v-if="actions.includes('new_order')" @click.prevent="$bvModal.show(modal_new_order,props.company = data.item.id)" size="sm" variant="outline-warning">New Subscription Order</b-button>
             </template>

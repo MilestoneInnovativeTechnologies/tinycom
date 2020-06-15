@@ -18,7 +18,7 @@ class ModifyUsersTable extends Migration
             $table->string('name',32)->index()->change();
             $table->string('email',64)->nullable()->change();
             $table->string('phone',16)->nullable()->after('email');
-            $table->enum('type',['company','referer','client'])->default('client')->after('phone');
+            $table->enum('type',['company','referrer','client'])->default('client')->after('phone');
         });
 
         \Illuminate\Support\Facades\DB::table('users')->insert([

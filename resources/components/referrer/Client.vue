@@ -13,7 +13,7 @@
             <companies-list :companies="companies" :fields="['#','name','domain','since','expire_on','upcoming']" :actions="['new_order']" :per_page="companies.length" :current_page="1"></companies-list>
         </b-card>
         <b-card v-if="client && payments" header="Payments" class="mt-3">
-            <payments-list :payments="payments" :fields="['#','date','amount','description','status','receipt']" :per_page="payments.length" :current_page="1"></payments-list>
+            <payments-list :payments="payments" :fields="['#','date','amount','description','status','receipt']" :actions="['sms','email']" :per_page="payments.length" :current_page="1"></payments-list>
         </b-card>
         <b-modal :id="modal" hide-footer title="New Company"><company-form @response="response" :user="id"></company-form></b-modal>
     </b-container>
