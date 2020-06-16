@@ -15,3 +15,7 @@
 <hr>
 
 For payment gateway, receipt (order id) should be unique. So in case there is a chance to conflict, try changing autoincrement number of orders table.
+
+Set mail settings in env file
+
+go through config file

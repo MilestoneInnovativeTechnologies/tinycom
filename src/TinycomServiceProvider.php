@@ -85,6 +85,7 @@ class TinycomServiceProvider extends ServiceProvider
                     $subscription->save();
                 });
             Cache::put(Subscription::$CacheSubscriptionCheckDate, now()->toDateTimeString());
+            DB::disconnect();
         }
     }
 }
