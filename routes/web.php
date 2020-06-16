@@ -8,7 +8,7 @@ Route::group([
 
 ],function(){
 
-    Route::get(config('tinycom.webhook.path'),'PaymentController@ProcessPayment')->name('tinycom.webhook.path');
+    Route::post(config('tinycom.webhook.path'),'PaymentController@ProcessPayment')->name('tinycom.webhook.path');
 
     Route::group([
 

@@ -37,7 +37,7 @@ class RazorPayController extends Controller
         $webhookSecret = config('tinycom.webhook.secret');
         $this->api->utility->verifyWebhookSignature($webhookBody, $webhookSignature, $webhookSecret);
 
-        $requestId = $request->header(config('tinycom.webhook.request_id_header')); if(Payment::where('request',$requestId)->exists()) return self::webHookReturn();
+        $requestId = $request->header(config('tinycom.webhook.request_id_header')); if(Payment::where('request_id',$requestId)->exists()) return self::webHookReturn();
         $content = json_decode($webhookBody,true); if($content['event'] !== 'invoice.paid') return self::webHookReturn();
 
         $create = ['request_id' => $requestId,'request' => $webhookBody,'date' => now()->toDateTimeString()];
