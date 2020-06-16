@@ -1,3 +1,4 @@
+import editions from "./store/modules/editions";
 
 window._ = require('lodash');
 try {
@@ -45,14 +46,8 @@ const app = new Vue({
             'company': ['active','company','domain','id','setup','created_at'],
         };
         let EDITIONS = [],COMPANIES = [],ORDERS = [],PAYMENTS = [],SUBSCRIPTIONS = [];
-        _.forEach(DATA,company => {
-            _.forEach(company.subscriptions,subscription => {
-                if(subscription.edition) {
-                    EDITIONS.push(_.pick(subscription.edition,required_fields.edition))
-                    Vue.set(subscription,'edition',subscription.edition.id);
-                }
-                SUBSCRIPTIONS.push(subscription)
-            })
+        _.forEach(DATA_COMPANIES,company => {
+            _.forEach(company.subscriptions,subscription => SUBSCRIPTIONS.push(subscription))
             if(!_.isEmpty(company.orders)) _.forEach(company.orders,order => {
                 if(order.payment) {
                     PAYMENTS.push(_.pick(order.payment,required_fields.payment));
@@ -61,9 +56,12 @@ const app = new Vue({
                 ORDERS.push(_.pick(order, required_fields.order))
             })
             COMPANIES.push(_.pick(company,required_fields.company));
-            dispatch('EDITIONS/serve_fetch',{ data:EDITIONS }); dispatch('COMPANIES/serve_fetch',{ data:COMPANIES });
+
+            dispatch('COMPANIES/serve_fetch',{ data:COMPANIES });
             dispatch('ORDERS/serve_fetch',{ data:ORDERS }); dispatch('PAYMENTS/serve_fetch',{ data:PAYMENTS });
             dispatch('SUBSCRIPTIONS/serve_fetch',{ data:SUBSCRIPTIONS });
         })
+        _.forEach(DATA_EDITIONS,edition => EDITIONS.push(_.pick(edition,required_fields.edition)))
+        dispatch('EDITIONS/serve_fetch',{ data:EDITIONS });
     }
 });
