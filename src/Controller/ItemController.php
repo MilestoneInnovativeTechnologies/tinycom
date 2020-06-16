@@ -10,7 +10,7 @@ use Milestone\Tinycom\Model\Item;
 class ItemController extends Controller
 {
 
-    public function update(Request $request, $sub, $id){
+    public function update(Request $request, $id){
         $update = ['name','description','status','price','selling','stock'];
         $item = Item::find($id); $item->update($request->only($update));
         if($request->hasFile('image')){ $item->addMediaFromRequest('image')->toMediaCollection('items'); }

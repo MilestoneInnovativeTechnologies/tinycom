@@ -129,7 +129,7 @@ class CartController extends Controller
         $Cart->save(); return ['error' => false, 'message' => 'Successfully marked as delivered', 'cart' => $Cart];
     }
 
-    public function bill($sub, $uuid){
+    public function bill($uuid){
         $bill = Cart::with(['Customer','Items.Item'])->whereNotIn('status',['New','Ordered','Cancelled'])->where('uuid',$uuid)->first();
         if(!$bill) return 'No bill exists'; return view('TinyCOM::bill')->with('bill',$bill);
     }

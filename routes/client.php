@@ -45,7 +45,7 @@ Route::group([
     Route::match(['get','post'],'/admin/login',function(Request $request){
         Auth::logout(); if($request->getMethod() !== 'POST') return view('TinyCOM::login');
         Auth::attempt(['name' => 'admin','password' => $request->input('password')]);
-        return redirect()->route('admin',['sub' => SUB]);
+        return redirect()->route('admin');
     })->name('admin.login');
 
     Route::group([

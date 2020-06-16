@@ -36,7 +36,7 @@ class SourceController extends Controller
         return $source;
     }
 
-    public function visit(Request $request, $sub, $uuid){
+    public function visit(Request $request, $uuid){
         session()->forget([Source::$SessionName,Source::$SessionSourceCustomers,Source::$SessionSourceItems,Source::$SessionSourceLogin]);
         $source = Source::where(['uuid' => $uuid,'active' => 'Y'])->with('media')->first();
         if($source && !$source->expired){
@@ -61,7 +61,7 @@ class SourceController extends Controller
         return view('TinyCOM::source')->with('source',$source);
     }
 
-    public function hit($sub, $uuid){
+    public function hit($uuid){
         $source = Source::where('uuid',$uuid)->first();
         if($source) $source->increment($source->expire > time() ? 'hits' : 'expire_hits');
         return 1;
