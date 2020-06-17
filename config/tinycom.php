@@ -76,7 +76,7 @@ return [
     |
     */
 
-    'domains' => ['tinycom.in','tinycom.ae','tinycom.xyz','tinycom.life','tinycom.co','tinycom.net','tinycom'],
+    'domains' => ['tinycom.in','tinycom.xyz'],
 
     /*
     |--------------------------------------------------------------------------
@@ -122,7 +122,9 @@ return [
     | Database Password
     |--------------------------------------------------------------------------
     |
-    | Database Password
+    | Database Password.
+    | Right now no impact on changing this, as same password string
+    | of username is used
     |
     */
 
@@ -182,18 +184,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Login Route
-    |--------------------------------------------------------------------------
-    |
-    | Name the route of login page. If none leave blank to use default login route.
-    | Ex: company.login
-    |
-    */
-
-    'login_route' => null,
-
-    /*
-    |--------------------------------------------------------------------------
     | Login View
     |--------------------------------------------------------------------------
     |
@@ -203,7 +193,7 @@ return [
     |
     */
 
-    'login_view' => null,
+    'login_view' => 'TinyCOM::enter',
 
     /*
     |--------------------------------------------------------------------------
@@ -228,7 +218,7 @@ return [
     |
     */
 
-    'mail_from_address' => 'info@tinycom.in',
+    'mail_from_address' => 'no-reply@tinycom.in',
 
     /*
     |--------------------------------------------------------------------------
