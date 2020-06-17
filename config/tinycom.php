@@ -32,14 +32,25 @@ return [
     |--------------------------------------------------------------------------
     |
     | Login email of administrator.
-    | Here the admin logged in to view details of all companies and their expire date
-    | setup pending companies etc.
-    | Initial password for admin would be admin.
+    | Here the admin logged in to view details of all companies and their expire
+    | date, setup pending companies etc.
     | This email can be changed from admin portal.
     |
     */
 
     'email' => 'admin@admin.net',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Administrator Password
+    |--------------------------------------------------------------------------
+    |
+    | Login password of administrator.
+    | This is just initial password only, this can be changed from admin portal.
+    |
+    */
+
+    'password' => 'admin',
 
     /*
     |--------------------------------------------------------------------------
@@ -51,7 +62,7 @@ return [
     |
     */
 
-    'domain' => 'tinycom',
+    'domain' => 'tinycom.in',
 
     /*
     |--------------------------------------------------------------------------

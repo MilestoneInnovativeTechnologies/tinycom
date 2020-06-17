@@ -15,15 +15,15 @@ class ModifyUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropUnique(['email']);
-            $table->string('name',32)->index()->change();
+            $table->string('name',48)->index()->change();
             $table->string('email',64)->nullable()->change();
             $table->string('phone',16)->nullable()->after('email');
             $table->enum('type',['company','referrer','client'])->default('client')->after('phone');
         });
 
         \Illuminate\Support\Facades\DB::table('users')->insert([
-            'name' => 'Administrator', 'email' => 'admin@admin.admin', 'type' => 'company',
-            'password' => \Illuminate\Support\Facades\Hash::make('admin'),
+            'name' => 'Administrator', 'email' => config('tinycom.email'), 'type' => 'company',
+            'password' => \Illuminate\Support\Facades\Hash::make(config('tinycom.password')),
             'created_at' => now()->toDateTimeString(), 'updated_at' => now()->toDateTimeString()
         ]);
     }
@@ -41,6 +41,6 @@ class ModifyUsersTable extends Migration
             $table->string('name')->change();
             $table->dropColumn(['phone','type']);
         });
-        \Illuminate\Support\Facades\DB::table('users')->where('name','admin')->delete();
+        \Illuminate\Support\Facades\DB::table('users')->where('name','Administrator')->delete();
     }
 }
