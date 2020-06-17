@@ -20,8 +20,12 @@ class SetupController extends Controller
         $referer = $request->header('referer'); extract(json_decode(base64_decode($token),true));
         if(!$referer || !$company || !$password || !$done) return 'Token failed';
         $redirect = $done . '/' . $token;
-        try { DB::connection()->getPdo(); } catch(\Exception $e){ return '<html><head></head><body>No Database found, or user not assigned to database</body></html>'; }
-        if(Schema::hasTable('users')) return '<html><head><script>window.onload = function(){ setTimeout(() => location.href="'.$redirect.'",2000); }</script></head><body>Setup already done!!</body></html>';
+        try {
+            if(Schema::hasTable('users'))
+                return '<html><head><script>window.onload = function(){ setTimeout(() => location.href="'.$redirect.'",2000); }</script></head><body>Setup already done!!</body></html>';
+        } catch(\Exception $e){
+            return '<html><head></head><body>No Database found, or user not assigned to database</body></html>';
+        }
         Artisan::call('migrate:fresh');
         $created_at = $updated_at = now()->toDateTimeString();
         $name = 'admin'; $password = Hash::make($password);
