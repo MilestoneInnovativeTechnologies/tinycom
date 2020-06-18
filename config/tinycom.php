@@ -38,7 +38,7 @@ return [
     |
     */
 
-    'email' => 'admin@admin.net',
+    'email' => 'admin@admin.admin',
 
     /*
     |--------------------------------------------------------------------------
@@ -230,6 +230,19 @@ return [
     */
 
     'mail_from_address' => 'no-reply@tinycom.in',
+
+    /*
+    |--------------------------------------------------------------------------
+    | New Company Setup - inform mail
+    |--------------------------------------------------------------------------
+    |
+    | For setting up company in hosting, like subdomain, database, the new
+    | company info need to be mailed to concern authorities. Drop the email
+    | address of such person
+    |
+    */
+
+    'new_company_inform_mail' => 'tinycom@milestoneit.net',
 
     /*
     |--------------------------------------------------------------------------
