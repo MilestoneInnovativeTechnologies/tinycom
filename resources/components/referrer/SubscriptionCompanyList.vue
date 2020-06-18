@@ -1,16 +1,16 @@
 <template>
     <section>
-        <b-table :items="items" :filter="filter" :fields="p_fields" small :per-page="per_page" :current-page="current_page">
+        <b-table :items="items" :filter="filter" :fields="p_fields" small :per-page="items.length > 22 ? 15 : 22" :current-page="current_page">
             <template v-slot:cell(no)="data">{{ data.index+1 }}</template>
+            <template v-slot:cell(upcoming)="data">{{ upcoming(data.item.company).length ? 'Yes' : 'No'  }}</template>
             <template v-if="p_actions.length" v-slot:cell(actions)="data">
                 <b-button v-for="(action,idx) in p_actions" :key="'sub-comp-list-actions-idx-'+idx" :disabled="disabled" :variant="action[1]" @click.prevent="exeAction(action[3],data.item)" size="sm" class="mr-1"><b-icon :icon="action[2]"></b-icon> {{ action[0] }} </b-button>
             </template>
         </b-table>
-        <b-row v-if="items.length > 22" class="my-2"><b-col cols="4" class="offset-4"><b-pagination v-model="current_page" :total-rows="items.length" :per-page="per_page" align="fill" size="sm"></b-pagination></b-col></b-row>
+        <b-pagination v-if="items.length > 22" v-model="current_page" :total-rows="items.length" :per-page="15" align="center" size="sm"></b-pagination>
         <b-modal :id="'sub-comp-list-view-subscription-'+unique" title="Subscriptions"><subscriptions-list :subscriptions="selected_subscriptions"></subscriptions-list></b-modal>
-        <b-modal :id="'sub-comp-list-add-subscription-'+unique" title="New Subscription Order" hide-footer><order-form :company="props.company" :manual="this.props.manual" @submitted="orderCreated"></order-form></b-modal>
+        <b-modal :id="'sub-comp-list-add-subscription-'+unique" title="New Subscription Order" hide-footer><order-form :company="props.company" @created="orderCreated"></order-form></b-modal>
         <b-modal :id="'sub-comp-list-unpaid-orders-'+unique" title="Unpaid Orders"><orders-list :orders="unpaid_orders" :fields="['date','amount','link']" :actions="['email','pay']" empty_text="No any pending orders left"></orders-list></b-modal>
-        <b-modal :id="'sub-comp-list-set-referrer-'+unique" title="Select Referrer" size="sm" hide-footer><b-form-select :options="option_referrers" v-model="props.referrer"></b-form-select><b-button @click="setReferrer" class="mt-2" block variant="primary">Set Referrer</b-button></b-modal>
         <b-modal :id="'sub-comp-list-view-details-'+unique" title="Details" cancel-disabled><b-table :items="details" stacked borderless></b-table></b-modal>
     </section>
 </template>
@@ -18,10 +18,10 @@
 <script>
     export default {
         name: "SubscriptionCompanyList",
-        props: ['items','filter','fields','actions','pagination'],
+        props: ['items','filter','fields','actions'],
         data(){ return {
             unique:0, disabled: false, current_page: 1,
-            props: { company:null, manual:null, referrer:null, subscription:null },
+            props: { company:null, manual:null, subscription:null },
             d_fields: {
                 no: 'no',
                 company_name: { key:'company',label:'Name',formatter:'cName',filterByFormatted:true },
@@ -29,8 +29,9 @@
                 expire: { key:'end',label:'Expire On',formatter:'dateFilter' },
                 expired: { key:'end',label:'Expired On',formatter:'dateFilter' },
                 added: { key:'added_on',formatter:'cCreated',filterByFormatted:true },
+                since: { key:'added_on',label:'Since',formatter:'cCreated',filterByFormatted:true },
                 client: { key:'id',label:'Client',formatter:'cClient',filterByFormatted:true },
-                referrer: { key:'created_at',label:'Referrer',formatter:'cReferrer',filterByFormatted:true },
+                edition: { key:'edition.name',label:'Edition',filterByFormatted:true },
             },
             d_actions: {
                 mail_expiring: ['Send Mail','warning','envelope-open','mailExpiring'],
@@ -39,25 +40,22 @@
                 view_details: ['Details','info','newspaper','viewDetail'],
                 unpaid_orders: ['Unpaid Order','info','book-half','unpaidOrders'],
                 add_order: ['Add Order','primary','box-seam','addOrder'],
-                change_referrer: ['Change Referrer','primary','person-bounding-box','changeReferrer'],
             }
         } },
         computed: {
             per_page(){ return this.items.length > 22 ? 15 : this.items.length },
-            p_fields(){ return this.fields ? _.map(this.fields,field => this.d_fields[field]).concat('actions') : ['no'] },
+            p_fields(){ return this.fields ? _.map(this.fields,field => _.has(this.d_fields,field) ? this.d_fields[field] : field).concat(this.actions ? 'actions' : []) : ['no'] },
             p_actions(){ return this.actions ? _.map(this.actions,action => this.d_actions[action]) : [] },
             company_subscriptions(){ return this.$store.getters['SUBSCRIPTIONS/companies'] },
             selected_subscriptions(){ return _.get(this.company_subscriptions,this.props.company,[]) },
             company_orders(){ return this.$store.getters['ORDERS/companies'] },
             unpaid_orders(){ return this.props.company ? _.filter(_.get(this.company_orders,this.props.company,[]),['status','New']) : [] },
             clients(){ return _.keyBy(this.$store.state.CLIENTS.CLIENTS,'id'); },
-            referrers(){ return _.keyBy(this.$store.state.REFERRERS.DATA,'id'); },
-            option_referrers(){ return _(this.referrers).mapValues('name').map((text,value) => { return { text,value } }).value() },
             details(){
                 let vm = this, cmp = this.props.company, sub = this.props.subscription, cp = _.bind(vm.companyProp,vm,cmp), ss = vm.selected_subscriptions, ca = [{},{},{ company:cmp }];
                 return (cmp && sub) ? [ _.zipObject(
-                    ['company','domain','client','referrer','added_on','expire_on'],
-                    [cp('company'),cp('domain'),vm.cClient(...ca),vm.cReferrer(...ca),vm.cCreated(...ca),vm.dateFilter(_.last(ss).end)]
+                    ['company','domain','client','added_on','expire_on'],
+                    [cp('company'),cp('domain'),vm.cClient(...ca),vm.cCreated(...ca),vm.dateFilter(_.last(ss).end)]
                 ) ] : [];
             }
         },
@@ -68,7 +66,9 @@
             cDomain(value,key,row){ return this.companyProp(row.company,'domain') },
             cCreated(value,key,row){ return this.dateFilter(this.companyProp(row.company,'created_at')) },
             cClient(value,key,row){ return _.get(this.clients,[this.companyProp(row.company,'user'),'name']) },
-            cReferrer(value,key,row){ return _.get(this.referrers,[this.companyProp(row.company,'referrer'),'name']) },
+            edition(value,key,row){ return value; _.get(_.find(this.$store.state.EDITIONS.DATA,['id',value]),'name'); },
+
+            upcoming(company){ let subs = _.get(this.company_subscriptions,company); return _.filter(subs,['status','Upcoming']); },
 
             exeAction(method,item){ this.disabled = true; this[method](item) },
             viewSubscriptions({ company }){ this.props.company = company; this.$bvModal.show('sub-comp-list-view-subscription-'+this.unique); this.disabled = false; },
@@ -76,26 +76,14 @@
             mailExpiring({ id }){ this.$post('subscription','sendExpiringMail',{ subscription:id }).then(({ message,variant }) => this.$bvToast.toast(message,{ variant,title:'Subscription Expiring',disabled:this.disabled = false })) },
             mailExpired({ id }){ this.$post('subscription','sendExpiredMail',{ subscription:id }).then(({ message,variant }) => this.$bvToast.toast(message,{ variant,title:'Subscription Expired',disabled:this.disabled = false })) },
             unpaidOrders({ company }){ this.props.company = company; this.$bvModal.show('sub-comp-list-unpaid-orders-'+this.unique); this.disabled = false; },
-            addOrder({ company },manual){
-                this.disabled = false;
-                if(manual === undefined) return this.$bvModal.msgBoxConfirm([
-                    this.$createElement('strong','Auto Mode: '),
-                    this.$createElement('span',"Payment Link and Invoice created automatically using payment gateway"),
-                    this.$createElement('br'),
-                    this.$createElement('strong',"Manual Mode: "),
-                    this.$createElement('span',"Create Link and Invoice manually and mention it in creating order!!"),
-                ],{ title:'Select Mode',okTitle:'Manual',cancelTitle:'Auto',okVariant:'primary',cancelVariant:'info' }).then(manual => this.addOrder({ company },manual))
-                this.props.company = company; this.props.manual = manual;
+            addOrder({ company }){
+                this.disabled = false; this.props.company = company;
                 this.$bvModal.show('sub-comp-list-add-subscription-'+this.unique);
             },
             orderCreated({ message,variant }){ this.$bvModal.hide('sub-comp-list-add-subscription-'+this.unique); this.$bvToast.toast(message,{ title:'New Order',variant }) },
-            changeReferrer({ company }){ this.props.company = company; this.$bvModal.show('sub-comp-list-set-referrer-'+this.unique); this.disabled = false; },
-            setReferrer(){ this.$post('company','referrer',this.props).then(({ message,variant }) => this.$bvToast.toast(message,{ variant,title:'Change Referrer',mdl:this.$bvModal.hide('sub-comp-list-set-referrer-'+this.unique),disabled:this.disabled = false })) },
         },
         created() {
             this.unique = Math.random();
-            if(!_.size(this.clients)) this.$post('client','fetch');
-            if(!_.size(this.referrers)) this.$post('referrer','fetch');
         }
     }
 </script>

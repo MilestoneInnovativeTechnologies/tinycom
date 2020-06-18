@@ -2,7 +2,7 @@
 import Vue from 'vue';
 const BVModules = require('bootstrap-vue');
 
-const Plugins = ['Layout','ListGroup','Card','Image','Icons','Badge','Table','Button','Pagination','Modal','Toast','FormGroup','FormInput','InputGroup','FormSelect','Spinner','Link','FormTextarea'];
+const Plugins = ['Layout','ListGroup','Card','Image','Icons','Badge','Table','Button','Pagination','Modal','Toast','FormGroup','FormInput','InputGroup','FormSelect','Spinner','Link','FormTextarea','Tabs'];
 Plugins.forEach(name => Vue.use(BVModules[name+'Plugin']))
 
 const Components = [];
