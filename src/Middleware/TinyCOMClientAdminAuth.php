@@ -16,7 +16,7 @@ class TinyCOMClientAdminAuth
      */
     public function handle($request, Closure $next)
     {
-        if(!Auth::check()) return redirect()->route('admin.login',['sub' => SUB]);
+        if(!Auth::check()) return redirect()->route('admin.login');
         return $next($request);
     }
 }
