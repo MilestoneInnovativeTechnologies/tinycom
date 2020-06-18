@@ -14,8 +14,9 @@
         </div>
         <hr>
         <div class="d-flex justify-content-around">
-            <a href="/admin/login" class="text-center d-block">Logout</a>
-            <a href="#" @click.prevent="$router.push({ name: 'password' })" class="text-center d-block">Change Password</a>
+            <a href="/admin/login" class="text-center d-block">Logout</a> |
+            <a href="#" @click.prevent="$router.push({ name: 'password' })" class="text-center d-block">Change Password</a> |
+            <a href="#" @click.prevent="$router.push({ name: 'logo' })" class="text-center d-block">Change Logo</a>
         </div>
     </div>
 </template>

@@ -25,6 +25,9 @@ const state = {
         },
         admin: {
             password: '/admin/api/password/update',
+        },
+        logo: {
+            company: '/admin/api/company/logo'
         }
     }
 }

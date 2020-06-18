@@ -9,6 +9,5 @@ export const store = new Vuex.Store({
         SERVER: require('./modules/server').default,
         CUSTOMERS: require('./modules/customers').default,
         SOURCES: require('./modules/sources').default,
-        DASHBOARD: require('./modules/dashboard').default,
     },
 })

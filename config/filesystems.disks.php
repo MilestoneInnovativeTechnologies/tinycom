@@ -14,6 +14,12 @@
             'url' => $host . '/uploads/payment/' . HOST,
             'visibility' => 'public',
         ],
+        'logo' => [
+            'driver' => 'local',
+            'root' => public_path('uploads/logo/' . HOST),
+            'url' => $host . '/uploads/logo/' . HOST,
+            'visibility' => 'public',
+        ],
 
 
     ];

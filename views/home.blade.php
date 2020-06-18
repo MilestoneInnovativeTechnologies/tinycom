@@ -9,13 +9,17 @@
 
     <script src="{{ asset('pack') }}"></script>
 
+    @php $lDisk = \Milestone\Tinycom\Model\Company::$LogoStoreDiskName; $lCache = \Milestone\Tinycom\Model\Company::$LogoImageCache; $lFile = cache()->get($lCache); @endphp
+    <link rel="icon" id="link-icon" href="{!! \Storage::disk($lDisk)->url($lFile) !!}" type="{!! \Storage::disk($lDisk)->mimeType($lFile) !!}"/>
+    <link rel="shortcut icon" id="link-short-icon" href="{!! \Storage::disk($lDisk)->url($lFile) !!}" type="{!! \Storage::disk($lDisk)->mimeType($lFile) !!}" />
+
     <title>{{ COMPANY }}</title>
 </head>
 <body class="pb-0">
     <div id="application">
         <section class="confirm-modal"><confirm-modal /></section>
         <nav class="navbar navbar-top navbar-expand-lg navbar-light bg-info fixed-top">
-            <a class="navbar-brand"><i v-if="back" @click.prevent="$router.go(-1)" class="d-lg-none fas fa-chevron-left"></i> @{{ header }}</a>
+            <a class="navbar-brand"><i v-if="back" @click.prevent="$router.back()" class="d-lg-none fas fa-chevron-left"></i> @{{ header }}</a>
             <span class="navbar-text ml-auto"><navbar-user /></span>
         </nav>
         <div id="public_top_spacer" :class="topSpacer">&nbsp;</div>
@@ -32,6 +36,6 @@
         </nav>
     </div>
     <script> const COMPANY = '{{ COMPANY }}', MEDIA_URL = '{!! \Illuminate\Support\Facades\Storage::disk('media')->url('[id]/[file_name]') !!}'; function imageUrl(media){ return MEDIA_URL.replace(/\[(\w+)\]/g,(i,M) => media[M])} </script>
-    <script defer src="{{ asset('js/public.js') }}"></script>
+    <script defer src="{{ asset('js/public.js') }}?_={{ time() }}"></script>
 </body>
 </html>

@@ -7,3 +7,5 @@ export const routes = [
     { path: '/category/:id/items', name:'category-items', component: require("../../components/public/CategoryItems").default, props:true },
     { path: '/item/:id', name:'item', component: require("../../components/public/ItemView").default, props:true },
 ]
+
+export const scrollBehavior = (to, from, savedPosition) => savedPosition || new Promise(resolve => setTimeout(() => resolve({ x:0,y:0 }),200));

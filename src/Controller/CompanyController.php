@@ -4,8 +4,10 @@ namespace Milestone\Tinycom\Controller;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Milestone\Tinycom\Mail\SetupCompleted;
 use Milestone\Tinycom\Model\Company;
 use Milestone\Tinycom\Model\User;
@@ -95,6 +97,16 @@ class CompanyController extends Controller
         if(!$company || !$referrer) return self::Error('Some of required fields are empty for changing referrer!!');
         Company::where('id',$company)->update(['referrer' => $referrer]);
         return self::Data(Company::find($company),'Referrer Changed successfully!!');
+    }
+
+    public function logo(Request $request){
+        $disk = Company::$LogoStoreDiskName;
+        if($request->hasFile('image')){
+            $file = $request->image->store('/',$disk);
+            Storage::disk($disk)->delete(Cache::get(Company::$LogoImageCache));
+            Cache::put(Company::$LogoImageCache,$file);
+        }
+        return Storage::disk($disk)->url(Cache::get(Company::$LogoImageCache));
     }
 
 }

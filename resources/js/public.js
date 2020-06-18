@@ -30,11 +30,11 @@ files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 const store = require('./store/public').store
-const routes = require('./routes/public').routes
+const { routes, scrollBehavior } = require('./routes/public')
 
 _.forEach(require('./filters').publicFilters,(fn,fl) => Vue.filter(fl,fn))
 
-const router = new VueRouter({ routes })
+const router = new VueRouter({ routes,scrollBehavior })
 const app = new Vue({
     router,store,
     el: '#application',

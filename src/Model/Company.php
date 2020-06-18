@@ -21,6 +21,8 @@ class Company extends Model
         }
     }
 
+    public static $LogoImageCache = CODE . '_LOGO';
+    public static $LogoStoreDiskName = 'logo';
 
     protected $guarded = [];
     protected $hidden = ['password','database_password','database_username','code','database'];

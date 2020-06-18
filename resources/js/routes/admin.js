@@ -24,4 +24,5 @@ export const routes = [
     { path: '/password', name: 'password' ,component: require('./../../components/admin/AdminPassword').default },
     { path: '/report', name: 'report' ,component: require('./../../components/admin/OrderReport').default },
     { path: '/item/update', name: 'item_update' ,component: require('./../../components/admin/ItemUpdate').default, props:true },
+    { path: '/logo', name: 'logo' ,component: require('./../../components/admin/Logo').default },
 ]

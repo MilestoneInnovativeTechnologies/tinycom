@@ -1,6 +1,6 @@
 <template>
     <section class="order-reports">
-        <div class="card" style="max-width: 65vh">
+        <div class="card">
             <div class="card-body">
                 <graph-bar :key="'graph-bar-collection-'+graph_key" :padding-left="30" :padding-top="30" :padding-bottom="0" :padding-right="0" :height="graph_height" :axis-reverse="true" :labels="graph_days" :values="bar_totals" :axis-min="axis_min" :axis-max="axis_max" :axis-step="10" display="all">
                     <note text="Collection Report"></note>
