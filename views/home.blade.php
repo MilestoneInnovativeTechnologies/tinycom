@@ -9,9 +9,14 @@
 
     <script src="{{ asset('pack') }}"></script>
 
-    @php $lDisk = \Milestone\Tinycom\Model\Company::$LogoStoreDiskName; $lCache = \Milestone\Tinycom\Model\Company::$LogoImageCache; $lFile = cache()->get($lCache); @endphp
-    <link rel="icon" id="link-icon" href="{!! \Storage::disk($lDisk)->url($lFile) !!}" type="{!! \Storage::disk($lDisk)->mimeType($lFile) !!}"/>
-    <link rel="shortcut icon" id="link-short-icon" href="{!! \Storage::disk($lDisk)->url($lFile) !!}" type="{!! \Storage::disk($lDisk)->mimeType($lFile) !!}" />
+    @php $lDisk = \Milestone\Tinycom\Model\Company::$LogoStoreDiskName; $lCache = \Milestone\Tinycom\Model\Company::$LogoImageCache; $lFile = cache()->get($lCache,null); @endphp
+    @if($lFile)
+        <link rel="icon" id="link-icon" href="{!! \Storage::disk($lDisk)->url($lFile) !!}" type="{!! \Storage::disk($lDisk)->mimeType($lFile) !!}"/>
+        <link rel="shortcut icon" id="link-short-icon" href="{!! \Storage::disk($lDisk)->url($lFile) !!}" type="{!! \Storage::disk($lDisk)->mimeType($lFile) !!}" />
+    @else
+        <link rel="icon" id="link-icon" href="/favicon.ico" type="image/x-icon"/>
+        <link rel="shortcut icon" id="link-short-icon" href="/favicon.ico" type="image/x-icon" />
+    @endif
 
     <title>{{ COMPANY }}</title>
 </head>
@@ -36,6 +41,6 @@
         </nav>
     </div>
     <script> const COMPANY = '{{ COMPANY }}', MEDIA_URL = '{!! \Illuminate\Support\Facades\Storage::disk('media')->url('[id]/[file_name]') !!}'; function imageUrl(media){ return MEDIA_URL.replace(/\[(\w+)\]/g,(i,M) => media[M])} </script>
-    <script defer src="{{ asset('js/public.js') }}?_={{ time() }}"></script>
+    <script defer src="{{ asset('js/public.js') }}"></script>
 </body>
 </html>

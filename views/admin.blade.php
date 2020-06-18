@@ -7,9 +7,14 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
 
-    @php $lDisk = \Milestone\Tinycom\Model\Company::$LogoStoreDiskName; $lCache = \Milestone\Tinycom\Model\Company::$LogoImageCache; $lFile = cache()->get($lCache); @endphp
-    <link rel="icon" id="link-icon" href="{!! \Storage::disk($lDisk)->url($lFile) !!}" type="{!! \Storage::disk($lDisk)->mimeType($lFile) !!}"/>
-    <link rel="shortcut icon" id="link-short-icon" href="{!! \Storage::disk($lDisk)->url($lFile) !!}" type="{!! \Storage::disk($lDisk)->mimeType($lFile) !!}" />
+    @php $lDisk = \Milestone\Tinycom\Model\Company::$LogoStoreDiskName; $lCache = \Milestone\Tinycom\Model\Company::$LogoImageCache; $lFile = cache()->get($lCache,null); @endphp
+    @if($lFile)
+        <link rel="icon" id="link-icon" href="{!! \Storage::disk($lDisk)->url($lFile) !!}" type="{!! \Storage::disk($lDisk)->mimeType($lFile) !!}"/>
+        <link rel="shortcut icon" id="link-short-icon" href="{!! \Storage::disk($lDisk)->url($lFile) !!}" type="{!! \Storage::disk($lDisk)->mimeType($lFile) !!}" />
+    @else
+        <link rel="icon" id="link-icon" href="/favicon.ico" type="image/x-icon"/>
+        <link rel="shortcut icon" id="link-short-icon" href="/favicon.ico" type="image/x-icon" />
+    @endif
 
 
     <title>{{ COMPANY }}</title>
@@ -31,7 +36,7 @@
     <script>
         @php $category_items = \Milestone\Tinycom\Model\CategoryItem::all(); $days7before = date('Y-m-d',strtotime('-7 days')).' 23:59:59'; session()->put(\Milestone\Tinycom\Model\Item::$LastGivenSession,now()->toDateTimeString()) @endphp
         const CATEGORIES = @json(\Milestone\Tinycom\Model\Category::with(['media' => function($Q){ $Q->select(['model_id','id','file_name']); }])->get()->keyBy->id), ITEMS = @json(\Milestone\Tinycom\Model\Item::with(['media' => function($Q){ $Q->select(['model_id','id','file_name']); }])->get()->keyBy->id), BUNDLES = @json(\Milestone\Tinycom\Model\Bundle::with('Items')->get()), CATEGORY_ITEMS = @json(\Milestone\Tinycom\Model\CategoryItem::all()->groupBy->category->mapWithKeys(function($Obj,$Cat){ return [$Cat => $Obj->pluck('item')]; })), ITEM_CATEGORIES = @json($category_items->groupBy->item->mapWithKeys(function($Obj,$Itm){ return [$Itm => $Obj->pluck('category')]; })), CUSTOMERS = @json(\Milestone\Tinycom\Model\Customer::all()), SOURCES = @json(\Milestone\Tinycom\Model\Source::where('expire','>',time() - 24*60*60)->get()), CARTS = @json(\Milestone\Tinycom\Model\Cart::with('Items')->where('updated_at','>',$days7before)->get());
-        const COMPANY = '{{ COMPANY }}', URL = { WHATSAPP:'https://api.whatsapp.com/send?phone=|phone|&text=|text|',SOURCE_LINK: '{{ route('source_link',['uuid' => '|uuid|','sub' => SUB]) }}',BILL_LINK: '{{ route('bill_link',['uuid' => '|uuid|', 'sub' => SUB]) }}',MEDIA: '{!! \Illuminate\Support\Facades\Storage::disk('media')->url('[id]/[file_name]') !!}',LOGO: '{!! \Storage::disk($lDisk)->url($lFile) !!}' };
+        const COMPANY = '{{ COMPANY }}', URL = { WHATSAPP:'https://api.whatsapp.com/send?phone=|phone|&text=|text|',SOURCE_LINK: '{{ route('source_link',['uuid' => '|uuid|','sub' => SUB]) }}',BILL_LINK: '{{ route('bill_link',['uuid' => '|uuid|', 'sub' => SUB]) }}',MEDIA: '{!! \Illuminate\Support\Facades\Storage::disk('media')->url('[id]/[file_name]') !!}',LOGO: '{!! $lFile ? \Storage::disk($lDisk)->url($lFile) : '/favicon.ico' !!}' };
         function urlParse(item,data){ return URL[item].replace(/\|(\w+)\|/g,(f,m) => data[m] || '') + '?_=' + timeNow() }
         function timeNow(){ return parseInt(new Date().getTime()/1000) }
         function imageUrl(media){
@@ -45,6 +50,6 @@
         }
     </script>
 
-    <script src="{{ asset('js/admin.js') }}?_={{ time() }}"></script>
+    <script src="{{ asset('js/admin.js') }}"></script>
 </body>
 </html>
