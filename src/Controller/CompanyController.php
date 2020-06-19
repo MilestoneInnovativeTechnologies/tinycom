@@ -100,10 +100,10 @@ class CompanyController extends Controller
     }
 
     public function logo(Request $request){
-        $disk = Company::$LogoStoreDiskName;
+        $disk = Company::$LogoStoreDiskName; $file = Cache::get(Company::$LogoImageCache,null);
+        if($file) Storage::disk($disk)->delete($file);
         if($request->hasFile('image')){
             $file = $request->image->store('/',$disk);
-            Storage::disk($disk)->delete(Cache::get(Company::$LogoImageCache));
             Cache::put(Company::$LogoImageCache,$file);
         }
         return Storage::disk($disk)->url(Cache::get(Company::$LogoImageCache));
