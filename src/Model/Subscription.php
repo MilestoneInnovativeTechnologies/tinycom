@@ -4,6 +4,7 @@ namespace Milestone\Tinycom\Model;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Milestone\Tinycom\Cast\Json;
 
@@ -28,6 +29,12 @@ class Subscription extends Model
                 $status_log = json_encode($status_log); $active = self::$StatusActive[Arr::get($subscription,'status','Upcoming')];
                 DB::table('subscriptions')->where('id',$subscription->id)->update(compact('status_log','active'));
             }
+        });
+        static::saved(function(){
+            Cache::forget(config('tinycom.subscription_cache_key'));
+            Cache::rememberForever(config('tinycom.subscription_cache_key'),function(){
+                return Subscription::with(['Company' => function($Q){ $Q->select('id','domain'); },'Edition' => function($Q){ $Q->select('id','name'); }])->select('start','end','company','id','status','edition')->whereIn('status',['Current','Upcoming'])->get()->groupBy(function($sub){ return $sub->Company->domain; })->toArray();
+            });
         });
     }
 

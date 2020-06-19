@@ -221,6 +221,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Subscription Cache Key
+    |--------------------------------------------------------------------------
+    |
+    | Subscription of companies are getting stored in cache for
+    | easy accessing for admin portal. Mention key here
+    | Ex: TinyCOMCompanies
+    |
+    */
+
+    'subscription_cache_key' => 'TinyCOMSubscriptions',
+
+    /*
+    |--------------------------------------------------------------------------
     | Mailing From Address
     |--------------------------------------------------------------------------
     |

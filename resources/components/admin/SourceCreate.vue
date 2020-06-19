@@ -129,22 +129,13 @@
             itemFilter({ name,description }){ return !this.item_filter || _.includes([name,description].join(' ').toLowerCase(),this.item_filter.toLowerCase()) },
             categoryFilter({ name,description }){ return !this.category_filter || _.includes([name,description].join(' ').toLowerCase(),this.category_filter.toLowerCase()) },
             submit(){
-                let data = new FormData(this.$refs['source_create_form']), $vm = this;
+                let data = new FormData(this.$refs['source_create_form']); this.disabled = true;
                 this.$store.dispatch('SOURCES/create',data).then(({ id }) => this.$router.push({ name:'source',params:{ id } }))
-                // $.ajax({ url:this.url, data, type: "POST",enctype: 'multipart/form-data', processData: false, contentType: false, success: function(R){
-                //         $vm.sourceCreated(R)
-                //     }
-                // })
-            },
-            sourceCreated(R){
-                this.$store.commit('SOURCES/add',R);
-                this.link = location.protocol + '//' + location.hostname + this.link_url + R.uuid;
-                $(this.$refs['source_create_modal']).modal('show');
             }
         },
         beforeRouteLeave (to, from, next) {
-            this.increment++;
-            next()
+            this.increment++; this.disabled = false;
+            next();
         }
     }
 </script>

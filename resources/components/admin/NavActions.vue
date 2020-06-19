@@ -18,6 +18,12 @@
             <a href="#" @click.prevent="$router.push({ name: 'password' })" class="text-center d-block">Change Password</a> |
             <a href="#" @click.prevent="$router.push({ name: 'logo' })" class="text-center d-block">Change Logo</a>
         </div>
+        <hr v-if="remain < limit">
+        <p :class="cls" v-if="remain < limit">
+            {{ edition }} Edition - Ony {{ remain }} Day{{ remain > 1 ? 's' : ''}} Remaining
+        </p><p class="text-center lead text-danger" v-else-if="!SUBSCRIPTIONS.length">
+            NO ACTIVE SUBSCRIPTIONS<br />SERVICES STOPS SOON<br />RENEW IMMEDIATELY
+        </p>
     </div>
 </template>
 
@@ -26,7 +32,14 @@
         name: "NavActions",
         data(){ return {
             links: require('./../../js/routes/admin').links,
+            SUBSCRIPTIONS, limit:15, warn:7, alert:3
         } },
+        computed: {
+            end(){ return _(this.SUBSCRIPTIONS).sort(({ end }) => new Date(end).getTime()).map('end').reverse().first() },
+            remain(){ return this.end ? _.floor((new Date(this.end).getTime() - new Date().getTime())/86400000) : 0 },
+            edition(){ return _.get(_(this.SUBSCRIPTIONS).find(['status','Current']),['edition','name']) },
+            cls(){ return ['text-center'].concat(this.remain > this.warn ? 'text-success' : (this.remain > this.alert ? 'text-warning' : 'text-danger')) }
+        },
         methods: {
             snakeCase(text){ return _.snakeCase(text) }
         }
