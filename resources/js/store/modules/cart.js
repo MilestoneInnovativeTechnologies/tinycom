@@ -32,7 +32,7 @@ const mutations = {
     incrementByIndex(state,idx){ let { price } = state.items[idx]; let quantity = ++ state.items[idx].quantity; state.items[idx].amount = price * quantity },
     decrementByIndex(state,idx){ let { price } = state.items[idx]; let quantity = -- state.items[idx].quantity; state.items[idx].amount = price * quantity },
     ordered(state){ state.ordered.status = true; state.ordered.error = null; },
-    orderResponse(state,{ error,message }){ state.ordered.error = error; state.ordered.message = message; state.items.splice(0); state.uuid = '' },
+    orderResponse(state,{ error,message }){ state.items.splice(0); state.uuid = ''; state.ordered.status = false; state.ordered.error = error; state.ordered.message = message; },
 }
 const actions = {
     init({ commit,dispatch,state:{ timeout } },data){
@@ -73,6 +73,7 @@ const actions = {
         })
     },
     order({ state:{ url:{ order },items,uuid },commit }){
+        commit('ordered');
         $.post(order, { items,uuid },function(R){
             commit('orderResponse',R);
         })

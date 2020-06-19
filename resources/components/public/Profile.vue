@@ -10,7 +10,7 @@
             </div>
             <div class="card-footer">
                 <i class="mt-2 text-success float-left" v-if="processing">{{ text }}</i>
-                <button class="float-right btn btn-success btn-sm" @click="updateProfile">Update</button>
+                <button class="float-right btn btn-success btn-sm" @click="updateProfile" :disabled="disabled">Update</button>
             </div>
         </div>
         <div class="card mt-3" v-else>
@@ -23,13 +23,17 @@
 <script>
     export default {
         name: "Profile",
-        data(){ return { v_name:'',v_phone:'',processing:false,text:'',msg:'Processing... Please wait!!' } },
+        data(){ return { v_name:'',v_phone:'',processing:false,text:'',msg:'Processing... Please wait!!',disabled:false } },
         methods: {
             updateProfile(){
-                this.process();
-                if(!this.phone) return this.process('Phone is mandatory fields. Please fill!');
+                this.process(); if(!this.phone) return this.process('Phone is mandatory fields. Please fill!');
+                this.disabled = true;
                 this.$store.dispatch('USER/update',{ name:this.v_name,phone:this.v_phone })
-                    .then((R) => _.isString(R) ? this.process(R) : this.process('Updated successfully!!'));
+                    .then((R) => {
+                        if(_.isString(R)) this.process(R)
+                        else this.process('Updated successfully!!')
+                        this.disabled = false;
+                    });
             },
             process(text){ this.processing = true; this.text = text || this.msg }
         },
