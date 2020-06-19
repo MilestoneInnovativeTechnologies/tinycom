@@ -28,6 +28,7 @@ const actions = {
     serve_subscriptions({ dispatch },{ data }){ dispatch('SUBSCRIPTIONS/serve_fetch',{ data },{ root:true }) },
     serve_delete({ commit,getters },{ data }){ let index = getters.index[data]; commit('delete',index); },
     serve_referrer({ dispatch,getters },{ data,error }){ if(!error) dispatch('serve_create',{ data }); },
+    serve_update({ dispatch },{ data,error }){ if(!error) dispatch('serve_create',{ data }); },
 }
 
 export default {

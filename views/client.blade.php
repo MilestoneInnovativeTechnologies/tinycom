@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=0.25, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="{{ asset('css/client.css') }}">
 
@@ -19,7 +19,7 @@
     </div>
     <script>
         const APP = '{{ config('tinycom.name') }}', LOGOUT = '{!! route('logout') !!}', USER = @json(\Illuminate\Support\Facades\Auth::user()), DOMAINS = @json(config('tinycom.domains')), TENURES = @json(config('tinycom.tenures')), CURRENCY_MULTIPLIER = {{ config('tinycom.currency_multipliers')[config('tinycom.currency')] }};
-        const DATA_COMPANIES = @json(\Milestone\Tinycom\Model\Company::with(['Orders.Payment','Subscriptions'])->get()), DATA_EDITIONS = @json(\Milestone\Tinycom\Model\Edition::all());
+        const DATA_COMPANIES = @json(\Milestone\Tinycom\Model\Company::with(['Orders.Payment','Subscriptions'])->get()), DATA_EDITIONS = @json(\Milestone\Tinycom\Model\Edition::all()), DATA_IMAGES = @json(\Milestone\Tinycom\Model\Company::all()->mapWithKeys(function($company){ return [$company->id => cache()->has($company->domain . '.logo') ? \Storage::disk(\Milestone\Tinycom\Model\Company::$LogoStoreDiskName)->url(cache()->get($company->domain . '.logo')) : NULL]; }));
     </script>
     <script src="{{ asset('js/client.js') }}"></script>
 </body>

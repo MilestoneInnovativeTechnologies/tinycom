@@ -11,19 +11,19 @@
                     <b-pagination v-model="current_page" :total-rows="companies.length" :per-page="per_page" align="center" size="sm"></b-pagination>
                 </b-tab>
                 <b-tab title="Newly Added Companies">
-                    <subscription-company-list :items="newly" :fields="['no','company_name','edition','domain','client']" :pagination="true"></subscription-company-list>
+                    <companies-list :companies="newly" :fields="['#','name','domain','client','added']" :actions="['update_name']"  :per_page="newly.length" :current_page="1"></companies-list>
                 </b-tab>
                 <b-tab title="Recently Expiring Companies">
-                    <subscription-company-list :items="expiring" :fields="['no','company_name','edition','domain','client','expire_on','upcoming']" :actions="['subscriptions','unpaid_orders','mail_expiring','add_order']" :per-page="per_page" :current-page="current_page"></subscription-company-list>
+                    <subscription-company-list :items="expiring" :fields="['no','company_name','edition','domain','client','expire','upcoming']" :actions="['subscriptions','unpaid_orders','mail_expiring','add_order']" :per-page="per_page" :current-page="current_page"></subscription-company-list>
                 </b-tab>
                 <b-tab title="Recently Expired Companies">
-                    <subscription-company-list :items="expired" :fields="['no','company_name','edition','domain','client','expired_on']"  :actions="['subscriptions','unpaid_orders','mail_expired','add_order']" :per-page="per_page" :current-page="current_page"></subscription-company-list>
+                    <subscription-company-list :items="expired" :fields="['no','company_name','edition','domain','client','expired']"  :actions="['subscriptions','unpaid_orders','mail_expired','add_order']" :per-page="per_page" :current-page="current_page"></subscription-company-list>
                 </b-tab>
                 <b-tab title="Expired & Inactive Companies">
-                    <subscription-company-list :items="inactive" :fields="['no','company_name','domain','client','since','expired_on']" :actions="['subscriptions','unpaid_orders','add_order']" :per-page="per_page" :current-page="current_page"></subscription-company-list>
+                    <subscription-company-list :items="inactive" :fields="['no','company_name','domain','client','since','expired']" :actions="['subscriptions','unpaid_orders','add_order']" :per-page="per_page" :current-page="current_page"></subscription-company-list>
                 </b-tab>
                 <b-tab title="Active Companies">
-                    <subscription-company-list :items="active" :fields="['no','company_name','edition','domain','client','since','expire','upcoming']" :pagination="true" :actions="['subscriptions','unpaid_orders','add_order']" :per-page="per_page" :current-page="current_page"></subscription-company-list>
+                    <subscription-company-list :items="active" :fields="['no','company_name','edition','domain','client','since','expire','upcoming']" :pagination="true" :actions="['subscriptions','unpaid_orders','update_name','add_order']" :per-page="per_page" :current-page="current_page"></subscription-company-list>
                 </b-tab>
             </b-tabs>
         </b-card>

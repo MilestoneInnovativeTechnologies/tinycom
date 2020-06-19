@@ -5,9 +5,11 @@
             <template v-slot:cell(actions)="data">
                 <b-button size="sm" :disabled="disabled" variant="warning" @click.prevent="mailSetupCompleted(data.item.id)"><b-icon icon="envelope"></b-icon> Send Setup Complete Mail</b-button>
                 <b-button size="sm" variant="info" @click.prevent="addReferrer(data.item.id)"><b-icon icon="envelope"></b-icon> Set Referrer</b-button>
+                <b-button size="sm" variant="warning" @click.prevent="updateName(data.item.id)"><b-icon icon="pencil-square"></b-icon> Update Company</b-button>
             </template>
         </b-table>
         <b-modal id="new-companies-set-referrer" title="Select Referrer" size="sm" hide-footer><b-form-select :options="option_referrers" v-model="referrer"></b-form-select><b-button @click="setReferrer" class="mt-2" block variant="primary">Set Referrer</b-button></b-modal>
+        <b-modal id="new-companies-update-name" title="Update Company Name" hide-footer><company-update :id="company" @update="updated"></company-update></b-modal>
     </div>
 </template>
 
@@ -37,6 +39,8 @@
             mailSetupCompleted(id){ this.disabled = true; this.sendSetupInfoMail(id).then(() => this.disabled = false); },
             addReferrer(company){ this.company = company; return this.$bvModal.show('new-companies-set-referrer') },
             setReferrer(){ this.disabled = true; this.changeReferrer(this.company,this.referrer).then(() => this.$bvModal.hide((this.disabled = false) || 'new-companies-set-referrer')) },
+            updateName(id){ this.company = id; this.$bvModal.show('new-companies-update-name'); },
+            updated({ message,variant }){ this.$bvModal.hide('new-companies-update-name'); this.$bvToast.toast(message,{ title:'Company Update',variant }) }
         },
         created() {
             if(!this.$store.state.CLIENTS.CLIENTS.length) this.$post('client','fetch');

@@ -3,6 +3,7 @@
 namespace Milestone\Tinycom\Model;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
@@ -21,8 +22,9 @@ class Company extends Model
         }
     }
 
-    public static $LogoImageCache = CODE . '_LOGO';
+    public static $LogoImageCache = HOST . '.logo';
     public static $LogoStoreDiskName = 'logo';
+    public static function logoName($hash,$domain){ return implode(".",[$domain,$hash]); }
 
     protected $guarded = [];
     protected $hidden = ['password','database_password','database_username','code','database'];

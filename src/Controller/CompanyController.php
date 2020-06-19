@@ -103,10 +103,41 @@ class CompanyController extends Controller
         $disk = Company::$LogoStoreDiskName; $file = Cache::get(Company::$LogoImageCache,null);
         if($file) Storage::disk($disk)->delete($file);
         if($request->hasFile('image')){
-            $file = $request->image->store('/',$disk);
+            $hash = $request->image->hashName(); $file = Company::logoName($hash,HOST);
+            $request->image->storeAs('/',$file,$disk);
             Cache::put(Company::$LogoImageCache,$file);
         }
         return Storage::disk($disk)->url(Cache::get(Company::$LogoImageCache));
+    }
+
+    public function companyLogo(Request $request){
+        $company = $request->has('company') ? Company::find($request->input('company')) : null; if(!$company) return;
+        $disk = Company::$LogoStoreDiskName; $cache = $company->domain . '.logo'; $file = Cache::get($cache,null);
+        if($file) Storage::disk($disk)->delete($file);
+        if($request->hasFile('image')){
+            $hash = $request->image->hashName(); $file = Company::logoName($hash,$company->domain);
+            $request->image->storeAs('/',$file,$disk);
+            Cache::put($cache,$file);
+        }
+        return Storage::disk($disk)->url(Cache::get($cache));
+    }
+
+    public function update(Request $request){
+        $company = $request->filled('id') ? Company::find($request->input('id')) : null;
+        if(!$company) return self::Error('Company not found!!');
+        if($request->filled('company')) $company->company = $request->input('company');
+        if($company->setup === 'N' && $request->filled('domain')){ $domain = $request->input('domain');
+            if(Company::where('domain',$domain)->where('id','!=',$company->id)->exists()) return self::Error('This domain is already in use, try choosing another!!');
+            $company->domain = $domain;
+            if($request->filled('sub')){
+                $sub = $request->input('sub');
+                $company->database = config('tinycom.database_prefix') . $sub;
+                $username = config('tinycom.database_username');
+                $company->database_username = config('tinycom.database_username_prefix') . (empty($username) ? $sub : $username);
+                $company->database_password = $company->database_username;
+            }
+        }
+        $company->save(); return self::Data($company->fresh());
     }
 
 }

@@ -12,6 +12,7 @@
         <b-modal :id="'sub-comp-list-add-subscription-'+unique" title="New Subscription Order" hide-footer><order-form :company="props.company" @created="orderCreated"></order-form></b-modal>
         <b-modal :id="'sub-comp-list-unpaid-orders-'+unique" title="Unpaid Orders"><orders-list :orders="unpaid_orders" :fields="['date','amount','link']" :actions="['email','pay']" empty_text="No any pending orders left"></orders-list></b-modal>
         <b-modal :id="'sub-comp-list-view-details-'+unique" title="Details" cancel-disabled><b-table :items="details" stacked borderless></b-table></b-modal>
+        <b-modal :id="'sub-comp-list-update-name-'+unique" title="Update" hide-footer><company-update :id="props.company" @update="updated"></company-update></b-modal>
     </section>
 </template>
 
@@ -38,6 +39,7 @@
                 mail_expired: ['Send Mail','warning','envelope-open-fill','mailExpired'],
                 subscriptions: ['Subscriptions','info','arrow-down-up','viewSubscriptions'],
                 view_details: ['Details','info','newspaper','viewDetail'],
+                update_name: ['Update','info','pencil-square','updateName'],
                 unpaid_orders: ['Unpaid Order','info','book-half','unpaidOrders'],
                 add_order: ['Add Order','primary','box-seam','addOrder'],
             }
@@ -73,6 +75,8 @@
             exeAction(method,item){ this.disabled = true; this[method](item) },
             viewSubscriptions({ company }){ this.props.company = company; this.$bvModal.show('sub-comp-list-view-subscription-'+this.unique); this.disabled = false; },
             viewDetail({ company,id }){ this.props.company = company; this.props.subscription = id; this.$bvModal.show('sub-comp-list-view-details-'+this.unique); this.disabled = false; },
+            updateName({ company }){ this.props.company = company; this.$bvModal.show('sub-comp-list-update-name-'+this.unique); this.disabled = false; },
+            updated({ message,variant }){ this.$bvModal.hide('sub-comp-list-update-name-'+this.unique); this.$bvToast.toast(message,{ title:'Company Name',variant }) },
             mailExpiring({ id }){ this.$post('subscription','sendExpiringMail',{ subscription:id }).then(({ message,variant }) => this.$bvToast.toast(message,{ variant,title:'Subscription Expiring',disabled:this.disabled = false })) },
             mailExpired({ id }){ this.$post('subscription','sendExpiredMail',{ subscription:id }).then(({ message,variant }) => this.$bvToast.toast(message,{ variant,title:'Subscription Expired',disabled:this.disabled = false })) },
             unpaidOrders({ company }){ this.props.company = company; this.$bvModal.show('sub-comp-list-unpaid-orders-'+this.unique); this.disabled = false; },

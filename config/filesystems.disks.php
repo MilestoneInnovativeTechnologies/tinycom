@@ -16,8 +16,8 @@
         ],
         'logo' => [
             'driver' => 'local',
-            'root' => public_path('uploads/logo/' . HOST),
-            'url' => $host . '/uploads/logo/' . HOST,
+            'root' => public_path('uploads/logo'),
+            'url' => $host . '/uploads/logo',
             'visibility' => 'public',
         ],
 

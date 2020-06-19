@@ -12,8 +12,8 @@
             <tr><th style="text-align: left;">Username</th><th>:</th><td>{{ $company->database_username }}</td></tr>
             <tr><th style="text-align: left;">Password</th><th>:</th><td>{{ $company->database_password }}</td></tr>
             <tr><th style="text-align: left;" colspan="3">User</th></tr>
-            <tr><th style="text-align: left;">Distributor</th><th>:</th><td>{{ $company->Referrer->name }}</td></tr>
-            <tr><th style="text-align: left;">Client</th><th>:</th><td>{{ $company->User->name }}</td></tr>
+            <tr><th style="text-align: left;">Distributor</th><th>:</th><td>{{ $company->Referrer ? $company->Referrer->name : '' }}</td></tr>
+            <tr><th style="text-align: left;">Client</th><th>:</th><td>{{ $company->User ? $company->User->name : '' }}</td></tr>
         </tbody>
     </table>
 </div>
