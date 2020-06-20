@@ -55,10 +55,10 @@ class LoginController extends Controller
 
     private function addUserCompany($User,$request){
         $data = $request->only('company','password'); $sub = $request->input('sub');
-        $data['domain'] = $sub . '.' . $request->input('domain');
-        $data['code'] = null; $data['database'] = config('tinycom.database_prefix') . $sub;
+        $data['domain'] = $sub . '.' . $request->input('domain'); $db = str_ireplace('.','_',$sub);
+        $data['code'] = null; $data['database'] = config('tinycom.database_prefix') . $db;
         $username = config('tinycom.database_username');
-        $data['database_username'] = config('tinycom.database_username_prefix') . (empty($username) ? $sub : $username);
+        $data['database_username'] = config('tinycom.database_username_prefix') . (empty($username) ? $db : $username);
         $data['database_password'] = $data['database_username'];
         $User->Companies()->save(new Company($data));
     }

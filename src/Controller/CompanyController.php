@@ -57,9 +57,9 @@ class CompanyController extends Controller
         if(!$request->filled(['user','company','domain','password'])) return self::Error('Some of required fields are empty.. Please fill all mandatory fields!!');
         $data = $request->only(['user','referrer','company','domain','password']); $sub = $request->input('sub'); $data['domain'] = rtrim($data['domain'],'.');
         if(Company::where('domain',$data['domain'])->exists()) return self::Error('Domain is already registered for another company. Please try with another domain!!');
-        $data['code'] = null; $data['database'] = config('tinycom.database_prefix') . $sub;
+        $data['code'] = null; $db = str_ireplace('.','_',$sub); $data['database'] = config('tinycom.database_prefix') . $db;
         $username = config('tinycom.database_username');
-        $data['database_username'] = config('tinycom.database_username_prefix') . (empty($username) ? $sub : $username);
+        $data['database_username'] = config('tinycom.database_username_prefix') . (empty($username) ? $db : $username);
         $data['database_password'] = $data['database_username']; $company = Company::create($data);
         return self::Data(Auth::user()->type === 'company' ? $company->fresh()->makeVisible(['password','database_password','database_username','database']) : $company->fresh(),'Company added successfully!!');
     }
