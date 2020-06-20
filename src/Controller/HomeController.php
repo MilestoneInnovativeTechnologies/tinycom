@@ -3,6 +3,7 @@
 namespace Milestone\Tinycom\Controller;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
 use Milestone\Tinycom\Model\Customer;
 use Milestone\Tinycom\Model\Item;
@@ -19,7 +20,8 @@ class HomeController extends Controller
     }
 
     public function pack(Request $request){
-        if($request->cookie(self::$TinyCOMCookie) && strpos($request->header('referer'),implode(" ",config('tinycom.domains',[]))) !== false){
+        $referrer = parse_url($request->header('referer'),PHP_URL_HOST); $referrers = array_keys(Cache::get(config('tinycom.cache_key',[])));
+        if($request->cookie(self::$TinyCOMCookie) && in_array($referrer,$referrers)){
             $customer = $request->cookie(Customer::$CookieName);
             $source = SourceController::GetSourceItems($customer);
             $cart = CartController::GetCreateCart($customer,$source['uuid']);
