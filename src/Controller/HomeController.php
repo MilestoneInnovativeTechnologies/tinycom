@@ -19,7 +19,7 @@ class HomeController extends Controller
     }
 
     public function pack(Request $request){
-        if(true || $request->cookie(self::$TinyCOMCookie) && strpos($request->header('referer'),'tinycom.in') !== false){
+        if($request->cookie(self::$TinyCOMCookie) && strpos($request->header('referer'),implode(" ",config('tinycom.domains',[]))) !== false){
             $customer = $request->cookie(Customer::$CookieName);
             $source = SourceController::GetSourceItems($customer);
             $cart = CartController::GetCreateCart($customer,$source['uuid']);
