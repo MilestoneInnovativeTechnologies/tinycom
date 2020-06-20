@@ -22,7 +22,7 @@ class TinycomServiceProvider extends ServiceProvider
     public function register()
     {
         $host = request()->getHost(); $parts = self::getDomainParts($host);
-        define('ACCESSING',($parts['domain'] === $host) ? 'VENDOR' : 'CLIENT');
+        define('ACCESSING',($parts['own']) ? 'VENDOR' : 'CLIENT');
         define('HOST',$host); define('DOMAIN',$parts['domain']); define('SUB',$parts['sub']);
         $this->mergeConfigs();
     }
@@ -59,13 +59,13 @@ class TinycomServiceProvider extends ServiceProvider
 
     private static function getDomainParts($host){
         $domains = config('tinycom.domains',[]); $domain = $sub = '';
-        if(empty($domains) || in_array($host,$domains)) return ['domain' => $host, 'sub' => ''];
+        if(empty($domains) || in_array($host,$domains)) return ['domain' => $host, 'sub' => '', 'own' => true]; $own = false;
         $parts = explode(".",$host); $loop = count($parts);
         while(--$loop >= 0){
             $sub = implode(".",array_slice($parts,0,$loop)); $domain = implode(".",array_slice($parts,$loop));
             if(in_array($domain,$domains)) break;
         }
-        return compact('domain','sub');
+        return compact('domain','sub','own');
     }
 
     private static function subscriptionsRearrange(){

@@ -55,7 +55,7 @@ class CompanyController extends Controller
 
     public function create(Request $request){
         if(!$request->filled(['user','company','domain','password'])) return self::Error('Some of required fields are empty.. Please fill all mandatory fields!!');
-        $data = $request->only(['user','referrer','company','domain','password']); $sub = $request->input('sub');
+        $data = $request->only(['user','referrer','company','domain','password']); $sub = $request->input('sub'); $data['domain'] = rtrim($data['domain'],'.');
         if(Company::where('domain',$data['domain'])->exists()) return self::Error('Domain is already registered for another company. Please try with another domain!!');
         $data['code'] = null; $data['database'] = config('tinycom.database_prefix') . $sub;
         $username = config('tinycom.database_username');
