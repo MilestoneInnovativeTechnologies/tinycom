@@ -11,7 +11,12 @@ use Milestone\Tinycom\Mail\NewCompany;
 class Company extends Model
 {
     protected static function booted(){
-        static::saved(function(){ Cache::forget(config('tinycom.cache_key')); Cache::rememberForever(config('tinycom.cache_key'),function(){ return Company::all()->map(function($company){ return $company->makeVisible('database','database_username','database_password','code'); })->keyBy->domain->toArray(); }); });
+        static::saved(function(){
+            Cache::forget(config('tinycom.cache_key'));
+            Cache::rememberForever(config('tinycom.cache_key'),function(){
+                return Company::withoutGlobalScopes()->get()->map(function($company){ return $company->makeVisible('database','database_username','database_password','code'); })->keyBy->domain->toArray();
+            });
+        });
         static::created(function($company){ Mail::to(config('tinycom.new_company_inform_mail'))->send(new NewCompany($company->id)); });
         if(Auth::check() && in_array(Auth::user()->type,['client','referrer'])){
             static::addGlobalScope('own', function (Builder $builder) {

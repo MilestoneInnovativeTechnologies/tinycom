@@ -1,6 +1,9 @@
 <?php
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
+use Milestone\Tinycom\Model\Company;
+use Milestone\Tinycom\Model\Subscription;
 
 Route::group([
 
@@ -9,6 +12,16 @@ Route::group([
 ],function(){
 
     Route::post(config('tinycom.webhook.path'),'PaymentController@ProcessPayment')->name('tinycom.webhook.path');
+    Route::get('cache/reset',function(){
+        Cache::forget(config('tinycom.cache_key')); Cache::forget(config('tinycom.subscription_cache_key'));
+        Cache::rememberForever(config('tinycom.cache_key'),function(){
+            return Company::all()->map(function($company){ return $company->makeVisible('database','database_username','database_password','code'); })->keyBy->domain->toArray();
+        });
+        Cache::rememberForever(config('tinycom.subscription_cache_key'),function(){
+            return Subscription::with(['Company' => function($Q){ $Q->select('id','domain'); },'Edition' => function($Q){ $Q->select('id','name'); }])->select('start','end','company','id','status','edition')->whereIn('status',['Current','Upcoming'])->get()->groupBy(function($sub){ return $sub->Company->domain; })->toArray();
+        });
+
+    });
 
     Route::group([
 
