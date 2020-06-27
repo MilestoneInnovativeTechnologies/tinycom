@@ -31,7 +31,7 @@
                     <tbody v-if="bill.items && bill.items.length">
                         <tr v-for="(item,idx) in bill.items" :key="'bill-detail-item-index-'+idx">
                             <td>{{ idx+1 }}</td>
-                            <td>{{ itemName(item.id) }}<br>{{ item.price }}</td>
+                            <td>{{ itemName(item.item) }}<br>{{ item.price }}</td>
                             <td class="text-center">{{ item.quantity | number }}</td>
                             <td class="text-right">{{ item.amount }}</td>
                         </tr>
