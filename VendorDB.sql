@@ -1,6 +1,6 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Server version:               5.7.29-log - MySQL Community Server (GPL)
+-- Server version:               5.5.62 - MySQL Community Server (GPL)
 -- Server OS:                    Win64
 -- HeidiSQL Version:             11.0.0.5919
 -- --------------------------------------------------------
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `editions` (
 -- Dumping data for table mileston_tinycom.editions: ~1 rows (approximately)
 /*!40000 ALTER TABLE `editions` DISABLE KEYS */;
 INSERT INTO `editions` (`id`, `name`, `amount_multiplier`, `description`, `features`, `active`, `created_at`, `updated_at`) VALUES
-	(1, 'Smart', 1.00, NULL, NULL, 'Y', '2020-06-17 11:35:20', '2020-06-17 11:35:20');
+	(1, 'Smart', 1.00, NULL, NULL, 'Y', '2020-06-25 11:41:56', '2020-06-25 11:41:56');
 /*!40000 ALTER TABLE `editions` ENABLE KEYS */;
 
 -- Dumping structure for table mileston_tinycom.failed_jobs
@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `features` (
 -- Dumping structure for table mileston_tinycom.migrations
 CREATE TABLE IF NOT EXISTS `migrations` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `migration` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -119,7 +119,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `company` bigint(20) unsigned DEFAULT NULL,
   `type` enum('Subscription','Addon','Other') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Subscription',
-  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `amount` decimal(8,2) NOT NULL DEFAULT '0.00',
   `reference` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `link` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -139,8 +139,8 @@ CREATE TABLE IF NOT EXISTS `orders` (
 
 -- Dumping structure for table mileston_tinycom.password_resets
 CREATE TABLE IF NOT EXISTS `password_resets` (
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   KEY `password_resets_email_index` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -152,7 +152,7 @@ CREATE TABLE IF NOT EXISTS `password_resets` (
 -- Dumping structure for table mileston_tinycom.payments
 CREATE TABLE IF NOT EXISTS `payments` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `reference` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `order_reference` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `order` bigint(20) unsigned DEFAULT NULL,
@@ -206,7 +206,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `phone` varchar(16) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `type` enum('company','referrer','client') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'client',
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -217,7 +217,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Dumping data for table mileston_tinycom.users: ~1 rows (approximately)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `name`, `email`, `phone`, `type`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-	(1, 'Administrator', 'admin@admin.admin', NULL, 'company', NULL, '$2y$10$6BlBBu0d88mbzM3mpfmHQO2uuk2JLWDX3osJkXfE.aZMqG9WBYeXu', NULL, '2020-06-17 11:35:20', '2020-06-17 11:35:20');
+	(1, 'Administrator', 'admin@admin.admin', NULL, 'company', NULL, '$2y$10$mwu/5dq6RFfetojjXy2wAOCui1T9oYXYrQ95cHeydAZsGon9CEo52', NULL, '2020-06-25 11:41:54', '2020-06-25 11:41:54');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
