@@ -5,10 +5,10 @@
                 Available categories
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item" v-for="item in list" :key="'category-list-' + item.id">
-                    <img class="img-thumbnail mr-2" :src="image(item.media)" width="32">
-                    {{ item.name }}
-                    <button class="float-right btn btn-link" @click="$router.push({ name:'category-items',params:{ id:item.id } })">View <i class="fas fa-chevron-right ml-1"></i></button>
+                <li class="list-group-item px-3 d-flex align-items-center justify-content-between" v-for="item in list" :key="'category-list-' + item.id" @click="$router.push({ name:'category-items',params:{ id:item.id } })">
+                    <img class="img-thumbnail mr-2" :src="image(item.media)" width="48">
+                    <span class="flex-grow-1 px-1">{{ item.name }}</span>
+                    <button class="btn btn-link p-0"><i class="fas fa-angle-double-right"></i></button>
                 </li>
             </ul>
         </div>
