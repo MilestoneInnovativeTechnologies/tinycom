@@ -43,10 +43,10 @@ class Source extends Model implements HasMedia
     {
         $this->addMediaCollection('sources')
             ->singleFile()
-            ->registerMediaConversions(function(Media $media){
+            /*->registerMediaConversions(function(Media $media){
                 $this->addMediaConversion('thumbnail')->width(128)->height(128)->sharpen(10)->performOnCollections('sources');
                 $this->addMediaConversion('detail')->width(256)->height(256)->sharpen(10)->performOnCollections('items');
-            });
+            })*/;
     }
 
 }

@@ -29,9 +29,9 @@ class Item extends Model implements HasMedia
     {
         $this->addMediaCollection('items')
             ->singleFile()
-            ->registerMediaConversions(function(Media $media){
+            /*->registerMediaConversions(function(Media $media){
                 $this->addMediaConversion('thumbnail')->width(128)->height(128)->sharpen(10);
                 $this->addMediaConversion('detail')->width(256)->height(256)->sharpen(10);
-            });
+            })*/;
     }
 }
