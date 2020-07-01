@@ -4,7 +4,8 @@ const state = {
 }
 const getters = {
     index({ DATA }){ return _(DATA).map('id').invert().mapValues(_.toInteger).value() },
-    companies({ DATA }){ return _.groupBy(DATA,'company') }
+    companies({ DATA }){ return _.groupBy(DATA,'company') },
+    expires({ DATA },{ companies }){ return _.mapValues(companies,subs => _.get(_(subs).sort(({ end }) => new Date(end).getTime()).reverse().first(),'end')) }
 }
 const mutations = {
     add(state,data){ state.DATA.push(data) },
