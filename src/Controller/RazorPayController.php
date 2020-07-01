@@ -45,7 +45,9 @@ class RazorPayController extends Controller
         $create['order_reference'] = $order_ref = Arr::get($content,'payload.invoice.entity.id');
         $receipt = Arr::get($content,'payload.invoice.entity.receipt');
         if(Order::where('id',$receipt)->exists()) $create['order'] = $receipt;
-        else $create['order'] = Arr::get(Order::where('reference',$order_ref)->first(),'id');
+        else if (Order::where('reference',$order_ref)->exists()) $create['order'] = Arr::get(Order::where('reference',$order_ref)->first(),'id');
+        else if (Order::where('reference',$receipt)->exists()) $create['order'] = Arr::get(Order::where('reference',$receipt)->first(),'id');
+        else return self::webHookReturn();
         $create['amount'] = intval(Arr::get($content,'payload.payment.entity.amount'))/100;
         $payment = new Payment($create); $payment->save();
         return self::webHookReturn();
