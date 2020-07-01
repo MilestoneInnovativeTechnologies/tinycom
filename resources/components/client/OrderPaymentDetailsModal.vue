@@ -4,6 +4,7 @@
             <template v-slot:cell(date)="data">{{ data.item.date | date }}</template>
             <template v-slot:cell(type)="data">{{ lg(order,'type') }}</template>
             <template v-slot:cell(detail)="data">{{ lg(order,['attributes','description']) }}</template>
+            <template v-slot:cell(amount)="data">{{ lg(order,'amount') }}</template>
             <template v-slot:cell(receipt)="data"><payment-receipt text="View" :id="id"></payment-receipt></template>
         </b-table>
     </b-modal>

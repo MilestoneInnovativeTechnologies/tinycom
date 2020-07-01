@@ -28,4 +28,15 @@ class PaymentController extends Controller
         return self::Data($payment->refresh(),'Payment added successfully!!');
     }
 
+    public function attachment(Request $request){
+        $data = $request->only(['id','attachment']);
+        if($data['attachment'] && !empty($data['attachment'])){
+            $payment = Payment::find($data['id']);
+            $payment->attachment = $data['attachment'];
+            $payment->save();
+            return self::Data($payment->refresh(),'File attached successfully!!');
+        }
+        return self::Error('No file attached');
+    }
+
 }

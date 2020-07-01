@@ -13,7 +13,8 @@ const mutations = {
 const actions = {
     serve_create({ getters,commit },{ data }){ let index = _.get(getters.index,data.id,null); return index !== null ? commit('update',{ data,index }) : commit('add',data) },
     serve_fetch({ dispatch },{ data }){ _(data).forEach(payment => dispatch('serve_create',{ data:payment })) },
-    serve_manual({ dispatch },{ data }) { dispatch('serve_create', {data}); dispatch('ORDERS/paid', data.order, {root: true}) }
+    serve_manual({ dispatch },{ data }) { dispatch('serve_create', {data}); dispatch('ORDERS/paid', data.order, {root: true}) },
+    serve_attachment({ dispatch },{ data }) { dispatch('serve_create', {data}); }
 }
 
 export default {

@@ -6,10 +6,12 @@
             <template v-slot:cell(type)="data">{{ orders[data.item.order] ? orders[data.item.order].type : data.item.order }}</template>
             <template v-slot:cell(actions)="data">
                 <b-button variant="info" size="sm" @click="viewDetail(data.item)"><b-icon icon="arrow-up-left"></b-icon> Details</b-button>
+                <b-button variant="warning" size="sm" @click="addAttachment(data.item)" v-if="!data.item.attachment"><b-icon icon="arrow-up-left"></b-icon> Add Attachment</b-button>
             </template>
         </b-table>
         <b-row v-if="payments.length > 22" class="my-2"><b-col cols="3" class="offset-4"><b-pagination v-model="current_page" :total-rows="payments.length" :per-page="per_page" align="fill" size="sm"></b-pagination></b-col></b-row>
         <b-modal title="Payment Details" id="payments-list-payment-details"><b-table stacked :items="items" small></b-table></b-modal>
+        <b-modal title="Add Attachment" id="payments-list-add-attachment"><attach-form :id="selected_payment" @submitted="attached"></attach-form></b-modal>
     </section>
 </template>
 
@@ -18,7 +20,7 @@
         name: "PaymentsList",
         data(){ return {
             fields: ['#', { key:'date',label:'Date',formatter:'dateFilter' },{ label:'Company',key:'order',formatter:'companyName' },'type','amount','receipt','actions'],
-            selected_order: null,
+            selected_order: null, selected_payment: null,
             per_page: 15, current_page: 1,
         } },
         computed: {
@@ -32,7 +34,9 @@
             dateFilter(date){ return this.$options.filters.date(date) },
             companyName(order){ return _.get(this.companies,_.get(this.orders,[order,'company'])) },
 
-            viewDetail({ order }){ this.selected_order = order; this.$bvModal.show('payments-list-payment-details'); }
+            viewDetail({ order }){ this.selected_order = order; this.$bvModal.show('payments-list-payment-details'); },
+            addAttachment({ id }){ this.selected_payment = id; this.$bvModal.show('payments-list-add-attachment'); },
+            attached({ message,variant }){ this.$bvModal.hide('payments-list-add-attachment'); this.$bvToast.toast(message,{ variant,title:'Add Attachment' }); },
         },
         created() {
             if(!_.size(this.payments)) this.$post('payment','fetch');
