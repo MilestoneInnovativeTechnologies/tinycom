@@ -18,7 +18,7 @@ class OrderController extends Controller
             $data['attributes']['end'] = $calculations['end'];
         }
         $order = new Order($data); $order->save();
-        if($request->input('reference') && $request->input('link')){
+        if($request->input('reference') || $request->input('link')){
             $reference = $request->input('reference');
             $link = $request->input('link');
         } else {
