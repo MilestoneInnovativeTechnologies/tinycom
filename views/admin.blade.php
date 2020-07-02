@@ -9,8 +9,8 @@
 
     @php $lDisk = \Milestone\Tinycom\Model\Company::$LogoStoreDiskName; $lCache = \Milestone\Tinycom\Model\Company::$LogoImageCache; $lFile = cache()->get($lCache,null); @endphp
     @if($lFile)
-        <link rel="icon" id="link-icon" href="{!! \Storage::disk($lDisk)->url($lFile) !!}" type="{!! \Storage::disk($lDisk)->mimeType($lFile) !!}"/>
-        <link rel="shortcut icon" id="link-short-icon" href="{!! \Storage::disk($lDisk)->url($lFile) !!}" type="{!! \Storage::disk($lDisk)->mimeType($lFile) !!}" />
+        <link rel="icon" id="link-icon" href="{!! \Storage::disk($lDisk)->url($lFile) !!}" />
+        <link rel="shortcut icon" id="link-short-icon" href="{!! \Storage::disk($lDisk)->url($lFile) !!}" />
     @else
         <link rel="icon" id="link-icon" href="/favicon.ico" type="image/x-icon"/>
         <link rel="shortcut icon" id="link-short-icon" href="/favicon.ico" type="image/x-icon" />
