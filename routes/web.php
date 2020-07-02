@@ -31,6 +31,16 @@ Route::group([
         });
 
     });
+    Route::get('cache/view',function(){
+        dd(
+            config('tinycom.cache_key'),
+            Cache::get(config('tinycom.cache_key')),
+            config('tinycom.subscription_cache_key'),
+            Cache::get(config('tinycom.subscription_cache_key')),
+            \Milestone\Tinycom\Model\Company::$LogoImageCache,
+            Cache::get(\Milestone\Tinycom\Model\Company::$LogoImageCache)
+        );
+    });
 
     Route::group([
 
