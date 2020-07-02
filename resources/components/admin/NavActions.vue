@@ -20,8 +20,11 @@
         </div>
         <template v-if="remain < limit">
             <hr><p :class="cls">
-                {{ edition }} Edition - Ony {{ remain }} Day{{ remain > 1 ? 's' : ''}} Remaining!
-                <template v-if="remain < alert"><br  />Services will stop if not renewed<template v-if="remain === 0"> by today</template>.</template>
+                <span v-if="remain < 0" class="font-weight-bolder">Your subscriptions expired..<br>Features limited..<br>All services will be stopped soon!!</span>
+                <span v-else>
+                    {{ edition }} Edition - Ony {{ remain }} Day{{ remain > 1 ? 's' : ''}} Remaining!
+                    <template v-if="remain < alert"><br  />Services will be limited if not renewed<template v-if="remain === 0"> by today</template>.</template>
+                </span>
             </p>
         </template>
     </div>

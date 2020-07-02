@@ -1,6 +1,6 @@
 
 const getRoutes = function(){
-    return (!SUBSCRIPTIONS.length) ? [
+    return (!_(SUBSCRIPTIONS).filter(({ status }) => _.includes(['Current','Upcoming'],status)).value().length) ? [
             { path: '/', name: 'home', component: require('./../../components/admin/ExpiredHome').default, menu:'Home' },
             { path: '/customers', name: 'customers' ,component: require('./../../components/admin/Customers').default, menu:'Customers' },
             { path: '/customer/:id', name: 'customer' ,component: require('./../../components/admin/Customer').default, props:true },
