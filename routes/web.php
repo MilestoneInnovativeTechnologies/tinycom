@@ -18,7 +18,16 @@ Route::group([
             return Company::all()->map(function($company){ return $company->makeVisible('database','database_username','database_password','code'); })->keyBy->domain->toArray();
         });
         Cache::rememberForever(config('tinycom.subscription_cache_key'),function(){
-            return Subscription::with(['Company' => function($Q){ $Q->select('id','domain'); },'Edition' => function($Q){ $Q->select('id','name'); }])->select('start','end','company','id','status','edition')->whereIn('status',['Current','Upcoming'])->get()->groupBy(function($sub){ return $sub->Company->domain; })->toArray();
+            return Subscription::with(['Company' => function($Q){ $Q->select('id','domain'); },'Edition' => function($Q){ $Q->select('id','name'); }])
+                ->select('start','end','company','id','status','edition')
+                ->whereIn('status',['Current','Upcoming'])
+                ->orWhere(function($Q){
+                    $Q->where('status','Expired')
+                        ->where('end','>',now()->subDays(config('tinycom.free_subscription_expire'))->toDateTimeString());
+                })
+                ->get()
+                ->groupBy(function($sub){ return $sub->Company->domain; })
+                ->toArray();
         });
 
     });
