@@ -24,9 +24,6 @@ class TinyCOMCompanyCodeDefine
         if(!defined('COMPANY')) define('COMPANY',Arr::get($domains[HOST],'company'));
         if(!defined('CODE')) define('CODE',Arr::get($domains[HOST],'code'));
 
-        if(!defined('COMPANY')) define('COMPANY',Arr::get($domains[HOST],'company'));
-        if(!defined('CODE')) define('CODE',Arr::get($domains[HOST],'code'));
-
         $subscriptions = Cache::get(config('tinycom.subscription_cache_key'),[]);
         define('SUBSCRIPTIONS',Arr::get($subscriptions,HOST,[]));
 

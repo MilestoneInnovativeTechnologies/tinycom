@@ -5,7 +5,6 @@ namespace Milestone\Tinycom\Model;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Source extends Model implements HasMedia
 {

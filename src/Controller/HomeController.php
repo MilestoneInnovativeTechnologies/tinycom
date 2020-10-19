@@ -21,16 +21,17 @@ class HomeController extends Controller
 
     public function pack(Request $request){
         $referrer = parse_url($request->header('referer'),PHP_URL_HOST); $referrers = array_keys(Cache::get(config('tinycom.cache_key',[])));
+
         if($request->cookie(self::$TinyCOMCookie) && in_array($referrer,$referrers)){
             $customer = $request->cookie(Customer::$CookieName);
             $source = SourceController::GetSourceItems($customer);
             $cart = CartController::GetCreateCart($customer,$source['uuid']);
             if($customer) $customer = Customer::find($customer);
             $category_items = \Milestone\Tinycom\Model\CategoryItem::all();
-            $CATEGORIES = json_encode(\Milestone\Tinycom\Model\Category::where('status','Y')->with(['media' => function($Q){ $Q->select(['model_id','id','file_name']); }])->get()->keyBy->id);
-            $ITEMS = json_encode(\Milestone\Tinycom\Model\Item::where('status','Y')->with(['media' => function($Q){ $Q->select(['model_id','id','file_name']); }])->get()->keyBy->id);
-            $BUNDLES = json_encode(\Milestone\Tinycom\Model\Bundle::with('Items')->get());
-            $CATEGORY_ITEMS = json_encode(\Milestone\Tinycom\Model\CategoryItem::all()->groupBy->category->mapWithKeys(function($Obj,$Cat){ return [$Cat => $Obj->map(function($obj){ return intval($obj->item); })]; }));
+            $CATEGORIES = self::CATEGORIES();//json_encode(\Milestone\Tinycom\Model\Category::where('status','Y')->with(['media' => function($Q){ $Q->select(['model_id','id','file_name']); }])->get()->keyBy->id);
+            $ITEMS = self::ITEMS();//json_encode(\Milestone\Tinycom\Model\Item::where('status','Y')->with(['media' => function($Q){ $Q->select(['model_id','id','file_name']); }])->get()->keyBy->id);
+            $BUNDLES = self::BUNDLES();
+            $CATEGORY_ITEMS = self::CATEGORY_ITEMS();//json_encode(\Milestone\Tinycom\Model\CategoryItem::all()->groupBy->category->mapWithKeys(function($Obj,$Cat){ return [$Cat => $Obj->map(function($obj){ return intval($obj->item); })]; }));
             $SOURCE = json_encode($source ?? null);
             $USER = json_encode($customer ?? null);
             $CART = json_encode($cart ?? null);
@@ -40,5 +41,27 @@ class HomeController extends Controller
         } else {
             return response([],200,['Content-Type' => 'application/javascript']);
         }
+    }
+
+    private static function CATEGORIES(){
+        $categories = \Milestone\Tinycom\Model\Category::where('status','Y')->with(['media' => function($Q){ $Q->select(['model_id','id','file_name']); }])->get();
+        if($categories->isEmpty()) return '{}';
+        return json_encode($categories->keyBy->id);
+    }
+
+    private static function ITEMS(){
+        $items = \Milestone\Tinycom\Model\Item::where('status','Y')->with(['media' => function($Q){ $Q->select(['model_id','id','file_name']); }])->get();
+        if($items->isEmpty()) return '{}';
+        return json_encode($items->keyBy->id);
+    }
+
+    private static function BUNDLES(){
+        return json_encode(\Milestone\Tinycom\Model\Bundle::with('Items')->get());
+    }
+
+    private static function CATEGORY_ITEMS(){
+        $CategoryItems = \Milestone\Tinycom\Model\CategoryItem::all();
+        if($CategoryItems->isEmpty()) return '{}';
+        return json_encode(\Milestone\Tinycom\Model\CategoryItem::all()->groupBy->category->mapWithKeys(function($Obj,$Cat){ return [$Cat => $Obj->map(function($obj){ return intval($obj->item); })]; }));
     }
 }

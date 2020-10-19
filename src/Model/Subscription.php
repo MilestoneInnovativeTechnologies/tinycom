@@ -41,7 +41,7 @@ class Subscription extends Model
                             ->where('end','>',now()->subDays(config('tinycom.free_subscription_expire'))->toDateTimeString());
                     })
                     ->get()
-                    ->groupBy(function($sub){ return $sub->Company->domain; })
+                    ->groupBy(function($sub){ return Arr::get($sub->Company,'domain',''); })
                     ->toArray();
             });
         });

@@ -252,6 +252,7 @@ return [
     | For setting up company in hosting, like subdomain, database, the new
     | company info need to be mailed to concern authorities. Drop the email
     | address of such person
+    | If null no emails will be fired..
     |
     */
 
