@@ -17,6 +17,7 @@ class Source extends Model implements HasMedia
     public static $SessionSourceLogin = CODE . '_SourceLoginRequired';
     public static $CreatedCacheName = CODE . '_' . 'source_last_created';
 
+    protected $with = ['media'];
     protected $guarded = [];
     protected $appends = ['expired'];
 
