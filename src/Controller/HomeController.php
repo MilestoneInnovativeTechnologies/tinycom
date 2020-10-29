@@ -16,7 +16,7 @@ class HomeController extends Controller
 
     public function index(Request $request){
         Cookie::queue(self::$TinyCOMCookie,1);
-        return view('TinyCOM::home');
+        return view('TinyCOM::public');
     }
 
     public function pack(Request $request){
