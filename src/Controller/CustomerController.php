@@ -3,10 +3,13 @@
 namespace Milestone\Tinycom\Controller;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
+use Milestone\Tinycom\Model\Address;
 use Milestone\Tinycom\Model\Cart;
 use Milestone\Tinycom\Model\Customer;
+use Milestone\Tinycom\Model\Group;
 use Milestone\Tinycom\Model\Source;
 
 class CustomerController extends Controller
@@ -23,7 +26,7 @@ class CustomerController extends Controller
         $this->manageCart($request,$customer);
         $this->manageSource($request,$customer);
 
-        $customer = Customer::find($customer->id); self::queueCookie($customer->id); self::live($customer->id);
+        $customer = Customer::with('Address')->find($customer->id); self::queueCookie($customer->id); self::live($customer->id);
         return $customer;
     }
 
@@ -41,7 +44,7 @@ class CustomerController extends Controller
 
     public function adminUpdate(Request $request){
         Customer::where('id',$request->id)->update($request->only(['phone','name','address']));
-        return Customer::find($request->id);
+        return Customer::with(['Address'])->find($request->id);
     }
 
     public function updateCustomerName($customer,$name){
@@ -95,7 +98,7 @@ class CustomerController extends Controller
 
     public function update(Request $request){
         $id = $request->cookie(Customer::$CookieName);
-        $customer = Customer::find($id); $phone = $request->get('phone');
+        $customer = Customer::with('Address')->find($id); $phone = $request->get('phone');
         $customer_same_phone = Customer::where('phone',$phone)->where('id','!=',$customer->id)->exists();
         if($customer_same_phone) return 'Customer with same phone exists.';
         $customer->phone = $phone; $customer->name = $request->get('name'); $customer->live = time(); $customer->name_change = null;
@@ -125,7 +128,49 @@ class CustomerController extends Controller
 
     public function fetch(Request $request){
         $customer = $request->input('id');
-        return Customer::find($customer);
+        return Customer::with(['Address'])->find($customer);
+    }
+
+    public function address(Request $request,$customer = null){
+      $customer = $customer ?: $request->cookie(Customer::$CookieName);
+      if(!$customer) return null;
+      $fields = ['title','address','location'];
+      if($request->filled('id')){
+        $id = $request->input('id');
+        Address::where(['id' => $id,'customer' => $customer])->update($request->only($fields));
+        if($request->filled('default') && $request->input('default') === 'Y'){
+          Address::where('customer',$customer)->update(['default' => 'N']);
+          Address::where(['id' => $id])->update(['default' => 'Y']);
+        }
+      } else Customer::find($customer)->Address()->save(new Address($request->only($fields)));
+      return Customer::with(['Address'])->find($customer);
+    }
+
+    public function adminCustomer(Request $request){
+      if($request->isNotFilled('customer')) return null;
+      return $this->address($request,$request->input('customer'));
+    }
+
+    public function group(Request $request){
+      $fields = $request->only(['name','customers']);
+      $fields['customers'] = (array_key_exists('customers',$fields) && !empty($fields['customers'])) ? array_map('intval',explode(',',$fields['customers'])) : [];
+      if($request->filled('id')){
+        $id = $request->input('id');
+        Group::where(['id' => $id])->update($fields);
+      } else return Group::create(['name' => $request->input('name'), 'customers' => []]);
+      return Group::find($request->input('id'));
+    }
+
+    public function groups(Request $request){
+      $customer = intval($request->input('customer')); $groups = $request->input('groups');
+      $groups =  $groups ? array_map('intval',explode(',',$groups)) : [];
+      $init = Arr::get(Group::latest('updated_at')->first(),'updated_at');
+      Group::all()->each(function($Group)use($customer,$groups){
+        $customers = $Group->customers; $group = $Group->id;
+        if(in_array($customer,$customers) && !in_array($group,$groups)) { $Group->customers = array_diff($customers,[$customer]); $Group->save(); }
+        elseif(!in_array($customer,$customers) && in_array($group,$groups))  { array_push($customers,$customer); $Group->customers = $customers; $Group->save(); }
+      });
+      return Group::where('updated_at','>',$init)->get();
     }
 
 }

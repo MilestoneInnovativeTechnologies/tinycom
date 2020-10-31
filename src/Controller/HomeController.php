@@ -26,7 +26,7 @@ class HomeController extends Controller
             $customer = $request->cookie(Customer::$CookieName);
             $source = SourceController::GetSourceItems($customer);
             $cart = CartController::GetCreateCart($customer,$source['uuid']);
-            if($customer) $customer = Customer::find($customer);
+            if($customer) $customer = Customer::with(['Address'])->find($customer);
             $category_items = \Milestone\Tinycom\Model\CategoryItem::all();
             $CATEGORIES = self::CATEGORIES();//json_encode(\Milestone\Tinycom\Model\Category::where('status','Y')->with(['media' => function($Q){ $Q->select(['model_id','id','file_name']); }])->get()->keyBy->id);
             $ITEMS = self::ITEMS();//json_encode(\Milestone\Tinycom\Model\Item::where('status','Y')->with(['media' => function($Q){ $Q->select(['model_id','id','file_name']); }])->get()->keyBy->id);

@@ -7,9 +7,9 @@
 {{--    <link rel="stylesheet" href="{{ asset('css/app.css') }}">--}}
 {{--    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">--}}
 
-{{--  <base href="http://localhost:8080/">--}}
-  <link href=css/vendor.9be85b89.css rel=stylesheet>
-  <link href=css/app.0e433876.css rel=stylesheet>
+  <base href="http://localhost:8080/">
+{{--  <link href=css/vendor.9be85b89.css rel=stylesheet>--}}
+{{--  <link href=css/app.0e433876.css rel=stylesheet>--}}
 
     @php $lDisk = \Milestone\Tinycom\Model\Company::$LogoStoreDiskName; $lCache = \Milestone\Tinycom\Model\Company::$LogoImageCache; $lFile = cache()->get($lCache,null); @endphp
     @if($lFile)
@@ -67,7 +67,7 @@
 --}}
 <script>
   @php $category_items = \Milestone\Tinycom\Model\CategoryItem::all(); $days7before = date('Y-m-d',strtotime('-7 days')).' 23:59:59'; session()->put(\Milestone\Tinycom\Model\Item::$LastGivenSession,now()->toDateTimeString()) @endphp
-  const CATEGORIES = @json(\Milestone\Tinycom\Model\Category::with(['media' => function($Q){ $Q->select(['model_id','id','file_name']); }])->get()->keyBy->id), ITEMS = @json(\Milestone\Tinycom\Model\Item::with(['media' => function($Q){ $Q->select(['model_id','id','file_name']); }])->get()->keyBy->id), BUNDLES = @json(\Milestone\Tinycom\Model\Bundle::with('Items')->get()), CATEGORY_ITEMS = @json(\Milestone\Tinycom\Model\CategoryItem::all()->groupBy->category->mapWithKeys(function($Obj,$Cat){ return [$Cat => $Obj->pluck('item')]; })), ITEM_CATEGORIES = @json($category_items->groupBy->item->mapWithKeys(function($Obj,$Itm){ return [$Itm => $Obj->pluck('category')]; })), CUSTOMERS = @json(\Milestone\Tinycom\Model\Customer::all()), SOURCES = @json(\Milestone\Tinycom\Model\Source::with(['media'])->where('expire','>',time() - 24*60*60)->get()), CARTS = @json(\Milestone\Tinycom\Model\Cart::with('Items')->where('updated_at','>',$days7before)->get());
+  const CATEGORIES = @json(\Milestone\Tinycom\Model\Category::with(['media' => function($Q){ $Q->select(['model_id','id','file_name']); }])->get()->keyBy->id), ITEMS = @json(\Milestone\Tinycom\Model\Item::with(['media' => function($Q){ $Q->select(['model_id','id','file_name']); }])->get()->keyBy->id), BUNDLES = @json(\Milestone\Tinycom\Model\Bundle::with('Items')->get()), CATEGORY_ITEMS = @json(\Milestone\Tinycom\Model\CategoryItem::all()->groupBy->category->mapWithKeys(function($Obj,$Cat){ return [$Cat => $Obj->pluck('item')]; })), ITEM_CATEGORIES = @json($category_items->groupBy->item->mapWithKeys(function($Obj,$Itm){ return [$Itm => $Obj->pluck('category')]; })), CUSTOMERS = @json(\Milestone\Tinycom\Model\Customer::with(['Address'])->get()), GROUPS = @json(\Milestone\Tinycom\Model\Group::all()), SOURCES = @json(\Milestone\Tinycom\Model\Source::with(['media'])->where('expire','>',time() - 24*60*60)->get()), CARTS = @json(\Milestone\Tinycom\Model\Cart::with('Items')->where('updated_at','>',$days7before)->get());
   const COMPANY = '{{ COMPANY }}', SUBSCRIPTIONS = @json(SUBSCRIPTIONS), CSRF_TOKEN = '{{ csrf_token() }}', LOGOUT = '{!! route("admin.login") !!}', URL = { WHATSAPP:'https://api.whatsapp.com/send?phone=|phone|&text=|text|',SOURCE_LINK: '{{ route('source_link',['uuid' => '|uuid|','sub' => SUB]) }}',BILL_LINK: '{{ route('bill_link',['uuid' => '|uuid|', 'sub' => SUB]) }}',MEDIA: '{!! \Illuminate\Support\Facades\Storage::disk('media')->url('[id]/[file_name]') !!}',LOGO: '{!! $lFile ? \Storage::disk($lDisk)->url($lFile) : '/favicon.ico' !!}' };
   function urlParse(item,data){ return URL[item].replace(/\|(\w+)\|/g,(f,m) => data[m] || '') + '?_=' + timeNow() }
   function timeNow(){ return parseInt(new Date().getTime()/1000) }
@@ -85,8 +85,8 @@
 {{--<script src="{{ asset('js/admin.js') }}"></script>--}}
 
   <div id="q-app"></div>
-{{--  <script src="vendor.js"></script><script src="app.js"></script>--}}
-<script src=js/vendor.13ba20fc.js></script>
-<script src=js/app.64401195.js></script>
+  <script src="vendor.js"></script><script src="app.js"></script>
+{{--<script src=js/vendor.13ba20fc.js></script>--}}
+{{--<script src=js/app.64401195.js></script>--}}
 </body>
 </html>

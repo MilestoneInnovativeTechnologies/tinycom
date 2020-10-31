@@ -3,6 +3,8 @@ import Vue from 'vue';
 const state = {
     uuid: '',
     items: [],
+    note: '',
+    address: '',
     url: {
       sync: '/cart/sync',
       order: '/cart/order',
@@ -36,6 +38,7 @@ const mutations = {
     ordered(state){ state.ordered.status = true; state.ordered.error = null; },
     orderResponse(state,{ error,message }){ state.items.splice(0); state.uuid = ''; state.ordered.status = false; state.ordered.error = error; state.ordered.message = message; },
     trigger(state,status){ state.ordered.trigger = status },
+    extra(state,data){ _.forEach(data,(val,key) => Vue.set(state[key],val)) }
 }
 const actions = {
     init({ commit,dispatch,state:{ timeout } },data){
@@ -75,10 +78,10 @@ const actions = {
             //setTimeout(sync,timeout)
         })
     },
-    order({ state:{ url:{ order },items,uuid },commit }){
+    order({ state:{ url:{ order },items,uuid,note,address },commit }){
         commit('ordered');
         return new Promise(resolve => {
-        $.post(order, { items,uuid }).then(({ data }) => { commit('orderResponse',data); resolve(data); })
+        $.post(order, { items,uuid,note,address }).then(({ data }) => { commit('orderResponse',data); resolve(data); })
       })
     }
 }

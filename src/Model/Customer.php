@@ -11,7 +11,7 @@ class Customer extends Model
 
     protected $guarded = [];
 
-    public function Carts(){
-        return $this->hasMany(Cart::class,'customer','id');
-    }
+    public function Carts(){ return $this->hasMany(Cart::class,'customer','id'); }
+    public function Address(){ return $this->hasMany(Address::class,'customer','id'); }
+
 }

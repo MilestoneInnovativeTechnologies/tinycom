@@ -16,9 +16,9 @@
 
   <script src="{{ asset('pack') }}"></script>
 
-{{--  <base href="http://localhost:8080/">--}}
-  <link href=css/vendor.9be85b89.css rel=stylesheet>
-  <link href=css/app.0e433876.css rel=stylesheet>
+  <base href="http://localhost:8080/">
+{{--  <link href=css/vendor.9be85b89.css rel=stylesheet>--}}
+{{--  <link href=css/app.0e433876.css rel=stylesheet>--}}
 
   <script> const COMPANY = '{{ COMPANY }}', MEDIA_URL = '{!! \Illuminate\Support\Facades\Storage::disk('media')->url('[id]/[file_name]') !!}', CSRF_TOKEN = '{{ csrf_token() }}'; function imageUrl(media){ return MEDIA_URL.replace(/\[(\w+)\]/g,(i,M) => media[M])} </script>
 
@@ -60,9 +60,9 @@
 </head>
 <body>
 <div id="q-app"></div>
-{{--<script src="vendor.js"></script><script src="app.js"></script>--}}
-<script src=js/vendor.3357b926.js></script>
-<script src=js/app.3e637503.js></script>
+<script src="vendor.js"></script><script src="app.js"></script>
+{{--<script src=js/vendor.3357b926.js></script>--}}
+{{--<script src=js/app.3e637503.js></script>--}}
 
 </body>
 </html>

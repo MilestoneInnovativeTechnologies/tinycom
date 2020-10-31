@@ -19,6 +19,7 @@ Route::group([
         Route::post('login','CustomerController@login');
         Route::get('logout','CustomerController@logout');
         Route::post('update','CustomerController@update');
+        Route::post('address','CustomerController@address');
     });
 
     Route::group(['prefix' => 'cart'],function(){
@@ -100,6 +101,9 @@ Route::group([
             Route::post('fetch','CustomerController@fetch');
             Route::post('create','CustomerController@create');
             Route::post('update','CustomerController@adminUpdate');
+            Route::post('address','CustomerController@adminCustomer');
+            Route::post('group','CustomerController@group');
+            Route::post('groups','CustomerController@groups');
         });
 
         Route::group([
@@ -112,6 +116,9 @@ Route::group([
         });
 
     });
+
+    Route::view('update','TinyCOM::update');
+    Route::post('update','SetupController@update');
 
 });
 

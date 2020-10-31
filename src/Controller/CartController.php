@@ -29,7 +29,7 @@ class CartController extends Controller
         $cart = Cart::where(['customer' => $customer,'status' => 'New'])->first();
 
         if(!$cart){
-            $cart = Cart::create(['uuid' => null, 'customer' => $customer, 'source' => $source_id, 'time' => time()]);
+            $cart = Cart::create(['uuid' => null, 'customer' => $customer, 'source' => $source_id, 'time' => time(), 'note' => null]);
             $cart->load('Items');
         } else {
             $cart->time = time();
@@ -71,7 +71,8 @@ class CartController extends Controller
     }
 
     public function order(Request $request){
-        $uuid = $request->get('uuid'); $items = $request->get('items'); $customer = $request->cookie(Customer::$CookieName); $source = session()->get(Source::$SessionName);
+        $uuid = $request->get('uuid'); $items = $request->get('items'); $note = $request->get('note'); $address = $request->get('address');
+        $customer = $request->cookie(Customer::$CookieName); $source = session()->get(Source::$SessionName);
         if(!$uuid || !$items || empty($items)) return ['error' => true, 'message' => 'No items or cart found in request!!'];
         $Cart = Cart::where('uuid',$uuid)->first(); if(!$Cart) return ['error' => true, 'message' => 'No cart exists !!'];
         $cart_items = []; $price = 0; $quantity = 1; $total = 0;
@@ -83,7 +84,7 @@ class CartController extends Controller
         $Cart->Items()->saveMany($cart_items);
         if($customer && !$Cart->customer) $Cart->customer = $customer;
         if($source && !$Cart->source) $Cart->source = Arr::get(Source::where('uuid',$source)->first(),'id');
-        $Cart->status = 'Ordered'; /*$Cart->amount = $total;*/ $Cart->time = time(); $Cart->save();
+        $status = 'Ordered'; $time = time(); $Cart->update(compact('address','note','status','time'));
         self::removeCart($uuid); SourceController::ordered();
         return ['error' => false, 'message' => 'Order Placed successfully..'];
     }
