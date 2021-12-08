@@ -1,4 +1,3 @@
-import editions from "./store/modules/editions";
 
 window._ = require('lodash');
 try {
@@ -16,7 +15,7 @@ window.axios.defaults.headers.common['X-CSRF-TOKEN'] = document.getElementsByNam
 window.axios.defaults.headers.common['Content-Type'] = 'multipart/form-data';
 window.axios.defaults.baseURL = '/client/server/';
 
-window.Vue = require('vue');
+window.Vue = require('vue').default;
 window.Vuex = require('vuex');
 import VueRouter from 'vue-router'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'

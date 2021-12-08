@@ -12,7 +12,7 @@ class TinycomServiceProvider extends ServiceProvider
 {
 
     private static $root = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR;
-    private static $configKeys = ['filesystems.disks'];
+    private static $configKeys = ['filesystems.disks','tinycom'];
 
     /**
      * Register services.

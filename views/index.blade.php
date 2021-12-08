@@ -224,7 +224,7 @@
 
                                 <h2 class="tm-section-title">Register</h2>
                                 <p class="tm-text tm-font-w-400 m-b-3">
-                                    Register and avail a free 14 days trail.<br />
+                                    Register and avail a free {{ config('tinycom.free_subscription_expire') }} days trail.<br />
                                     Already registered? Move to <a href="{!! route(!empty(config('tinycom.login_route')) ? config('tinycom.login_route') : 'login') !!}">login page</a>
                                 </p>
 
