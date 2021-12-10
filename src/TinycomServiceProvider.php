@@ -6,6 +6,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
+use Milestone\Tinycom\Command\Build;
 use Milestone\Tinycom\Model\Subscription;
 
 class TinycomServiceProvider extends ServiceProvider
@@ -38,6 +39,8 @@ class TinycomServiceProvider extends ServiceProvider
         if(app()->runningInConsole()){
             $this->publishConfig();
             $this->publishAssets();
+            $this->publishViews();
+            $this->commands([Build::class]);
         } else {
             $this->loadViews();
             $this->loadRoutes('web',strtolower(ACCESSING));
@@ -55,7 +58,8 @@ class TinycomServiceProvider extends ServiceProvider
     private function loadMigrations($access){ $this->loadMigrationsFrom(self::getRoot('migrations' . DIRECTORY_SEPARATOR . $access)); }
     private function loadViews(){ $this->loadViewsFrom(self::getRoot('views'), 'TinyCOM'); }
     private function loadRoutes(...$files){ foreach ($files as $filename) $this->loadRoutesFrom(self::getRoot('routes', ($filename . '.php'))); }
-    private function publishAssets(){ $this->publishes([self::getRoot('assets') => public_path('/')]); }
+    private function publishAssets(){ $this->publishes([self::getRoot('assets') => public_path('/')],'tinycom-update'); }
+    private function publishViews(){ $this->publishes([self::getRoot('views','admin.blade.php') => resource_path('views/vendor/TinyCOM/admin.blade.php'), self::getRoot('views','public.blade.php') => resource_path('views/vendor/TinyCOM/public.blade.php')]); }
 
     private static function getDomainParts($host){
         $domains = config('tinycom.domains',[]); $domain = $sub = '';
