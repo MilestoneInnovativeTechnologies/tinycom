@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import formData from "assets/formData";
-import customers from "app/milestone/tinycom/resources/js/store/modules/customers";
 
 const state = {
     CUSTOMERS, GROUPS,
