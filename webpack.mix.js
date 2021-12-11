@@ -25,9 +25,9 @@ function admRCss(){ return admCss.map(css => rPath+'css/'+css+'.css'); }
 
 mix
     .setPublicPath(aPath)
-    .js(rPath + 'js/company.js', 'js').vue()
-    .js(rPath + 'js/client.js', 'js').vue()
-    .js(rPath + 'js/referrer.js', 'js').vue()
+    .js(rPath + 'js/company.js', 'js')
+    .js(rPath + 'js/client.js', 'js')
+    .js(rPath + 'js/referrer.js', 'js')
     .sass(rPath + 'sass/app.scss', 'css')
     .sass(rPath + 'sass/company.scss', 'css')
     .sass(rPath + 'sass/client.scss', 'css')
