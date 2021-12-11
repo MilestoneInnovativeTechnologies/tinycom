@@ -1,0 +1,42 @@
+{
+	"name": "tinycom",
+	"version": "0.1",
+	"description": "A tiny eCommerce portal for small business. Fully offline!",
+	"productName": "TinyCOM",
+	"author": "Milestone Innovative Technologies <info@milestoneit.net>",
+    "private": true,
+    "scripts": {
+        "dev": "npm run development",
+        "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --config=node_modules/laravel-mix/setup/webpack.config.js",
+        "watch": "npm run development -- --watch",
+        "watch-poll": "npm run watch -- --watch-poll",
+        "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --disable-host-check --config=node_modules/laravel-mix/setup/webpack.config.js",
+        "prod": "npm run production",
+        "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+		"build": "npm run prod",
+        "build:public": "rd src /Q /S & mklink /J src milestone\\tinycom\\resources\\quasar\\src-public & quasar build & php artisan build public & php artisan vendor:publish --tag=tinycom-update --force",
+        "build:admin": "rd src /Q /S & mklink /J src milestone\\tinycom\\resources\\quasar\\src-admin & quasar build & php artisan build admin & php artisan vendor:publish --tag=tinycom-update --force",
+        "watch:public": "rd src /Q /S & mklink /J src milestone\\tinycom\\resources\\quasar\\src-public & quasar dev",
+        "watch:admin": "rd src /Q /S & mklink /J src milestone\\tinycom\\resources\\quasar\\src-admin & quasar dev"
+    },
+    "devDependencies": {
+        "@quasar/app": "^2.0.0",
+        "laravel-mix": "^5.0.9",
+        "resolve-url-loader": "^4.0.0",
+        "rework": "^1.0.1",
+        "rework-visit": "^1.0.0"
+    },
+    "dependencies": {
+        "@fortawesome/fontawesome-free": "^5.15.4",
+        "@quasar/extras": "^1.0.0",
+        "axios": "^0.24.0",
+        "bootstrap": "^4.5.0",
+        "bootstrap-vue": "^2.15.0",
+        "core-js": "^3.19.3",
+        "cors": "^2.8.5",
+        "jquery": "^3.6.0",
+        "popper.js": "^1.16.1",
+        "quasar": "^1.16.3",
+        "vue-graph": "^0.8.7"
+    }
+}
