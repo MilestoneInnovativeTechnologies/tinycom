@@ -57,10 +57,25 @@ If it hasn't installed, install using
     npm install -g cross-env
 
 copy and replace asset compile related files from milestone\tinycom\resources\asset
-    copy milestone\tinycom\resources\asset\*.*
+    copy milestone\tinycom\resources\asset\*.* /Y
 
 Add a line to .env file for developing
-dev=1
+DEV=1
 once in production, remove line or make dev=0
 
+npm install
 
+While in development, run following commands
+```npm run watch``` for developing COMPANY,REFERRER,CLIENT portals
+```npm run watch:public``` for developing end users interface
+```npm run watch:admin``` for developing client's admin portal
+
+For production (build)
+```npm run build``` for building COMPANY,REFERRER,CLIENT portals all at once
+```npm run build:public``` for End User's interface
+```npm run watch:admin``` for client's admin interface
+
+The compiled assets are automatically copied to package assets folder as ready to deploy..
+While in development, latest assets are always copied to public folder for real time experience..
+
+End User's interface and Client's admin interfaces are developed with quasar..

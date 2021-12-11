@@ -14,10 +14,10 @@
         "prod": "npm run production",
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
 		"build": "npm run prod",
-        "build:public": "rd src /Q /S & mklink /J src milestone\\tinycom\\resources\\quasar\\src-public & quasar build & php artisan build public & php artisan vendor:publish --tag=tinycom-update --force",
-        "build:admin": "rd src /Q /S & mklink /J src milestone\\tinycom\\resources\\quasar\\src-admin & quasar build & php artisan build admin & php artisan vendor:publish --tag=tinycom-update --force",
-        "watch:public": "rd src /Q /S & mklink /J src milestone\\tinycom\\resources\\quasar\\src-public & quasar dev",
-        "watch:admin": "rd src /Q /S & mklink /J src milestone\\tinycom\\resources\\quasar\\src-admin & quasar dev"
+        "build:public": "rd src /Q /S & mklink /J src milestone\\tinycom\\resources\\asset\\src-public & quasar build & php artisan build public & php artisan vendor:publish --tag=tinycom-update --force",
+        "build:admin": "rd src /Q /S & mklink /J src milestone\\tinycom\\resources\\asset\\src-admin & quasar build & php artisan build admin & php artisan vendor:publish --tag=tinycom-update --force",
+        "watch:public": "rd src /Q /S & mklink /J src milestone\\tinycom\\resources\\asset\\src-public & quasar dev",
+        "watch:admin": "rd src /Q /S & mklink /J src milestone\\tinycom\\resources\\asset\\src-admin & quasar dev"
     },
     "devDependencies": {
         "@quasar/app": "^2.0.0",
