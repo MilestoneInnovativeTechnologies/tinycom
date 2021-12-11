@@ -15,7 +15,7 @@ window.axios.defaults.headers.common['X-CSRF-TOKEN'] = document.getElementsByNam
 window.axios.defaults.headers.common['Content-Type'] = 'multipart/form-data';
 window.axios.defaults.baseURL = '/referrer/server/';
 
-window.Vue = require('vue').default;
+window.Vue = require('vue');
 window.Vuex = require('vuex');
 import VueRouter from 'vue-router'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'

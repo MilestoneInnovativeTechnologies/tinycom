@@ -56,28 +56,11 @@ Similarly, check for cross-env in cmd
 If it hasn't installed, install using
     npm install -g cross-env
 
-Install node dependencies
-    npm install --save-dev webpack@4 resolve-url-loader rework rework-visit sass sass-loader@10 vue-loader vue-template-compiler
-    npm install vue jquery bootstrap@4.5.0 bootstrap-vue@2.15.0 vuex vue-router popper.js @fortawesome/fontawesome-free
-
-replace laravel webpack.mix.js with milestone\tinycom\webpack.mix.js
-    copy milestone\tinycom\webpack.mix.js /Y
-
-npm install core-js @quasar/extras@1.0.0 quasar@1.0.0 vue-graph@0.8.7 cors
-npm install --save-dev @quasar/app@2.0.0
-
-copy files from milestone\tinycom\resources\quasar to root directory
-    copy milestone\tinycom\resources\quasar\*.*
+copy and replace asset compile related files from milestone\tinycom\resources\asset
+    copy milestone\tinycom\resources\asset\*.*
 
 Add a line to .env file for developing
 dev=1
 once in production, remove line or make dev=0
 
-Add following lines to
-    "build": "npm run prod",
-    "build:public": "rd src /Q /S & mklink /J src milestone\\tinycom\\resources\\quasar\\src-public & quasar build & php artisan build public & php artisan vendor:publish --tag=tinycom-update --force",
-    "build:admin": "rd src /Q /S & mklink /J src milestone\\tinycom\\resources\\quasar\\src-admin & quasar build & php artisan build admin & php artisan vendor:publish --tag=tinycom-update --force",
-    "watch:public": "rd src /Q /S & mklink /J src milestone\\tinycom\\resources\\quasar\\src-public & quasar dev",
-    "watch:admin": "rd src /Q /S & mklink /J src milestone\\tinycom\\resources\\quasar\\src-admin & quasar dev"
-package.json > scripts
 
