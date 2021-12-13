@@ -39,6 +39,7 @@ class Build extends Command
     {
         exec('xcopy "dist/spa/js" "milestone/tinycom/assets/js" /ECIQRY');
         exec('xcopy "dist/spa/css" "milestone/tinycom/assets/css" /ECIQRY');
+        exec('xcopy "dist/spa/fonts" "milestone/tinycom/assets/fonts" /ECIQRY');
 
         $json = [];
         preg_match_all('/(link href|script src)=(css|js)\/(vendor|app).(.{8}).(css|js)/',file_get_contents(base_path("dist\spa\index.html")),$matches);
