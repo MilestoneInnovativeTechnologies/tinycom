@@ -1,13 +1,9 @@
 {
-    "/js/admin.js": "/js/admin.js",
     "/js/client.js": "/js/client.js",
     "/js/company.js": "/js/company.js",
-    "/js/public.js": "/js/public.js",
     "/css/app.css": "/css/app.css",
     "/css/company.css": "/css/company.css",
     "/css/client.css": "/css/client.css",
     "/css/referrer.css": "/css/referrer.css",
-    "/js/referrer.js": "/js/referrer.js",
-    "/css/public.css": "/css/public.css",
-    "/css/admin.css": "/css/admin.css"
+    "/js/referrer.js": "/js/referrer.js"
 }

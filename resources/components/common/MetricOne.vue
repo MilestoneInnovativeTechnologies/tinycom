@@ -16,8 +16,5 @@
     export default {
         name: "MetricOne",
         props: ['img','count','text','variant','to'],
-        methods: {
-            hover(status,{ target }){ console.log(status,target); },
-        }
     }
 </script>
