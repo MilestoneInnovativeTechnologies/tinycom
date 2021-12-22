@@ -24,7 +24,7 @@
       </q-card-section>
 
       <q-card-section class="q-pt-none">
-        <q-input v-model="phone" label="Phone" color="primary" autofocus type="number" />
+        <q-input v-model="phone" label="Phone" color="primary" autofocus type="number" placeholder="WhatsApp Number" />
       </q-card-section>
 
       <q-card-actions align="right">
